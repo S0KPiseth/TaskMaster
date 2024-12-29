@@ -1,0 +1,39 @@
+.dashBordCard {
+  width: 100%;
+  justify-content: space-between;
+  display: flex;
+  border-radius: 0.5rem;
+  padding: 20px;
+  background-color: var(--background-secondary);
+  box-shadow: 0 0 1px var(--shadow-color);
+  font-size: var(--text-xl);
+}
+.dashBordCard > div > p {
+  margin-bottom: 10px;
+  font-family: "Exo 2", serif;
+}
+#text {
+  color: var(--color-gray-500);
+}
+#count {
+  font-size: 3.5rem;
+  font-weight: var(--font-semibold);
+}
+.dashBordCard > div:nth-child(2) {
+  position: relative;
+}
+.dashBordCard > div:nth-child(2) > button {
+  right: 10px;
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  border: 0;
+  background-color: var(--color-primary-100);
+  border-radius: 0.5rem;
+  color: var(--color-primary-600);
+}
+.dashBordCard > div:nth-child(2) > button:hover {
+  background-color: var(--color-primary-800);
+  color: white;
+  box-shadow: 0 0 2px var(--color-primary-600);
+}

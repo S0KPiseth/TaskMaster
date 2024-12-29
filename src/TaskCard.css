@@ -1,0 +1,104 @@
+.tkCard {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--background-secondary);
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-color);
+}
+/* .tkCard > div {
+  width: 50%; */
+/* } */
+.tkCard > div:nth-child(2) {
+  right: 0;
+  position: absolute;
+  padding: 20px;
+  width: 80%;
+  display: flex;
+  justify-content: end;
+  align-items: end;
+  height: 152px;
+}
+.tkCard > div:nth-child(2) > p {
+  font-weight: var(--font-medium);
+  border-radius: 2rem;
+  padding: 5px 10px 5px 10px;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.in-progress {
+  color: var(--color-primary-700);
+  background-color: var(--color-primary-100);
+}
+
+.tkCard > div > p {
+  font-family: var(--font-secondary);
+  margin: 20px;
+}
+.tkCard > div:nth-child(2) > div {
+  align-items: center;
+  column-gap: 20px;
+  display: flex;
+}
+#buttonTask > button {
+  color: var(--color-gray-500);
+  border: 0;
+  background-color: var(--background-secondary);
+}
+.tags {
+  display: flex;
+  column-gap: 5px;
+}
+.tags > p {
+  font-weight: var(--font-medium);
+  border: 0;
+  border-radius: 2rem;
+  /* color: var(--color-error-700); */
+  padding: 5px 10px 5px 10px;
+  /* background-color: var(--color-error-50); */
+}
+.priority-high {
+  background-color: var(--high-priority-bg);
+  color: var(--high-priority-text);
+}
+
+.priority-medium {
+  background-color: var(--medium-priority-bg);
+  color: var(--medium-priority-text);
+}
+
+.priority-low {
+  background-color: var(--low-priority-bg);
+  color: var(--low-priority-text);
+}
+
+.complete {
+  background-color: var(--low-priority-bg);
+  color: var(--low-priority-text);
+}
+.line-trough {
+  text-decoration: line-through;
+  color: var(--color-gray-500);
+}
+#edit:hover {
+  color: rgb(37 99 235);
+}
+#edit svg:hover {
+  fill: rgb(37 99 235);
+}
+#complete:hover {
+  color: var(--low-priority-text);
+}
+#complete svg:hover {
+  fill: var(--color-success-500);
+}
+#delete:hover {
+  color: var(--high-priority-text);
+}
+#delete svg:hover {
+  fill: var(--color-error-500);
+}

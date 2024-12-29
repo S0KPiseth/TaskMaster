@@ -1,0 +1,97 @@
+:root {
+  /* Typography */
+  --font-primary: "Lexend Deca", serif;
+  --font-secondary: "Exo 2", serif;
+
+  /* Font Sizes */
+
+  --text-xs: 0.6rem; /* 9.6px */
+  --text-sm: 0.7rem; /* 11.2px */
+  --text-base: 0.8rem; /* 12.8px */
+  --text-lg: 0.9rem; /* 14.4px */
+  --text-xl: 1rem; /* 16px */
+  --text-2xl: 1.2rem; /* 19.2px */
+  --text-3xl: 1.5rem; /* 24px */
+
+  /* Font Weights */
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+
+  /* Light Theme Colors */
+  --color-primary-50: #f0f9ff;
+  --color-primary-100: #e0f2fe;
+  --color-primary-200: #bae6fd;
+  --color-primary-300: #7dd3fc;
+  --color-primary-400: #38bdf8;
+  --color-primary-500: #0ea5e9;
+  --color-primary-600: #0284c7;
+  --color-primary-700: rgb(30 64 175);
+  --color-primary-800: #0969da;
+
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
+  --color-gray-1000: #000000;
+
+  --color-success-50: #f0fdf4;
+  --color-success-500: #22c55e;
+  --color-success-700: #15803d;
+
+  --color-warning-50: #fffbeb;
+  --color-warning-500: #f59e0b;
+  --color-warning-700: #b45309;
+
+  --color-error-50: #fef2f2;
+  --color-error-500: #ef4444;
+  --color-error-700: #b91c1c;
+
+  /* Light Theme Semantic Colors */
+  --background-primary: var(--color-gray-50);
+  --background-secondary: white;
+  --background-tertiary: var(--color-gray-100);
+
+  --text-primary: var(--color-gray-1000);
+  --text-secondary: var(--color-gray-600);
+  --text-tertiary: var(--color-gray-500);
+
+  --border-color: var(--color-gray-200);
+  --shadow-color: rgba(0, 0, 0, 0.1);
+
+  --high-priority-bg: rgba(254, 242, 242, 0.8); /* Light red, semi-transparent */
+  --medium-priority-bg: rgba(255, 251, 230, 0.8); /* Light yellow, semi-transparent */
+  --low-priority-bg: rgba(242, 246, 242, 0.8); /* Light green, semi-transparent */
+
+  --high-priority-text: rgba(128, 0, 0, 0.8); /* Dark red, semi-transparent */
+  --medium-priority-text: rgba(128, 104, 0, 0.8); /* Dark yellow, semi-transparent */
+  --low-priority-text: rgba(0, 128, 0, 0.8); /* Dark green, semi-transparent */
+}
+
+/* Dark Theme Colors */
+[data-theme="dark"] {
+  --background-primary: var(--color-gray-900);
+  --background-secondary: var(--color-gray-800);
+  --background-tertiary: var(--color-gray-700);
+
+  --text-primary: white;
+  --text-secondary: var(--color-gray-300);
+  --text-tertiary: var(--color-gray-400);
+
+  --border-color: var(--color-gray-700);
+  --shadow-color: rgba(0, 0, 0, 0.3);
+}
+body {
+  background-color: var(--background-primary);
+  font-family: var(--font-primary);
+  font-size: var(--text-base);
+  font-weight: var(--font-normal);
+  color: var(--text-primary);
+}

@@ -1,0 +1,23 @@
+.dashBoard {
+  padding: 20px;
+}
+.dbcContainer {
+  display: flex;
+  flex-direction: column;
+  row-gap: 30px;
+  margin-bottom: 20px;
+}
+.addTaskBtn {
+  font-size: var(--text-lg);
+  height: 40px;
+  padding: 10px;
+  border-radius: 0.5rem;
+  background-color: var(--color-primary-700);
+  color: white;
+  border: 0;
+}
+.recentTask {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+}

@@ -1,0 +1,144 @@
+h3 {
+  font-weight: var(--font-medium);
+}
+.selectClass {
+  box-shadow: 0 0 2px var(--shadow-color);
+  width: 15%;
+  border-radius: 0.5rem;
+  height: 40px;
+  border: 1px solid var(--border-color);
+  margin-left: 5px;
+  padding-left: 20px;
+  font-size: var(--text-medium);
+}
+.taskFilter {
+  padding: 20px;
+  padding-left: 0;
+}
+.tasksTabContent {
+  padding: 20px;
+  background-color: var(--background-primary);
+  padding-bottom: 20px;
+  /* box-shadow: 0 0 2px var(--shadow-color); */
+}
+.addTask {
+  background-color: rgb(249 250 251);
+  padding: 25px;
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+  animation: test 0.5s;
+}
+@keyframes test {
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  70% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.lastInput {
+  display: flex;
+  column-gap: 15px;
+}
+.lastInput > input {
+  width: 85%;
+}
+#priorityChoice {
+  width: 15%;
+}
+.addTask input {
+  border: 1px solid var(--border-color);
+  height: 40px;
+  box-shadow: 0 0 2px var(--shadow-color);
+  border-radius: 0.25rem;
+  padding: 10px;
+}
+.addTask label {
+  align-items: center;
+  display: flex;
+  border: 1px solid var(--border-color);
+  height: 40px;
+  box-shadow: 0 0 2px var(--shadow-color);
+  border-radius: 0.25rem;
+  padding: 10px;
+}
+.addTask label > input {
+  box-shadow: none;
+  border: 0;
+  height: 70%;
+}
+.addBtnContainer button {
+  font-size: var(--text-base);
+  margin-right: 10px;
+}
+.addBtnContainer button:nth-child(1) {
+  background-color: black;
+}
+.addBtnContainer button:nth-child(2) {
+  color: black;
+  background-color: white;
+  box-shadow: 0 0 2px var(--shadow-color);
+  border: 1px solid var(--border-color);
+}
+#ttAddBtn:hover,
+#ttAddBtn:active {
+  background-color: var(--color-primary-800);
+}
+#style2 {
+  margin: 0;
+  padding: 0;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: transparent;
+  width: 20px; /* Set width to 15px */
+  height: 23px; /* Set height to 15px */
+  border: 0;
+  cursor: pointer;
+  box-shadow: none;
+}
+
+#style2::-webkit-color-swatch {
+  border-radius: 50%;
+  border: 0;
+}
+
+#style2::-moz-color-swatch {
+  border-radius: 50%;
+  border: 0;
+}
+.shakingInput {
+  animation: shaking 0.5s;
+}
+.shakingInput:focus {
+  outline-color: red;
+}
+@keyframes shaking {
+  10% {
+    transform: rotate(5deg);
+  }
+  30% {
+    transform: rotate(-5deg);
+  }
+  50% {
+    transform: rotate(5deg);
+  }
+  70% {
+    transform: rotate(-5deg);
+  }
+  90% {
+    transform: rotate(5deg);
+  }
+}
