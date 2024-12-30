@@ -1,28 +1,86 @@
-import { useState } from "react";
+import { useState, useRef, createContext } from "react";
 import "./App.css";
 import Dashboard from "./Dashboard";
 import TaskTab from "./TaskTab";
-
+import Calendar from "./Calendar";
 function App() {
   const [acControlStatus, setAcControlStatus] = useState(false);
-  const [navigationHelper, setNavigationHelper] = useState("Tasks");
+  const [navigationHelper, setNavigationHelper] = useState("Calendar");
+  //condition render for add task
+  const [addStatus, setAddStatus] = useState(false);
+  const [taskList, setTaskList] = useState([
+    [
+      "Check userContext",
+      "The use context have been use in the project but it doesn't work properly.",
+      [
+        { tagname: "Urgent", color: "#fef2f2", textColor: "#8b0000" },
+        { tagname: "Review", color: "#fffbe6", textColor: "#8b5e00" },
+        { tagname: "roadblock", color: "#f2f6f2", textColor: "#004d00" },
+      ],
+      "2024-01-01",
+      "Hight Priority",
+      "In Progress",
+    ],
+    [
+      "Project Update",
+      "Update on the project status.",
+      [
+        { tagname: "Urgent", color: "#fef2f2", textColor: "#8b0000" },
+        { tagname: "Review", color: "#fffbe6", textColor: "#8b5e00" },
+        { tagname: "Completed", color: "#f2f6f2", textColor: "#004d00" },
+      ],
+      "2024-01-01",
+      "Hight Priority",
+      "In Progress",
+    ],
+    [
+      "Bug Fix",
+      "Fixing critical bug in the system.",
+      [
+        { tagname: "Critical", color: "#fef2f2", textColor: "#8b0000" },
+        { tagname: "Bug", color: "#e6f7ff", textColor: "#0066cc" },
+      ],
+      "2024-01-05",
+      "Hight Priority",
+      "Over due",
+    ],
+    [
+      "New Feature",
+      "Adding new features to the platform.",
+      [
+        { tagname: "New", color: "#fffbe6", textColor: "#8b5e00" },
+        { tagname: "Feature", color: "#e0f7fa", textColor: "#004d40" },
+      ],
+      "2024-01-10",
+      "Medium Priority",
+      "Complete",
+    ],
+    [
+      "Client Meeting",
+      "Meeting with the client to discuss project progress.",
+      [
+        { tagname: "Client", color: "#f2f6f2", textColor: "#004d00" },
+        { tagname: "Meeting", color: "#ffe0b2", textColor: "#e65100" },
+      ],
+      "2024-01-15",
+      "Low Priority",
+      "In Progress",
+    ],
+  ]);
+
   function navigate(e) {
-    document.querySelectorAll(".sideBarBtn").forEach((element) => {
-      element.className = "sideBarBtn";
-    });
     setNavigationHelper(e.target.textContent);
-    e.target.className += " activeTab";
   }
-  let mainComponent = <Dashboard />;
+  let mainComponent = <Dashboard taskList={taskList} setNavigationHelper={setNavigationHelper} setAddStatus={setAddStatus} />;
   switch (navigationHelper) {
     case "Dashboard":
-      mainComponent = <Dashboard />;
+      mainComponent = <Dashboard taskList={taskList} setNavigationHelper={setNavigationHelper} setAddStatus={setAddStatus} />;
       break;
     case "Tasks":
-      mainComponent = <TaskTab />;
+      mainComponent = <TaskTab taskList={taskList} setTaskList={setTaskList} addStatus={addStatus} setAddStatus={setAddStatus} />;
       break;
-    case "Calender":
-      mainComponent = <p>Tasks</p>;
+    case "Calendar":
+      mainComponent = <Calendar />;
       break;
     case "Settings":
       mainComponent = <p>Tasks</p>;
@@ -42,7 +100,7 @@ function App() {
               onClick={(e) => {
                 navigate(e);
               }}
-              className="sideBarBtn activeTab"
+              className={navigationHelper === "Dashboard" ? "sideBarBtn activeTab" : "sideBarBtn"}
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <rect width="7" height="9" x="3" y="3" rx="1"></rect>
@@ -56,7 +114,7 @@ function App() {
               onClick={(e) => {
                 navigate(e);
               }}
-              className="sideBarBtn"
+              className={navigationHelper === "Tasks" ? "sideBarBtn activeTab" : "sideBarBtn"}
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="m9 11 3 3L22 4"></path>
@@ -69,7 +127,7 @@ function App() {
               onClick={(e) => {
                 navigate(e);
               }}
-              className="sideBarBtn"
+              className={navigationHelper === "Calendar" ? "sideBarBtn activeTab" : "sideBarBtn"}
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M8 2v4"></path>
@@ -77,14 +135,14 @@ function App() {
                 <rect width="18" height="18" x="3" y="4" rx="2"></rect>
                 <path d="M3 10h18"></path>
               </svg>
-              Calender
+              Calendar
             </button>
             <hr />
             <button
               onClick={(e) => {
                 navigate(e);
               }}
-              className="sideBarBtn"
+              className={navigationHelper === "Settings" ? "sideBarBtn activeTab" : "sideBarBtn"}
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>

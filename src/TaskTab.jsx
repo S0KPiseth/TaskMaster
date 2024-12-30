@@ -2,56 +2,9 @@ import { useState, useRef, useEffect } from "react";
 import "./TaskTab.css";
 import TaskCard from "./TaskCard";
 
-function TaskTab() {
+function TaskTab({ taskList, setTaskList, addStatus, setAddStatus }) {
   const tagUpdate = useRef([]);
-  const [addStatus, setAddStatus] = useState(false);
-  const [taskList, setTaskList] = useState([
-    [
-      "Project Update",
-      "Update on the project status.",
-      [
-        { tagname: "Urgent", color: "#fef2f2", textColor: "#8b0000" },
-        { tagname: "Review", color: "#fffbe6", textColor: "#8b5e00" },
-        { tagname: "Completed", color: "#f2f6f2", textColor: "#004d00" },
-      ],
-      "2024-01-01",
-      "Hight Priority",
-      "In Progress",
-    ],
-    [
-      "Bug Fix",
-      "Fixing critical bug in the system.",
-      [
-        { tagname: "Critical", color: "#fef2f2", textColor: "#8b0000" },
-        { tagname: "Bug", color: "#e6f7ff", textColor: "#0066cc" },
-      ],
-      "2024-01-05",
-      "Hight Priority",
-      "Over due",
-    ],
-    [
-      "New Feature",
-      "Adding new features to the platform.",
-      [
-        { tagname: "New", color: "#fffbe6", textColor: "#8b5e00" },
-        { tagname: "Feature", color: "#e0f7fa", textColor: "#004d40" },
-      ],
-      "2024-01-10",
-      "Medium Priority",
-      "Complete",
-    ],
-    [
-      "Client Meeting",
-      "Meeting with the client to discuss project progress.",
-      [
-        { tagname: "Client", color: "#f2f6f2", textColor: "#004d00" },
-        { tagname: "Meeting", color: "#ffe0b2", textColor: "#e65100" },
-      ],
-      "2024-01-15",
-      "Low Priority",
-      "In Progress",
-    ],
-  ]);
+
   //filter option
   const [filterOption, setFilterOption] = useState(["All Status", "All Priority"]);
 
@@ -144,7 +97,6 @@ function TaskTab() {
         </div>
         {addStatus && (
           <>
-            {" "}
             <AddTask taskList={taskList} setAddStatus={setAddStatus} tags={tags} setTag={setTag} setTaskList={setTaskList} tagUpdate={tagUpdate} editTaskValue={editTaskValue} editTaskIndex={idxOfT2E.current} /> <br />
           </>
         )}

@@ -133,7 +133,9 @@ html,
   background-color: transparent;
 }
 .middleContent {
+  padding: 20px;
   position: relative;
+  height: 100%;
 }
 .accountPanel {
   display: flex;
