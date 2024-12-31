@@ -1,0 +1,105 @@
+.dateCard {
+  position: relative;
+  margin: 5px;
+  width: 150px;
+  aspect-ratio: 3 / 2;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.041);
+  text-align: center;
+  background-color: white;
+  border-radius: 0.5rem;
+  font-size: var(--text-2xl);
+  overflow: scroll;
+}
+.dateCard:hover {
+  z-index: 1;
+  scale: 2;
+}
+.dateCard::-webkit-scrollbar {
+  display: none;
+}
+
+.dateCard > div {
+  overflow: hidden;
+}
+
+.dayNdate {
+  font-size: var(--text-sm);
+  display: flex;
+  padding: 5px;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-evenly;
+}
+.dayNdate > p:nth-child(2) {
+  font-size: var(--text-4xl);
+  font-family: var(--font-secondary);
+  font-weight: var(--font-semibold);
+}
+.dayNdate > p:nth-child(1) {
+  font-weight: var(--font-normal);
+}
+.dayNdateHover {
+  flex-direction: row;
+  justify-content: space-between;
+}
+.dayNdateHover > p {
+  font-size: var(--text-sm) !important;
+}
+.calendarTasks div {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  height: 10px;
+  position: relative;
+  padding: 6px;
+  display: flex;
+  font-size: 0.4rem;
+  background-color: rgba(0, 128, 0, 0.122);
+  border-radius: 0.5em 0 0 0.5em;
+  align-items: center;
+}
+.calendarTasks p {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+.calendarTasks > div::before {
+  position: absolute;
+  content: "";
+  width: 2px;
+  height: 200px;
+  background-color: green;
+  z-index: 1;
+  top: 0;
+  right: 0;
+  border-radius: 2em;
+  height: 100%;
+}
+.calendarTasks > div > p {
+  text-align: center;
+}
+.calendarTasks > div > input {
+  height: 8px;
+  background-color: rgba(0, 128, 0, 0.122);
+  border-width: 1px;
+}
+.calendarTasks > div > input:checked {
+  color: black;
+}
+.calendarTasks {
+  display: flex;
+  flex-direction: column;
+  row-gap: 2px;
+  width: 100%;
+  top: 30%;
+}
+.background-task {
+  background-color: aliceblue;
+}
+.clearTask {
+  color: var(--color-success-500);
+}
+.remainTask {
+  color: var(--color-error-700);
+}

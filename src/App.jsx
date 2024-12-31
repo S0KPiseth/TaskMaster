@@ -17,7 +17,7 @@ function App() {
         { tagname: "Review", color: "#fffbe6", textColor: "#8b5e00" },
         { tagname: "roadblock", color: "#f2f6f2", textColor: "#004d00" },
       ],
-      "2024-01-01",
+      "2024-12-01",
       "Hight Priority",
       "In Progress",
     ],
@@ -29,7 +29,7 @@ function App() {
         { tagname: "Review", color: "#fffbe6", textColor: "#8b5e00" },
         { tagname: "Completed", color: "#f2f6f2", textColor: "#004d00" },
       ],
-      "2024-01-01",
+      "2024-11-02",
       "Hight Priority",
       "In Progress",
     ],
@@ -80,7 +80,7 @@ function App() {
       mainComponent = <TaskTab taskList={taskList} setTaskList={setTaskList} addStatus={addStatus} setAddStatus={setAddStatus} />;
       break;
     case "Calendar":
-      mainComponent = <Calendar />;
+      mainComponent = <Calendar taskList={taskList} />;
       break;
     case "Settings":
       mainComponent = <p>Tasks</p>;

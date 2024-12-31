@@ -1,15 +1,16 @@
 .calendar {
   width: 100%;
   height: 100%;
-  background-color: var(--background-secondary);
+  /* background-color: var(--background-secondary); */
   display: flex;
   flex-direction: column;
 }
 .controlCalendar {
+  font-size: var(--text-2xl);
   width: 100%;
+  margin-bottom: 20px;
 }
 .controlCalendar > div,
-.calendarDays,
 .dateCardContainer {
   display: flex;
 }
@@ -17,7 +18,12 @@
   justify-content: center;
   column-gap: 10px;
 }
-.calendarDays {
-  column-gap: 20px;
-  justify-content: space-between;
+
+.calendarDayContainer {
+  margin-top: 15px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.controlCalendar > div > p:nth-child(2n + 1) {
+  cursor: pointer;
 }

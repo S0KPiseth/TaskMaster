@@ -12,6 +12,7 @@
   --text-xl: 1rem; /* 16px */
   --text-2xl: 1.2rem; /* 19.2px */
   --text-3xl: 1.5rem; /* 24px */
+  --text-4xl: 3rem;
 
   /* Font Weights */
   --font-normal: 400;
@@ -94,4 +95,15 @@ body {
   font-size: var(--text-base);
   font-weight: var(--font-normal);
   color: var(--text-primary);
+}
+.visible-none {
+  position: absolute;
+  scale: 0;
+  width: 0;
+  height: 0;
+}
+.visible-true {
+  scale: 1;
+  width: fit-content;
+  height: fit-content;
 }
