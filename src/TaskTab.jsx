@@ -1,8 +1,8 @@
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./TaskTab.css";
 import TaskCard from "./TaskCard";
 
-function TaskTab({ taskList, setTaskList, addStatus, setAddStatus }) {
+function TaskTab({ taskList, setTaskList, addStatus, setAddStatus, completeTask }) {
   const tagUpdate = useRef([]);
 
   //filter option
@@ -41,15 +41,6 @@ function TaskTab({ taskList, setTaskList, addStatus, setAddStatus }) {
     editTaskValue.current = task2edit;
     setTag(editTaskValue.current[2]);
     setAddStatus(true);
-  }
-  //complete task
-  function completeTask(id) {
-    const list = [...taskList];
-    const task2Complete = [...list[id]];
-    task2Complete[5] = "Complete";
-    list[id] = task2Complete;
-    console.log(list);
-    setTaskList(list);
   }
   //delete task
   function deleteTask(id) {
@@ -90,7 +81,7 @@ function TaskTab({ taskList, setTaskList, addStatus, setAddStatus }) {
             <option value="" defaultValue>
               All Priority
             </option>
-            <option value="">Hight Priority</option>
+            <option value="">High Priority</option>
             <option value="">Medium Priority</option>
             <option value="">Low Priority</option>
           </select>
@@ -103,10 +94,10 @@ function TaskTab({ taskList, setTaskList, addStatus, setAddStatus }) {
 
         {newList.map((e, index) => {
           return (
-            <>
+            <React.Fragment key={index}>
               <TaskCard taskList={e} setAddStatus={setAddStatus} editTask={editTask} index={index} completeTask={completeTask} deleteTask={deleteTask} />
               <br />
-            </>
+            </React.Fragment>
           );
         })}
       </div>
@@ -181,7 +172,7 @@ function AddTask({ taskList, setAddStatus, tags, setTag, setTaskList, tagUpdate,
       <div className="lastInput">
         <input type="date" name="" id="date" defaultValue={editTaskValue.current[3]} />
         <select name="" id="priorityChoice" className="selectClass" defaultValue={editTaskValue.current[4]}>
-          <option value="Hight Priority">Hight Priority</option>
+          <option value="High Priority">High Priority</option>
           <option value="Medium Priority">Medium Priority</option>
           <option value="Low Priority">Low Priority</option>
         </select>

@@ -2,7 +2,7 @@ import "./Calendar.css";
 import DateCard from "./DateCard";
 import { useState } from "react";
 
-function Calendar({ taskList }) {
+function Calendar({ taskList, completeTask }) {
   let now = new Date();
   const [year, setYear] = useState(now.getFullYear());
   const [month, setMonth] = useState(now.getMonth());
@@ -19,13 +19,17 @@ function Calendar({ taskList }) {
     setMonth(0);
 
     lastDay = new Date(year, month + 1, 0);
+  } else if (month < 0) {
+    lastDay = new Date(year, month + 1, 0);
+    setMonth(11);
+    setYear(year - 1);
   } else {
     lastDay = new Date(year, month + 1, 0);
   }
 
   let testDayOFmonthList = [];
 
-  for (let date = 0; date < 35; date++) {
+  for (let date = 0; date < 42; date++) {
     // console.log(date, firstDay.getDay());
     if (firstDay.getDay() <= date) {
       testDayOFmonthList[date] = new Date(year, month, date + 1 - firstDay.getDay()).getDate();
@@ -33,15 +37,21 @@ function Calendar({ taskList }) {
       testDayOFmonthList[date] = null;
     }
   }
+
   const lastDayIndex = testDayOFmonthList.indexOf(lastDay.getDate());
   testDayOFmonthList.forEach((e, idx) => {
     idx > lastDayIndex ? (testDayOFmonthList[idx] = null) : null;
   });
+  const numberOFNull = testDayOFmonthList.slice(lastDayIndex, testDayOFmonthList.length).filter((e) => {
+    return e === null;
+  });
+  numberOFNull.length >= 7 ? (testDayOFmonthList = testDayOFmonthList.slice(0, 35)) : null;
   const cards = testDayOFmonthList.map((e, idx) => {
+    const isPreviousDay = now > new Date(year, month, e);
     const tasksForDay = taskList.filter((task) => {
-      return task[3] === `${year}-${month + 1}-${String(e).padStart(2, 0)}`;
+      return task[3] === `${year}-${String(month + 1).padStart(2, 0)}-${String(e).padStart(2, 0)}`;
     });
-    return <DateCard day={idx % 7} date={e} tasksForDay={tasksForDay} />;
+    return <DateCard key={idx} completeTask={completeTask} taskList={taskList} day={idx % 7} date={e} tasksForDay={tasksForDay} isToday={e == now.getDate() && year == now.getFullYear() && month == now.getMonth() ? true : false} isPreviousDay={isPreviousDay} />;
   });
   const groupedCards = [];
   for (let i = 0; i < cards.length; i += 7) {

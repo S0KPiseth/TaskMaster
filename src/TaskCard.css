@@ -62,18 +62,28 @@
   /* background-color: var(--color-error-50); */
 }
 .priority-high {
-  background-color: var(--high-priority-bg);
+  background-color: var(--high-priority-bg) !important;
   color: var(--high-priority-text);
 }
 
 .priority-medium {
-  background-color: var(--medium-priority-bg);
+  background-color: var(--medium-priority-bg) !important;
   color: var(--medium-priority-text);
 }
 
 .priority-low {
-  background-color: var(--low-priority-bg);
+  background-color: var(--low-priority-bg) !important;
   color: var(--low-priority-text);
+}
+.priority-high::before {
+  background-color: var(--high-priority-text) !important;
+}
+.priority-medium::before {
+  background-color: var(--medium-priority-text) !important;
+}
+
+.priority-low::before {
+  background-color: var(--low-priority-text) !important;
 }
 
 .complete {

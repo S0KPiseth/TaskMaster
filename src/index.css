@@ -19,6 +19,7 @@
   --font-medium: 500;
   --font-semibold: 600;
   --font-bold: 700;
+  --font-max: 1000;
 
   /* Light Theme Colors */
   --color-primary-50: #f0f9ff;

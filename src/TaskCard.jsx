@@ -28,7 +28,7 @@ function TaskCard({ taskList, editTask, index, completeTask, deleteTask, recent 
         <p className={taskList[5] == "In Progress" ? "in-progress" : taskList[5] == "Over due" ? "priority-high" : "complete"}>{taskList[5]}</p>
         <div>
           <div className="tags">
-            <p className={taskList[4] == "Medium Priority" ? "priority-medium" : taskList[4] == "Hight Priority" ? "priority-high" : "priority-low"}>{taskList[4]}</p>
+            <p className={taskList[4] == "Medium Priority" ? "priority-medium" : taskList[4] == "High Priority" ? "priority-high" : "priority-low"}>{taskList[4]}</p>
             {tags}
           </div>
           {!recent && (

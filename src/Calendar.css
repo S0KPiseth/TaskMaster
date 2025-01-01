@@ -15,7 +15,7 @@
   display: flex;
 }
 .controlCalendar > div {
-  justify-content: center;
+  justify-content: space-evenly;
   column-gap: 10px;
 }
 
@@ -26,4 +26,5 @@
 }
 .controlCalendar > div > p:nth-child(2n + 1) {
   cursor: pointer;
+  user-select: none;
 }

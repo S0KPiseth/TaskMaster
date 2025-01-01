@@ -1,9 +1,10 @@
-import { useState, useRef, createContext } from "react";
+import { useState, useRef, createContext, useEffect } from "react";
 import "./App.css";
 import Dashboard from "./Dashboard";
 import TaskTab from "./TaskTab";
 import Calendar from "./Calendar";
 function App() {
+  const now = new Date();
   const [acControlStatus, setAcControlStatus] = useState(false);
   const [navigationHelper, setNavigationHelper] = useState("Calendar");
   //condition render for add task
@@ -17,8 +18,8 @@ function App() {
         { tagname: "Review", color: "#fffbe6", textColor: "#8b5e00" },
         { tagname: "roadblock", color: "#f2f6f2", textColor: "#004d00" },
       ],
-      "2024-12-01",
-      "Hight Priority",
+      "2025-01-01",
+      "Medium Priority",
       "In Progress",
     ],
     [
@@ -29,8 +30,8 @@ function App() {
         { tagname: "Review", color: "#fffbe6", textColor: "#8b5e00" },
         { tagname: "Completed", color: "#f2f6f2", textColor: "#004d00" },
       ],
-      "2024-11-02",
-      "Hight Priority",
+      "2024-12-01",
+      "High Priority",
       "In Progress",
     ],
     [
@@ -41,7 +42,7 @@ function App() {
         { tagname: "Bug", color: "#e6f7ff", textColor: "#0066cc" },
       ],
       "2024-01-05",
-      "Hight Priority",
+      "High Priority",
       "Over due",
     ],
     [
@@ -51,7 +52,7 @@ function App() {
         { tagname: "New", color: "#fffbe6", textColor: "#8b5e00" },
         { tagname: "Feature", color: "#e0f7fa", textColor: "#004d40" },
       ],
-      "2024-01-10",
+      "2025-01-10",
       "Medium Priority",
       "Complete",
     ],
@@ -62,11 +63,35 @@ function App() {
         { tagname: "Client", color: "#f2f6f2", textColor: "#004d00" },
         { tagname: "Meeting", color: "#ffe0b2", textColor: "#e65100" },
       ],
-      "2024-01-15",
+      "2025-01-01",
       "Low Priority",
       "In Progress",
     ],
   ]);
+
+  //complete task
+  function completeTask(id) {
+    const list = [...taskList];
+    const task2Complete = [...list[id]];
+    task2Complete[5] = "Complete";
+    list[id] = task2Complete;
+    setTaskList(list);
+  }
+  function overDueTasks(id) {
+    const list = [...taskList];
+    const task2Complete = [...list[id]];
+    task2Complete[5] = "Over due";
+    list[id] = task2Complete;
+    setTaskList(list);
+  }
+  useEffect(() => {
+    taskList.forEach((task, idx) => {
+      const date = task[3].split("-");
+      console.log(date[0]);
+
+      new Date(date[0], date[1] - 1, date[2]) < now && task[5] === "In Progress" ? overDueTasks(idx) : null;
+    });
+  }, [taskList]);
 
   function navigate(e) {
     setNavigationHelper(e.target.textContent);
@@ -77,10 +102,10 @@ function App() {
       mainComponent = <Dashboard taskList={taskList} setNavigationHelper={setNavigationHelper} setAddStatus={setAddStatus} />;
       break;
     case "Tasks":
-      mainComponent = <TaskTab taskList={taskList} setTaskList={setTaskList} addStatus={addStatus} setAddStatus={setAddStatus} />;
+      mainComponent = <TaskTab taskList={taskList} setTaskList={setTaskList} addStatus={addStatus} setAddStatus={setAddStatus} completeTask={completeTask} />;
       break;
     case "Calendar":
-      mainComponent = <Calendar taskList={taskList} />;
+      mainComponent = <Calendar taskList={taskList} completeTask={completeTask} />;
       break;
     case "Settings":
       mainComponent = <p>Tasks</p>;
