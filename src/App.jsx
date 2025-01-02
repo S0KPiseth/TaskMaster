@@ -6,7 +6,7 @@ import Calendar from "./Calendar";
 function App() {
   const now = new Date();
   const [acControlStatus, setAcControlStatus] = useState(false);
-  const [navigationHelper, setNavigationHelper] = useState("Calendar");
+  const [navigationHelper, setNavigationHelper] = useState("Tasks");
   //condition render for add task
   const [addStatus, setAddStatus] = useState(false);
   const [taskList, setTaskList] = useState([
@@ -18,7 +18,7 @@ function App() {
         { tagname: "Review", color: "#fffbe6", textColor: "#8b5e00" },
         { tagname: "roadblock", color: "#f2f6f2", textColor: "#004d00" },
       ],
-      "2025-01-01",
+      "2025-01-02",
       "Medium Priority",
       "In Progress",
     ],
@@ -85,11 +85,13 @@ function App() {
     setTaskList(list);
   }
   useEffect(() => {
-    taskList.forEach((task, idx) => {
-      const date = task[3].split("-");
-      console.log(date[0]);
+    const currentYear = now.getFullYear(); // Year
+    const currentMonth = String(now.getMonth() + 1).padStart(2, "0"); // Month
+    const currentDate = String(now.getDate()).padStart(2, "0"); // Day
 
-      new Date(date[0], date[1] - 1, date[2]) < now && task[5] === "In Progress" ? overDueTasks(idx) : null;
+    const formattedDate = `${currentYear}-${currentMonth}-${currentDate}`;
+    taskList.forEach((task, idx) => {
+      task[3] < formattedDate && task[5] === "In Progress" ? overDueTasks(idx) : null;
     });
   }, [taskList]);
 

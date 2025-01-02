@@ -98,6 +98,11 @@
 .calendarTasks > div > p {
   text-align: center;
 }
+.overDue {
+  width: 100%;
+  color: red;
+}
+
 .calendarTasks > div > input {
   height: 8px;
   background-color: rgba(0, 128, 0, 0.122);
@@ -134,8 +139,8 @@
 }
 
 .warning {
-  left: -35px;
-  position: absolute;
+  left: 0;
+  position: absolute !important;
   width: 20px !important;
   background-color: red !important;
   color: white;
