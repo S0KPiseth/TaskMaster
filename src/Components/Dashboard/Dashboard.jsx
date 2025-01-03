@@ -1,6 +1,6 @@
 import "./Dashboard.css";
-import DashboardCard from "./DashboardCard";
-import TaskCard from "./TaskCard";
+import DashboardCard from "../DateCard/DashboardCard";
+import TaskCard from "../TaskCard/TaskCard";
 
 function Dashboard({ taskList, setNavigationHelper, setAddStatus }) {
   const recent = taskList.map((e) => {

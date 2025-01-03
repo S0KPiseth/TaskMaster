@@ -1,0 +1,35 @@
+.sideBarBtns {
+  margin-left: 5px;
+  width: 90%;
+  margin-right: auto;
+}
+.sideBarBtn {
+  display: flex;
+  position: relative;
+  background-color: transparent;
+  border-radius: 0.5rem;
+  font-family: var(--font-secondary);
+  color: var(--text-secondary);
+  border: 0;
+  padding: 10px;
+  font-size: var(--text-xl);
+  width: 100%;
+  font-weight: var(--font-semibold);
+  text-align: left;
+  align-items: center;
+  font-family: "Inter", serif;
+}
+.sideBarBtn:hover {
+  background-color: var(--color-gray-200);
+}
+.activeTab {
+  /* background-color: var(--color-gray-200); */
+  color: var(--text-primary);
+}
+.Icon {
+  width: 20%;
+  text-align: center;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}

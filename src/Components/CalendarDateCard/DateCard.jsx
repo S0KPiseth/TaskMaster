@@ -1,5 +1,6 @@
 import "./Date.css";
-import "./TaskCard";
+import "../TaskCard/TaskCard.css";
+
 import { useState } from "react";
 function DateCard({ taskList, day, date, tasksForDay, isToday, isPreviousDay, completeTask }) {
   const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];

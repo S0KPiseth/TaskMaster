@@ -1,12 +1,14 @@
+import SidebarButton from "./Components/SidebarBtn/SidebarButton";
 import { useState, useRef, createContext, useEffect } from "react";
 import "./App.css";
-import Dashboard from "./Dashboard";
-import TaskTab from "./TaskTab";
-import Calendar from "./Calendar";
+import Dashboard from "./Components/Dashboard/Dashboard";
+import TaskTab from "./Components/TasksTab/TaskTab";
+import Calendar from "./Components/Calendar/Calendar";
+
 function App() {
   const now = new Date();
   const [acControlStatus, setAcControlStatus] = useState(false);
-  const [navigationHelper, setNavigationHelper] = useState("Tasks");
+  const [navigationHelper, setNavigationHelper] = useState("Dashboard");
   //condition render for add task
   const [addStatus, setAddStatus] = useState(false);
   const [taskList, setTaskList] = useState([
@@ -96,7 +98,7 @@ function App() {
   }, [taskList]);
 
   function navigate(e) {
-    setNavigationHelper(e.target.textContent);
+    setNavigationHelper(e);
   }
   let mainComponent = <Dashboard taskList={taskList} setNavigationHelper={setNavigationHelper} setAddStatus={setAddStatus} />;
   switch (navigationHelper) {
@@ -115,69 +117,28 @@ function App() {
   }
   return (
     <>
-      <div style={{ width: "20%" }}>
+      <div style={{ width: "250px", position: "relative" }}>
         <div className="sideBar">
-          <a style={{ textDecoration: "none" }} href="./index.html">
-            Task Master
-          </a>
-          <br />
-          <br />
-          <div className="sideBarBtns">
-            <button
-              onClick={(e) => {
-                navigate(e);
-              }}
-              className={navigationHelper === "Dashboard" ? "sideBarBtn activeTab" : "sideBarBtn"}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect width="7" height="9" x="3" y="3" rx="1"></rect>
-                <rect width="7" height="5" x="14" y="3" rx="1"></rect>
-                <rect width="7" height="9" x="14" y="12" rx="1"></rect>
-                <rect width="7" height="5" x="3" y="16" rx="1"></rect>
+          <div className="sideBarHeader">
+            <a id="logo" href="./index.html">
+              <svg width="40px" height="40px" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M27.947 9.523a3.333 3.333 0 0 1 5.107 4.287L18.055 31.683a3.333 3.333 0 1 1 -5.107 -4.283z" fill="black" />
+                <path d="M5 21.233a3.333 3.333 0 1 1 6.667 0 3.333 3.333 0 0 1 -6.667 0" fill="green" />
               </svg>
-              Dashboard
-            </button>
-            <button
-              onClick={(e) => {
-                navigate(e);
-              }}
-              className={navigationHelper === "Tasks" ? "sideBarBtn activeTab" : "sideBarBtn"}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="m9 11 3 3L22 4"></path>
-                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
-              </svg>
-              Tasks
-            </button>
-            <hr />
-            <button
-              onClick={(e) => {
-                navigate(e);
-              }}
-              className={navigationHelper === "Calendar" ? "sideBarBtn activeTab" : "sideBarBtn"}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M8 2v4"></path>
-                <path d="M16 2v4"></path>
-                <rect width="18" height="18" x="3" y="4" rx="2"></rect>
-                <path d="M3 10h18"></path>
-              </svg>
-              Calendar
-            </button>
-            <hr />
-            <button
-              onClick={(e) => {
-                navigate(e);
-              }}
-              className={navigationHelper === "Settings" ? "sideBarBtn activeTab" : "sideBarBtn"}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
-                <circle cx="12" cy="12" r="3"></circle>
-              </svg>
-              Settings
-            </button>
+              Task Master
+            </a>
           </div>
+          <hr />
+          <div className="sideBarBtns">
+            <SidebarButton navigate={navigate} navigationHelper={navigationHelper} name="Dashboard" />
+            <SidebarButton navigate={navigate} navigationHelper={navigationHelper} name="Tasks" />
+          </div>
+          <hr />
+          <div className="sideBarBtns">
+            <SidebarButton navigate={navigate} navigationHelper={navigationHelper} name="Calendar" />
+            <SidebarButton navigate={navigate} navigationHelper={navigationHelper} name="Settings" />
+          </div>
+          <footer>&copy; 2025 Piseth Sok. All rights reserved.</footer>
         </div>
       </div>
       <div className="content">
@@ -239,6 +200,32 @@ function App() {
             </div>
           )}
           {mainComponent}
+          <div
+            className="closeNopenSidebar"
+            onMouseEnter={() => {
+              document.querySelector("#sidebarCtrBtn").classList += "bouncingBtn";
+              document.querySelector(".vertical-line").style.visibility = "visible";
+            }}
+            onMouseLeave={() => {
+              document.querySelector("#sidebarCtrBtn").classList = [];
+              document.querySelector(".vertical-line").style.visibility = "hidden";
+            }}
+          >
+            <div className="vertical-line"></div>
+            <button id="sidebarCtrBtn">
+              <svg width="20px" height="20px" viewBox="0 0 1.2 1.2" xmlns="http://www.w3.org/2000/svg">
+                <title>{"arrowhead-left"}</title>
+                <g id="Layer_2" data-name="Layer 2">
+                  <g id="invisible_box" data-name="invisible box">
+                    <path width={48} height={48} fill="none" d="M0 0h1.2v1.2H0z" />
+                  </g>
+                  <g id="icons_Q2" data-name="icons Q2">
+                    <path d="M0.52 0.6 0.78 0.34A0.1 0.1 0 0 0 0.77 0.27 0.1 0.1 0 0 0 0.7 0.28l-0.3 0.3a0.1 0.1 0 0 0 0 0.07l0.3 0.3a0.1 0.1 0 0 0 0.07 0.01 0.1 0.1 0 0 0 0.01 -0.07Z" />
+                  </g>
+                </g>
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
     </>
