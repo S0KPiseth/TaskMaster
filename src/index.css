@@ -5,7 +5,7 @@
 
   /* Font Sizes */
 
-  --text-xs: 0.6rem; /* 9.6px */
+  --text-xs: 0.4rem; /* 9.6px */
   --text-sm: 0.7rem; /* 11.2px */
   --text-base: 0.8rem; /* 12.8px */
   --text-lg: 0.9rem; /* 14.4px */
@@ -108,4 +108,55 @@ body {
   scale: 1;
   width: fit-content;
   height: fit-content;
+}
+.width-250 {
+  min-width: 200px !important;
+  width: 200px !important;
+}
+.width-60 {
+  min-width: 60px !important;
+  width: 60px !important;
+}
+/* @media (max-width: 768px) {
+  .calendar {
+    scale: 0.5;
+  }
+} */
+@media (max-width: 1024px) {
+  :root {
+    --text-xs: 0.5rem; /* 8px */
+    --text-sm: 0.6rem; /* 9.6px */
+    --text-base: 0.7rem; /* 11.2px */
+    --text-lg: 0.8rem; /* 12.8px */
+    --text-xl: 0.9rem; /* 14.4px */
+    --text-2xl: 1rem; /* 16px */
+    --text-3xl: 1.2rem; /* 19.2px */
+    --text-4xl: 2.5rem; /* 40px */
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --text-xs: 0.45rem; /* 7.2px */
+    --text-sm: 0.55rem; /* 8.8px */
+    --text-base: 0.65rem; /* 10.4px */
+    --text-lg: 0.75rem; /* 12px */
+    --text-xl: 0.85rem; /* 13.6px */
+    --text-2xl: 0.95rem; /* 15.2px */
+    --text-3xl: 1.15rem; /* 18.4px */
+    --text-4xl: 2rem; /* 32px */
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --text-xs: 0.4rem; /* 6.4px */
+    --text-sm: 0.5rem; /* 8px */
+    --text-base: 0.6rem; /* 9.6px */
+    --text-lg: 0.7rem; /* 11.2px */
+    --text-xl: 0.8rem; /* 12.8px */
+    --text-2xl: 0.9rem; /* 14.4px */
+    --text-3xl: 1.1rem; /* 17.6px */
+    --text-4xl: 1.8rem; /* 28.8px */
+  }
 }

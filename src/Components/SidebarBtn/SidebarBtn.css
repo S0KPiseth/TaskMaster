@@ -1,5 +1,4 @@
 .sideBarBtns {
-  margin-left: 5px;
   width: 90%;
   margin-right: auto;
 }
@@ -27,9 +26,13 @@
   color: var(--text-primary);
 }
 .Icon {
+  scale: 1.2;
   width: 20%;
   text-align: center;
   align-items: center;
   display: flex;
   justify-content: center;
+}
+.full-width {
+  width: 100%;
 }

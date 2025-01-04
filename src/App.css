@@ -10,24 +10,25 @@ html,
 #root {
   width: 100%;
   display: flex;
+  flex-direction: row-reverse;
 }
 .sideBar {
-  max-width: 20%;
-  width: 250px;
   height: 100%;
   position: fixed;
-  padding-top: 20px;
+  padding-top: 12px;
   /* text-align: center; */
   background-color: var(--background-secondary);
   font-weight: var(--font-bold);
   font-size: var(--text-2xl);
   box-shadow: 0 0 5px var(--color-gray-200);
 }
+.sideBarContainer {
+  position: relative;
+}
 #logo {
   text-decoration: none;
   display: flex;
   font-family: var(--font-secondary);
-  padding-left: 10px;
   color: var(--text-primary);
   align-items: center;
 }
@@ -123,6 +124,7 @@ html,
   height: 100%;
 }
 .accountPanel {
+  top: 0;
   display: flex;
   flex-direction: column;
   right: 40px;
@@ -152,14 +154,14 @@ html,
   padding-left: 10px;
 }
 .closeNopenSidebar {
+  position: absolute;
   top: 0;
-  left: 250px;
-  position: fixed;
+  right: 0;
   width: 30px;
   height: 100%;
   display: flex;
   justify-content: center;
-  transform: translateX(-50%);
+  transform: translateX(50%);
   z-index: 1;
 }
 #sidebarCtrBtn {
@@ -200,7 +202,7 @@ html,
 }
 .vertical-line {
   --color: rgb(32, 201, 151);
-  width: 1.5px;
+  width: 2px;
   height: 100%;
   background-color: var(--color);
   visibility: hidden;

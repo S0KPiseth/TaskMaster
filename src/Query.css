@@ -1,0 +1,15 @@
+/* Mobile Screens */
+@media (max-width: 768px) {
+  .sideBarContainer,
+  .sideBar {
+    width: 60px !important;
+    min-width: 60px !important;
+  }
+}
+@media (max-width: 480px) {
+  .sideBarContainer,
+  .sideBar {
+    width: 0px !important;
+    min-width: 0px !important;
+  }
+}

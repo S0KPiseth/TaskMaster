@@ -1,15 +1,16 @@
 import SidebarButton from "./Components/SidebarBtn/SidebarButton";
-import { useState, useRef, createContext, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
+import "./Query.css";
 import Dashboard from "./Components/Dashboard/Dashboard";
 import TaskTab from "./Components/TasksTab/TaskTab";
 import Calendar from "./Components/Calendar/Calendar";
 
 function App() {
-  const now = new Date();
+  const [isTabletScreen, setIsTabletScreen] = useState(window.matchMedia("(max-width: 768px)").matches);
   const [acControlStatus, setAcControlStatus] = useState(false);
-  const [navigationHelper, setNavigationHelper] = useState("Dashboard");
-  //condition render for add task
+  const [navigationHelper, setNavigationHelper] = useState("Tasks");
+  const [sideBarStatus, setSideBarStatus] = useState(!isTabletScreen);
   const [addStatus, setAddStatus] = useState(false);
   const [taskList, setTaskList] = useState([
     [
@@ -24,126 +25,65 @@ function App() {
       "Medium Priority",
       "In Progress",
     ],
-    [
-      "Project Update",
-      "Update on the project status.",
-      [
-        { tagname: "Urgent", color: "#fef2f2", textColor: "#8b0000" },
-        { tagname: "Review", color: "#fffbe6", textColor: "#8b5e00" },
-        { tagname: "Completed", color: "#f2f6f2", textColor: "#004d00" },
-      ],
-      "2024-12-01",
-      "High Priority",
-      "In Progress",
-    ],
-    [
-      "Bug Fix",
-      "Fixing critical bug in the system.",
-      [
-        { tagname: "Critical", color: "#fef2f2", textColor: "#8b0000" },
-        { tagname: "Bug", color: "#e6f7ff", textColor: "#0066cc" },
-      ],
-      "2024-01-05",
-      "High Priority",
-      "Over due",
-    ],
-    [
-      "New Feature",
-      "Adding new features to the platform.",
-      [
-        { tagname: "New", color: "#fffbe6", textColor: "#8b5e00" },
-        { tagname: "Feature", color: "#e0f7fa", textColor: "#004d40" },
-      ],
-      "2025-01-10",
-      "Medium Priority",
-      "Complete",
-    ],
-    [
-      "Client Meeting",
-      "Meeting with the client to discuss project progress.",
-      [
-        { tagname: "Client", color: "#f2f6f2", textColor: "#004d00" },
-        { tagname: "Meeting", color: "#ffe0b2", textColor: "#e65100" },
-      ],
-      "2025-01-01",
-      "Low Priority",
-      "In Progress",
-    ],
   ]);
 
-  //complete task
-  function completeTask(id) {
-    const list = [...taskList];
-    const task2Complete = [...list[id]];
-    task2Complete[5] = "Complete";
-    list[id] = task2Complete;
-    setTaskList(list);
-  }
-  function overDueTasks(id) {
-    const list = [...taskList];
-    const task2Complete = [...list[id]];
-    task2Complete[5] = "Over due";
-    list[id] = task2Complete;
-    setTaskList(list);
-  }
+  // Handle screen size changes
   useEffect(() => {
-    const currentYear = now.getFullYear(); // Year
-    const currentMonth = String(now.getMonth() + 1).padStart(2, "0"); // Month
-    const currentDate = String(now.getDate()).padStart(2, "0"); // Day
+    const mediaQuery = window.matchMedia("(max-width: 768px)");
 
+    const handleResize = (e) => {
+      setIsTabletScreen(e.matches);
+      setSideBarStatus(!e.matches);
+    };
+
+    mediaQuery.addEventListener("change", handleResize);
+
+    return () => mediaQuery.removeEventListener("change", handleResize);
+  }, []);
+
+  // Check for overdue tasks
+  useEffect(() => {
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    const currentMonth = String(now.getMonth() + 1).padStart(2, "0");
+    const currentDate = String(now.getDate()).padStart(2, "0");
     const formattedDate = `${currentYear}-${currentMonth}-${currentDate}`;
-    taskList.forEach((task, idx) => {
-      task[3] < formattedDate && task[5] === "In Progress" ? overDueTasks(idx) : null;
-    });
-  }, [taskList]);
 
-  function navigate(e) {
+    setTaskList((prevTaskList) => prevTaskList.map((task) => (task[3] < formattedDate && task[5] === "In Progress" ? [...task.slice(0, 5), "Over due"] : task)));
+  }, []);
+
+  const completeTask = (id) => {
+    setTaskList((prevList) => prevList.map((task, index) => (index === id ? [...task.slice(0, 5), "Complete"] : task)));
+  };
+
+  const navigate = (e) => {
     setNavigationHelper(e);
-  }
-  let mainComponent = <Dashboard taskList={taskList} setNavigationHelper={setNavigationHelper} setAddStatus={setAddStatus} />;
-  switch (navigationHelper) {
-    case "Dashboard":
-      mainComponent = <Dashboard taskList={taskList} setNavigationHelper={setNavigationHelper} setAddStatus={setAddStatus} />;
-      break;
-    case "Tasks":
-      mainComponent = <TaskTab taskList={taskList} setTaskList={setTaskList} addStatus={addStatus} setAddStatus={setAddStatus} completeTask={completeTask} />;
-      break;
-    case "Calendar":
-      mainComponent = <Calendar taskList={taskList} completeTask={completeTask} />;
-      break;
-    case "Settings":
-      mainComponent = <p>Tasks</p>;
-      break;
-  }
+  };
+
+  const sideBarCloseNOpen = () => {
+    setSideBarStatus((prev) => !prev);
+  };
+
+  const renderMainComponent = () => {
+    switch (navigationHelper) {
+      case "Dashboard":
+        return <Dashboard taskList={taskList} setNavigationHelper={setNavigationHelper} setAddStatus={setAddStatus} />;
+      case "Tasks":
+        return <TaskTab taskList={taskList} setTaskList={setTaskList} addStatus={addStatus} setAddStatus={setAddStatus} completeTask={completeTask} />;
+      case "Calendar":
+        return <Calendar taskList={taskList} completeTask={completeTask} />;
+      case "Settings":
+        return <p>Settings</p>;
+      default:
+        return <Dashboard taskList={taskList} setNavigationHelper={setNavigationHelper} setAddStatus={setAddStatus} />;
+    }
+  };
+
   return (
     <>
-      <div style={{ width: "250px", position: "relative" }}>
-        <div className="sideBar">
-          <div className="sideBarHeader">
-            <a id="logo" href="./index.html">
-              <svg width="40px" height="40px" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M27.947 9.523a3.333 3.333 0 0 1 5.107 4.287L18.055 31.683a3.333 3.333 0 1 1 -5.107 -4.283z" fill="black" />
-                <path d="M5 21.233a3.333 3.333 0 1 1 6.667 0 3.333 3.333 0 0 1 -6.667 0" fill="green" />
-              </svg>
-              Task Master
-            </a>
-          </div>
-          <hr />
-          <div className="sideBarBtns">
-            <SidebarButton navigate={navigate} navigationHelper={navigationHelper} name="Dashboard" />
-            <SidebarButton navigate={navigate} navigationHelper={navigationHelper} name="Tasks" />
-          </div>
-          <hr />
-          <div className="sideBarBtns">
-            <SidebarButton navigate={navigate} navigationHelper={navigationHelper} name="Calendar" />
-            <SidebarButton navigate={navigate} navigationHelper={navigationHelper} name="Settings" />
-          </div>
-          <footer>&copy; 2025 Piseth Sok. All rights reserved.</footer>
-        </div>
-      </div>
       <div className="content">
         <div className="header">
-          <label htmlFor="">
+          <label>
             <input type="text" placeholder="Search..." />
           </label>
 
@@ -163,30 +103,12 @@ function App() {
               </div>
               <div className="accountControl">
                 <p>Name</p>
-                <button
-                  onClick={() => {
-                    acControlStatus ? setAcControlStatus(false) : setAcControlStatus(true);
-                  }}
-                >
-                  {!acControlStatus ? (
-                    <svg width="20" height="20" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-labelledby="arrowhead-down-title">
-                      <title id="arrowhead-down-title">arrowhead-down-solid</title>
-                      <rect width="48" height="48" fill="none" />
-                      <path d="M10.6,19.5l12,11.9a1.9,1.9,0,0,0,2.8,0l12-11.9A2,2,0,0,0,36,16H12a2,2,0,0,0-1.4,3.5Z" />
-                    </svg>
-                  ) : (
-                    <svg width={20} height={20} viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-                      <title>{"arrowhead-up-solid"}</title>
-                      <g id="Layer_2" data-name="Layer 2">
-                        <g id="invisible_box" data-name="invisible box">
-                          <rect width={48} height={48} fill="none" />
-                        </g>
-                        <g id="Q3_icons" data-name="Q3 icons">
-                          <path d="M37.4,28.5l-12-11.9a1.9,1.9,0,0,0-2.8,0l-12,11.9A2,2,0,0,0,12,32H36a2,2,0,0,0,1.4-3.5Z" />
-                        </g>
-                      </g>
-                    </svg>
-                  )}
+                <button onClick={() => setAcControlStatus((prev) => !prev)}>
+                  <svg width="20" height="20" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                    <title>{acControlStatus ? "arrowhead-up-solid" : "arrowhead-down-solid"}</title>
+                    <rect width="48" height="48" fill="none" />
+                    <path d={acControlStatus ? "M37.4,28.5l-12-11.9a1.9,1.9,0 0,0-2.8,0l-12,11.9A2,2,0,0,0,12,32H36a2,2,0,0,0,1.4-3.5Z" : "M10.6,19.5l12,11.9a1.9,1.9,0,0,0,2.8,0l12-11.9A2,2,0,0,0,36,16H12a2,2,0,0,0-1.4,3.5Z"} />
+                  </svg>
                 </button>
               </div>
             </div>
@@ -199,22 +121,65 @@ function App() {
               <a href="#switch account">Switch Account</a>
             </div>
           )}
-          {mainComponent}
+          {renderMainComponent()}
+        </div>
+      </div>
+      <div className={`sideBarContainer ${sideBarStatus ? "width-250" : "width-60"}`}>
+        <div className={`sideBar ${sideBarStatus ? "width-250" : "width-60"}`}>
+          <div className="sideBarHeader">
+            <a id="logo" href="./index.html" style={{ paddingLeft: sideBarStatus ? "10px" : undefined }}>
+              <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M27.947 9.523a3.333 3.333 0 0 1 5.107 4.287L18.055 31.683a3.333 3.333 0 1 1 -5.107 -4.283z" fill="black" />
+                <path d="M5 21.233a3.333 3.333 0 1 1 6.667 0 3.333 3.333 0 0 1 -6.667 0" fill="green" />
+              </svg>
+              {sideBarStatus && "Task Master"}
+            </a>
+          </div>
+          <hr />
+          <div className="sideBarBtns" style={{ marginLeft: sideBarStatus ? "5px" : "auto" }}>
+            <SidebarButton navigate={navigate} navigationHelper={navigationHelper} name="Dashboard" sideBarStatus={sideBarStatus} />
+            <SidebarButton navigate={navigate} navigationHelper={navigationHelper} name="Tasks" sideBarStatus={sideBarStatus} />
+          </div>
+          <hr />
+          <div className="sideBarBtns" style={{ marginLeft: sideBarStatus ? "5px" : "auto" }}>
+            <SidebarButton navigate={navigate} navigationHelper={navigationHelper} name="Calendar" sideBarStatus={sideBarStatus} />
+            <SidebarButton navigate={navigate} navigationHelper={navigationHelper} name="Settings" sideBarStatus={sideBarStatus} />
+          </div>
+          <footer>{sideBarStatus && "© 2025 Piseth Sok. All rights reserved."}</footer>
           <div
             className="closeNopenSidebar"
             onMouseEnter={() => {
-              document.querySelector("#sidebarCtrBtn").classList += "bouncingBtn";
-              document.querySelector(".vertical-line").style.visibility = "visible";
+              if (!isTabletScreen) {
+                const sidebarBtn = document.querySelector("#sidebarCtrBtn");
+                const verticalLine = document.querySelector(".vertical-line");
+                if (sidebarBtn && verticalLine) {
+                  sidebarBtn.classList.add("bouncingBtn");
+                  verticalLine.style.visibility = "visible";
+                }
+              }
             }}
             onMouseLeave={() => {
-              document.querySelector("#sidebarCtrBtn").classList = [];
-              document.querySelector(".vertical-line").style.visibility = "hidden";
+              const sidebarBtn = document.querySelector("#sidebarCtrBtn");
+              const verticalLine = document.querySelector(".vertical-line");
+              if (sidebarBtn && verticalLine) {
+                sidebarBtn.classList.remove("bouncingBtn");
+                verticalLine.style.visibility = "hidden";
+              }
             }}
           >
             <div className="vertical-line"></div>
-            <button id="sidebarCtrBtn">
-              <svg width="20px" height="20px" viewBox="0 0 1.2 1.2" xmlns="http://www.w3.org/2000/svg">
-                <title>{"arrowhead-left"}</title>
+            <button id="sidebarCtrBtn" onClick={sideBarCloseNOpen}>
+              <svg
+                id="arrowhead"
+                width="20"
+                height="20"
+                viewBox="0 0 1.2 1.2"
+                xmlns="http://www.w3.org/2000/svg"
+                style={{
+                  transform: sideBarStatus ? "rotate(1turn)" : "rotate(0.5turn)",
+                }}
+              >
+                <title>arrowhead-left</title>
                 <g id="Layer_2" data-name="Layer 2">
                   <g id="invisible_box" data-name="invisible box">
                     <path width={48} height={48} fill="none" d="M0 0h1.2v1.2H0z" />

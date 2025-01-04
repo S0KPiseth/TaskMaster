@@ -1,9 +1,11 @@
 .calendar {
+  position: absolute;
   width: 100%;
   height: 100%;
   /* background-color: var(--background-secondary); */
   display: flex;
   flex-direction: column;
+  left: 0;
 }
 .controlCalendar {
   font-size: var(--text-2xl);
@@ -13,6 +15,7 @@
 .controlCalendar > div,
 .dateCardContainer {
   display: flex;
+  justify-content: center;
 }
 .controlCalendar > div {
   justify-content: space-evenly;
@@ -20,6 +23,7 @@
 }
 
 .calendarDayContainer {
+  width: 95%;
   margin-top: 15px;
   margin-left: auto;
   margin-right: auto;

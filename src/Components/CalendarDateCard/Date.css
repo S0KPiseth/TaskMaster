@@ -1,7 +1,7 @@
 .dateCard {
   position: relative;
   margin: 5px;
-  width: 150px;
+  width: 13.5%;
   aspect-ratio: 3 / 2;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.041);
   text-align: center;
@@ -17,7 +17,7 @@
 .disableDate {
   position: relative;
   margin: 5px;
-  width: 150px;
+  width: 13.5%;
   aspect-ratio: 3 / 2;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.041);
   background-color: white;
@@ -72,7 +72,7 @@
   position: relative;
   padding: 6px;
   display: flex;
-  font-size: 0.4rem;
+  font-size: var(--text-xs);
   background-color: rgba(0, 128, 0, 0.122);
   border-radius: 0.5em 0 0 0.5em;
   align-items: center;

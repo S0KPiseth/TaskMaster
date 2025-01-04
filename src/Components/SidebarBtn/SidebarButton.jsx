@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import DashboardIcon from "/src/assets/Icons/DashboardIcon.jsx";
 
 import "./SidebarBtn.css";
@@ -6,7 +6,7 @@ import TaskIcon from "../../assets/Icons/TaskIcon";
 import CalendarIcon from "../../assets/Icons/CalendarIcon";
 import SettingIcon from "../../assets/Icons/SettignIcon";
 
-function SidebarButton({ navigate, navigationHelper, name }) {
+function SidebarButton({ navigate, navigationHelper, name, sideBarStatus }) {
   let mainComponent;
   switch (name) {
     case "Dashboard":
@@ -29,9 +29,9 @@ function SidebarButton({ navigate, navigationHelper, name }) {
       }}
       className={navigationHelper === name ? "sideBarBtn activeTab" : "sideBarBtn"}
     >
-      <div className="Icon">{mainComponent}</div>
+      <div className={sideBarStatus ? "Icon" : "Icon full-width"}>{mainComponent}</div>
 
-      {name}
+      {sideBarStatus ? name : null}
     </button>
   );
 }
