@@ -7,11 +7,12 @@ import TaskTab from "./Components/TasksTab/TaskTab";
 import Calendar from "./Components/Calendar/Calendar";
 
 function App() {
-  const [isTabletScreen, setIsTabletScreen] = useState(window.matchMedia("(max-width: 768px)").matches);
+  const [isTabletScreen, setIsTabletScreen] = useState(window.matchMedia("(max-width: 1024px)").matches);
   const [acControlStatus, setAcControlStatus] = useState(false);
   const [navigationHelper, setNavigationHelper] = useState("Tasks");
   const [sideBarStatus, setSideBarStatus] = useState(!isTabletScreen);
   const [addStatus, setAddStatus] = useState(false);
+  const [hover, setHover] = useState(false);
   const [taskList, setTaskList] = useState([
     [
       "Check userContext",
@@ -29,16 +30,47 @@ function App() {
 
   // Handle screen size changes
   useEffect(() => {
-    const mediaQuery = window.matchMedia("(max-width: 768px)");
+    const tabletQuery = window.matchMedia("(max-width: 1024px)");
+    const phoneQuery = window.matchMedia("(max-width: 480px)");
 
-    const handleResize = (e) => {
-      setIsTabletScreen(e.matches);
-      setSideBarStatus(!e.matches);
+    const handleBodyClick = () => {
+      document.querySelector(".sideBar").classList.remove("show");
+      document.querySelector(".sideBarContainer").classList.remove("show");
     };
 
-    mediaQuery.addEventListener("change", handleResize);
+    const handleResize = () => {
+      if (phoneQuery.matches) {
+        // Phone size: sidebar should be true (open) and add body click listener
+        setIsTabletScreen(true);
+        setSideBarStatus(true);
+        setHover(true);
+        document.querySelector(".content").addEventListener("click", handleBodyClick);
+      } else if (tabletQuery.matches) {
+        // Tablet size: sidebar should be false (closed)
+        setIsTabletScreen(true);
+        setSideBarStatus(false);
+        document.body.removeEventListener("click", handleBodyClick);
+      } else {
+        // Larger screens: not tablet and sidebar open
+        setIsTabletScreen(false);
+        setSideBarStatus(true);
+        document.body.removeEventListener("click", handleBodyClick);
+      }
+    };
 
-    return () => mediaQuery.removeEventListener("change", handleResize);
+    // Initial check
+    handleResize();
+
+    // Add listeners to both queries
+    tabletQuery.addEventListener("change", handleResize);
+    phoneQuery.addEventListener("change", handleResize);
+
+    // Cleanup
+    return () => {
+      tabletQuery.removeEventListener("change", handleResize);
+      phoneQuery.removeEventListener("change", handleResize);
+      document.querySelector(".content").removeEventListener("click", handleBodyClick);
+    };
   }, []);
 
   // Check for overdue tasks
@@ -63,7 +95,10 @@ function App() {
   const sideBarCloseNOpen = () => {
     setSideBarStatus((prev) => !prev);
   };
-
+  const showSidebarMobile = () => {
+    document.querySelector(".sideBar").classList += " show";
+    document.querySelector(".sideBarContainer").classList += " show";
+  };
   const renderMainComponent = () => {
     switch (navigationHelper) {
       case "Dashboard":
@@ -71,7 +106,7 @@ function App() {
       case "Tasks":
         return <TaskTab taskList={taskList} setTaskList={setTaskList} addStatus={addStatus} setAddStatus={setAddStatus} completeTask={completeTask} />;
       case "Calendar":
-        return <Calendar taskList={taskList} completeTask={completeTask} />;
+        return <Calendar taskList={taskList} completeTask={completeTask} hover={hover} setHover={setHover} />;
       case "Settings":
         return <p>Settings</p>;
       default:
@@ -83,11 +118,18 @@ function App() {
     <>
       <div className="content">
         <div className="header">
-          <label>
-            <input type="text" placeholder="Search..." />
-          </label>
-
           <div>
+            <button id="menuButton" onClick={showSidebarMobile}>
+              <svg width="25px" height="25px" viewBox="0 0 0.531 0.531" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
+                <path d="M0.5 0.094v0.063H0.031V0.094zM0.031 0.313h0.469V0.25H0.031zm0 0.156h0.469v-0.063H0.031z" fill="#000000" />
+              </svg>
+            </button>
+            <label id="searchBar">
+              <input type="text" placeholder="Search..." />
+            </label>
+          </div>
+
+          <div className="AccountNNotification">
             <button className="notification">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />

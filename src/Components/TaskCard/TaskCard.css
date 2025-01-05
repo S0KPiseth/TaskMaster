@@ -17,7 +17,7 @@
   border: 1px solid rgba(0, 162, 255, 0.312);
   border-radius: inherit;
 }
-.tkCard > div:nth-child(2) {
+#TagsNControl {
   right: 0;
   position: absolute;
   padding: 20px;
@@ -27,7 +27,7 @@
   align-items: end;
   height: 152px;
 }
-.tkCard > div:nth-child(2) > p {
+#TagsNControl > p {
   font-weight: var(--font-medium);
   border-radius: 2rem;
   padding: 5px 10px 5px 10px;
@@ -45,7 +45,7 @@
   font-family: var(--font-secondary);
   margin: 20px;
 }
-.tkCard > div:nth-child(2) > div {
+#innerTagNControl {
   align-items: center;
   column-gap: 20px;
   display: flex;

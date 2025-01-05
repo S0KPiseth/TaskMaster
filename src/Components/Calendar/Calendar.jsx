@@ -2,7 +2,7 @@ import "./Calendar.css";
 import DateCard from "../CalendarDateCard/DateCard";
 import { useState } from "react";
 
-function Calendar({ taskList, completeTask }) {
+function Calendar({ taskList, completeTask, hover, setHover }) {
   let now = new Date();
   const [year, setYear] = useState(now.getFullYear());
   const [month, setMonth] = useState(now.getMonth());
@@ -51,7 +51,7 @@ function Calendar({ taskList, completeTask }) {
     const tasksForDay = taskList.filter((task) => {
       return task[3] === `${year}-${String(month + 1).padStart(2, 0)}-${String(e).padStart(2, 0)}`;
     });
-    return <DateCard key={idx} completeTask={completeTask} taskList={taskList} day={idx % 7} date={e} tasksForDay={tasksForDay} isToday={e == now.getDate() && year == now.getFullYear() && month == now.getMonth() ? true : false} isPreviousDay={isPreviousDay} />;
+    return <DateCard hover={hover} setHover={setHover} key={idx} completeTask={completeTask} taskList={taskList} day={idx % 7} date={e} tasksForDay={tasksForDay} isToday={e == now.getDate() && year == now.getFullYear() && month == now.getMonth() ? true : false} isPreviousDay={isPreviousDay} />;
   });
   const groupedCards = [];
   for (let i = 0; i < cards.length; i += 7) {

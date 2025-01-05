@@ -12,7 +12,9 @@
   --text-xl: 1rem; /* 16px */
   --text-2xl: 1.2rem; /* 19.2px */
   --text-3xl: 1.5rem; /* 24px */
-  --text-4xl: 3rem;
+  --text-task: 0.4rem;
+  --text-day: 0.7rem;
+  --text-date: 3rem;
 
   /* Font Weights */
   --font-normal: 400;
@@ -131,7 +133,9 @@ body {
     --text-xl: 0.9rem; /* 14.4px */
     --text-2xl: 1rem; /* 16px */
     --text-3xl: 1.2rem; /* 19.2px */
-    --text-4xl: 2.5rem; /* 40px */
+    --text-task: clamp(0.09rem, 1vh, 0.3rem);
+    --text-day: clamp(0.1rem, 0.9vh, 0.5rem);
+    --text-date: clamp(0.8rem, 5vh, 1.8rem);
   }
 }
 
@@ -144,7 +148,6 @@ body {
     --text-xl: 0.85rem; /* 13.6px */
     --text-2xl: 0.95rem; /* 15.2px */
     --text-3xl: 1.15rem; /* 18.4px */
-    --text-4xl: 2rem; /* 32px */
   }
 }
 
@@ -157,6 +160,37 @@ body {
     --text-xl: 0.8rem; /* 12.8px */
     --text-2xl: 0.9rem; /* 14.4px */
     --text-3xl: 1.1rem; /* 17.6px */
-    --text-4xl: 1.8rem; /* 28.8px */
+    --text-task: 0.9rem;
+    --text-day: 1.2rem;
+    --text-date: 3rem;
+  }
+  #taskCardDive {
+    height: 25px;
+  }
+  #taskCardDive > input {
+    margin: 0px 10px 0px 10px;
+    height: inherit;
+  }
+  #menuButton {
+    position: relative !important;
+    width: fit-content !important;
+    visibility: visible !important;
+  }
+  svg {
+    width: 19px;
+  }
+  .AccountNNotification {
+    padding-right: 0px !important;
+    column-gap: 5px !important;
+  }
+  .account {
+    padding-right: 10px !important;
+    justify-content: end;
+    flex-grow: 1;
+  }
+  .warning {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
