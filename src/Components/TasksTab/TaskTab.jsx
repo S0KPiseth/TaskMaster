@@ -3,7 +3,7 @@ import "./TaskTab.css";
 import TaskCard from "../TaskCard/TaskCard";
 import AddTask from "./AddTask/AddTask";
 
-function TaskTab({ taskList, setTaskList, addStatus, setAddStatus, completeTask }) {
+function TaskTab({ taskList, setTaskList, addStatus, setAddStatus, completeTask, isTabletScreen }) {
   const tagUpdate = useRef([]);
 
   //filter option
@@ -96,7 +96,7 @@ function TaskTab({ taskList, setTaskList, addStatus, setAddStatus, completeTask 
         {newList.map((e, index) => {
           return (
             <React.Fragment key={index}>
-              <TaskCard taskList={e} setAddStatus={setAddStatus} editTask={editTask} index={index} completeTask={completeTask} deleteTask={deleteTask} />
+              <TaskCard taskList={e} setAddStatus={setAddStatus} editTask={editTask} index={index} completeTask={completeTask} deleteTask={deleteTask} isTabletScreen={isTabletScreen} />
               <br />
             </React.Fragment>
           );

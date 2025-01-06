@@ -5,6 +5,10 @@
     width: 60px !important;
     min-width: 60px !important;
   }
+  #TagsNControl {
+    height: 100% !important;
+    width: fit-content !important;
+  }
 }
 @media (max-width: 480px) {
   .sideBarContainer,
@@ -25,11 +29,11 @@
   .tags p {
     font-size: var(--text-sm) !important;
   }
-  #innerTagNControl {
-    /* row-gap: 5px; */
+  /* #innerTagNControl {
+
     flex-direction: column;
     align-items: end !important;
-  }
+  } */
   #innerTagNControl svg {
     width: 15px;
   }

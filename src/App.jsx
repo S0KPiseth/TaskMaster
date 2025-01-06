@@ -104,7 +104,7 @@ function App() {
       case "Dashboard":
         return <Dashboard taskList={taskList} setNavigationHelper={setNavigationHelper} setAddStatus={setAddStatus} />;
       case "Tasks":
-        return <TaskTab taskList={taskList} setTaskList={setTaskList} addStatus={addStatus} setAddStatus={setAddStatus} completeTask={completeTask} />;
+        return <TaskTab taskList={taskList} setTaskList={setTaskList} addStatus={addStatus} setAddStatus={setAddStatus} completeTask={completeTask} isTabletScreen={isTabletScreen} />;
       case "Calendar":
         return <Calendar taskList={taskList} completeTask={completeTask} hover={hover} setHover={setHover} />;
       case "Settings":

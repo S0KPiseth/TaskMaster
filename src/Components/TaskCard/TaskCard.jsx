@@ -1,5 +1,38 @@
 import "./TaskCard.css";
-function TaskCard({ taskList, editTask, index, completeTask, deleteTask, recent }) {
+import { useEffect, useRef, useState } from "react";
+function TaskCard({ taskList, editTask, index, completeTask, deleteTask, recent, isTabletScreen }) {
+  const myRef = useRef(null);
+  const DateRef = useRef(null);
+  const [isTouching, setIsTouching] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  const checkCollision = () => {
+    if (!myRef.current || !DateRef.current) return;
+    const tagsBox = myRef.current.getBoundingClientRect();
+    const dateBox = DateRef.current.getBoundingClientRect();
+    const threshold = 2;
+    const isBorderTouching =
+      // Touching on right/left
+      Math.abs(dateBox.right - tagsBox.left) <= threshold ||
+      // OR boxes are overlapping
+      (dateBox.left < tagsBox.right && dateBox.right > tagsBox.left);
+    isBorderTouching && setIsTouching(true);
+  };
+
+  useEffect(() => {
+    const handleWidth = () => {
+      setWindowWidth(window.innerWidth);
+      checkCollision();
+    };
+    handleWidth();
+    window.addEventListener("resize", handleWidth);
+    return () => window.removeEventListener("resize", handleWidth);
+  }, []);
+
+  useEffect(() => {
+    checkCollision();
+  }, [windowWidth, taskList[2].length]);
+
   const tags = taskList[2].map((e, index) => {
     return (
       <p key={index} style={{ backgroundColor: e.color, color: e.textColor }}>
@@ -9,12 +42,13 @@ function TaskCard({ taskList, editTask, index, completeTask, deleteTask, recent 
   });
   return (
     <div className="tkCard">
-      <div>
+      <div className="taskContent">
         <p style={{ fontWeight: "var(--font-semibold)", fontSize: "var(--text-xl)" }} className={taskList[5] == "Complete" ? "line-trough" : ""}>
           {taskList[0]}
         </p>
         <p style={{ fontSize: "var(--text-lg)", color: "var(--color-gray-500)" }}>{taskList[1]}</p>
-        <p style={{ color: "var(--color-gray-500)", display: "flex", columnGap: "10px" }}>
+        <div className="tags">{(isTabletScreen || isTouching) && tags}</div>
+        <p style={{ color: "var(--color-gray-500)", display: "flex", columnGap: "10px", width: "fit-content" }} ref={DateRef}>
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M8 2v4"></path>
             <path d="M16 2v4"></path>
@@ -27,9 +61,9 @@ function TaskCard({ taskList, editTask, index, completeTask, deleteTask, recent 
       <div id="TagsNControl">
         <p className={taskList[5] == "In Progress" ? "in-progress" : taskList[5] == "Over due" ? "priority-high" : "complete"}>{taskList[5]}</p>
         <div id="innerTagNControl">
-          <div className="tags">
+          <div className="tags" ref={myRef}>
             <p className={taskList[4] == "Medium Priority" ? "priority-medium" : taskList[4] == "High Priority" ? "priority-high" : "priority-low"}>{taskList[4]}</p>
-            {tags}
+            {!isTabletScreen && !isTouching && tags}
           </div>
           {!recent && (
             <div id="buttonTask">

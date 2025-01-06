@@ -17,15 +17,25 @@
   border: 1px solid rgba(0, 162, 255, 0.312);
   border-radius: inherit;
 }
+.taskContent {
+  flex-grow: 1;
+}
+.taskContent > .tags {
+  margin-left: 20px;
+  margin-right: 20px;
+  flex-wrap: wrap;
+  flex-direction: row;
+  row-gap: 5px;
+}
 #TagsNControl {
   right: 0;
   position: absolute;
   padding: 20px;
-  width: 80%;
+  width: fit-content;
   display: flex;
   justify-content: end;
   align-items: end;
-  height: 152px;
+  height: 100%;
 }
 #TagsNControl > p {
   font-weight: var(--font-medium);
