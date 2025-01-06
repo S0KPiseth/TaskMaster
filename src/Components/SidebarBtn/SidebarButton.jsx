@@ -10,16 +10,16 @@ function SidebarButton({ navigate, navigationHelper, name, sideBarStatus }) {
   let mainComponent;
   switch (name) {
     case "Dashboard":
-      mainComponent = <DashboardIcon fill={navigationHelper === name ? "var(--text-primary)" : "var(--text-secondary)"} />;
+      mainComponent = <DashboardIcon />;
       break;
     case "Tasks":
-      mainComponent = <TaskIcon fill={navigationHelper === name ? "var(--text-primary)" : "var(--text-secondary)"} />;
+      mainComponent = <TaskIcon />;
       break;
     case "Calendar":
-      mainComponent = <CalendarIcon fill={navigationHelper === name ? "var(--text-primary)" : "var(--text-secondary)"} />;
+      mainComponent = <CalendarIcon />;
       break;
     case "Settings":
-      mainComponent = <SettingIcon fill={navigationHelper === name ? "var(--text-primary)" : "var(--text-secondary)"} />;
+      mainComponent = <SettingIcon />;
       break;
   }
   return (

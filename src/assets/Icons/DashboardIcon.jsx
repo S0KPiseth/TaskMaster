@@ -1,6 +1,7 @@
 import * as React from "react";
+
 const DashboardIcon = (props) => (
-  <svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width={30} height={30} viewBox="0 0 30 30" id="svg822" inkscape:version="0.92.4 (f8dce91, 2019-08-02)" sodipodi:docname="dashboard.svg" {...props}>
+  <svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width={30} height={30} viewBox="0 0 30 30" id="svg822" inkscape:version="0.92.4 (f8dce91, 2019-08-02)" sodipodi:docname="dashboard.svg">
     <defs id="defs816">
       <inkscape:path-effect only_selected="false" apply_with_weight="true" apply_no_weight="true" helper_size={0} steps={2} weight={33.333333} is_visible="true" id="path-effect1025" effect="bspline" />
       <inkscape:path-effect only_selected="false" apply_with_weight="true" apply_no_weight="true" helper_size={0} steps={2} weight={33.333333} is_visible="true" id="path-effect1021" effect="bspline" />
@@ -25,7 +26,7 @@ const DashboardIcon = (props) => (
       <rect
         style={{
           opacity: 1,
-          fill: props.fill,
+          fill: "currentColor",
           fillOpacity: 1,
           stroke: props.stroke,
           strokeWidth: 1,
@@ -51,7 +52,7 @@ const DashboardIcon = (props) => (
         id="rect1368"
         style={{
           opacity: 1,
-          fill: props.fill,
+          fill: "currentColor",
           fillOpacity: 1,
           stroke: props.stroke,
           strokeWidth: 1,
@@ -63,7 +64,7 @@ const DashboardIcon = (props) => (
       <rect
         style={{
           opacity: 1,
-          fill: props.fill,
+          fill: "currentColor",
           fillOpacity: 1,
           stroke: props.stroke,
           strokeWidth: 1,
@@ -83,4 +84,5 @@ const DashboardIcon = (props) => (
     </g>
   </svg>
 );
+
 export default DashboardIcon;

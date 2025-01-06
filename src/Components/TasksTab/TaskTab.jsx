@@ -16,10 +16,11 @@ function TaskTab({ taskList, setTaskList, addStatus, setAddStatus, completeTask,
   const [tags, setTag] = useState([]);
   const [newList, setNewList] = useState(taskList);
 
-  useEffect(filterTask, [taskList]);
+  useEffect(() => filterTask(), [taskList]);
 
   //Filter task
   function filterTask() {
+    console.log(taskList);
     const filter1 = document.getElementById("status");
     const filter2 = document.getElementById("priority");
     const filter1_option = filter1.options[filter1.selectedIndex].text;
@@ -45,11 +46,9 @@ function TaskTab({ taskList, setTaskList, addStatus, setAddStatus, completeTask,
   }
   //delete task
   function deleteTask(id) {
-    const list = [...taskList];
-    const updateList = list.filter((_, idx) => {
-      return idx != id;
+    setTaskList((prevList) => {
+      return prevList.filter((_, idx) => idx !== id);
     });
-    setTaskList(updateList);
   }
 
   return (
@@ -89,14 +88,14 @@ function TaskTab({ taskList, setTaskList, addStatus, setAddStatus, completeTask,
         </div>
         {addStatus && (
           <>
-            <AddTask taskList={taskList} setAddStatus={setAddStatus} tags={tags} setTag={setTag} setTaskList={setTaskList} tagUpdate={tagUpdate} editTaskValue={editTaskValue} editTaskIndex={idxOfT2E.current} /> <br />
+            <AddTask taskList={taskList} setAddStatus={setAddStatus} tags={tags} setTag={setTag} setTaskList={setTaskList} tagUpdate={tagUpdate} editTaskValue={editTaskValue} editTaskIndex={idxOfT2E} /> <br />
           </>
         )}
 
         {newList.map((e, index) => {
           return (
-            <React.Fragment key={index}>
-              <TaskCard taskList={e} setAddStatus={setAddStatus} editTask={editTask} index={index} completeTask={completeTask} deleteTask={deleteTask} isTabletScreen={isTabletScreen} />
+            <React.Fragment key={`${e[0].slice(0, 3)}${index}`}>
+              <TaskCard taskList={taskList} taskItems={e} setAddStatus={setAddStatus} editTask={editTask} index={index} completeTask={completeTask} deleteTask={deleteTask} isTabletScreen={isTabletScreen} />
               <br />
             </React.Fragment>
           );

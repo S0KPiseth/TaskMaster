@@ -1,5 +1,6 @@
 import SidebarButton from "./Components/SidebarBtn/SidebarButton";
 import { useState, useEffect } from "react";
+import { tasks } from "./lib/Constant";
 import "./App.css";
 import "./Query.css";
 import Dashboard from "./Components/Dashboard/Dashboard";
@@ -13,20 +14,7 @@ function App() {
   const [sideBarStatus, setSideBarStatus] = useState(!isTabletScreen);
   const [addStatus, setAddStatus] = useState(false);
   const [hover, setHover] = useState(false);
-  const [taskList, setTaskList] = useState([
-    [
-      "Check userContext",
-      "The use context have been use in the project but it doesn't work properly.",
-      [
-        { tagname: "Urgent", color: "#fef2f2", textColor: "#8b0000" },
-        { tagname: "Review", color: "#fffbe6", textColor: "#8b5e00" },
-        { tagname: "roadblock", color: "#f2f6f2", textColor: "#004d00" },
-      ],
-      "2025-01-02",
-      "Medium Priority",
-      "In Progress",
-    ],
-  ]);
+  const [taskList, setTaskList] = useState([...tasks]);
 
   // Handle screen size changes
   useEffect(() => {
@@ -49,9 +37,11 @@ function App() {
         // Tablet size: sidebar should be false (closed)
         setIsTabletScreen(true);
         setSideBarStatus(false);
+        setHover(false);
         document.body.removeEventListener("click", handleBodyClick);
       } else {
         // Larger screens: not tablet and sidebar open
+        setHover(false);
         setIsTabletScreen(false);
         setSideBarStatus(true);
         document.body.removeEventListener("click", handleBodyClick);
@@ -82,7 +72,7 @@ function App() {
     const formattedDate = `${currentYear}-${currentMonth}-${currentDate}`;
 
     setTaskList((prevTaskList) => prevTaskList.map((task) => (task[3] < formattedDate && task[5] === "In Progress" ? [...task.slice(0, 5), "Over due"] : task)));
-  }, []);
+  }, [addStatus]);
 
   const completeTask = (id) => {
     setTaskList((prevList) => prevList.map((task, index) => (index === id ? [...task.slice(0, 5), "Complete"] : task)));
@@ -121,10 +111,14 @@ function App() {
           <div>
             <button id="menuButton" onClick={showSidebarMobile}>
               <svg width="25px" height="25px" viewBox="0 0 0.531 0.531" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
-                <path d="M0.5 0.094v0.063H0.031V0.094zM0.031 0.313h0.469V0.25H0.031zm0 0.156h0.469v-0.063H0.031z" fill="#000000" />
+                <path d="M0.5 0.094v0.063H0.031V0.094zM0.031 0.313h0.469V0.25H0.031zm0 0.156h0.469v-0.063H0.031z" fill="currentColor" />
               </svg>
             </button>
             <label id="searchBar">
+              <svg width="25px" height="25px" viewBox="0 0 0.6 0.6" fill="none" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" transform="matrix(6.123233995736766e-17,1,-1,6.123233995736766e-17,0,0)">
+                <path d="M0.275 0.475a0.2 0.2 0 1 0 0 -0.4 0.2 0.2 0 0 0 0 0.4" stroke="currentColor" strokeWidth={0.05} strokeLinecap="round" strokeLinejoin="round" />
+                <path d="m0.525 0.525 -0.1 -0.1" stroke="currentColor" strokeWidth={0.05} strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
               <input type="text" placeholder="Search..." />
             </label>
           </div>
@@ -145,11 +139,11 @@ function App() {
               </div>
               <div className="accountControl">
                 <p>Name</p>
-                <button onClick={() => setAcControlStatus((prev) => !prev)}>
+                <button id="dropDownBtn" onClick={() => setAcControlStatus((prev) => !prev)}>
                   <svg width="20" height="20" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
                     <title>{acControlStatus ? "arrowhead-up-solid" : "arrowhead-down-solid"}</title>
                     <rect width="48" height="48" fill="none" />
-                    <path d={acControlStatus ? "M37.4,28.5l-12-11.9a1.9,1.9,0 0,0-2.8,0l-12,11.9A2,2,0,0,0,12,32H36a2,2,0,0,0,1.4-3.5Z" : "M10.6,19.5l12,11.9a1.9,1.9,0,0,0,2.8,0l12-11.9A2,2,0,0,0,36,16H12a2,2,0,0,0-1.4,3.5Z"} />
+                    <path d={acControlStatus ? "M37.4,28.5l-12-11.9a1.9,1.9,0 0,0-2.8,0l-12,11.9A2,2,0,0,0,12,32H36a2,2,0,0,0,1.4-3.5Z" : "M10.6,19.5l12,11.9a1.9,1.9,0,0,0,2.8,0l12-11.9A2,2,0,0,0,36,16H12a2,2,0,0,0-1.4,3.5Z"} fill="currentColor" />
                   </svg>
                 </button>
               </div>
@@ -171,7 +165,7 @@ function App() {
           <div className="sideBarHeader">
             <a id="logo" href="./index.html" style={{ paddingLeft: sideBarStatus ? "10px" : undefined }}>
               <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M27.947 9.523a3.333 3.333 0 0 1 5.107 4.287L18.055 31.683a3.333 3.333 0 1 1 -5.107 -4.283z" fill="black" />
+                <path d="M27.947 9.523a3.333 3.333 0 0 1 5.107 4.287L18.055 31.683a3.333 3.333 0 1 1 -5.107 -4.283z" fill="currentColor" />
                 <path d="M5 21.233a3.333 3.333 0 1 1 6.667 0 3.333 3.333 0 0 1 -6.667 0" fill="green" />
               </svg>
               {sideBarStatus && "Task Master"}
@@ -218,6 +212,7 @@ function App() {
                 viewBox="0 0 1.2 1.2"
                 xmlns="http://www.w3.org/2000/svg"
                 style={{
+                  fill: "currentColor",
                   transform: sideBarStatus ? "rotate(1turn)" : "rotate(0.5turn)",
                 }}
               >

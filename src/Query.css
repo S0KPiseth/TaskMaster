@@ -11,6 +11,9 @@
   }
 }
 @media (max-width: 480px) {
+  .dateCard:hover {
+    scale: unset !important;
+  }
   .sideBarContainer,
   .sideBar {
     top: 0;

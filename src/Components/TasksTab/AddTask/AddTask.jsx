@@ -35,12 +35,13 @@ function AddTask({ taskList, setAddStatus, tags, setTag, setTaskList, tagUpdate,
       const e = document.getElementById("priorityChoice");
       const text = e.options[e.selectedIndex].text;
       const taskToAdd = [document.getElementById("title").value, document.getElementById("description").value, tags, document.getElementById("date").value, text, "In Progress"];
-      if (editTaskIndex == null) {
+      if (editTaskIndex.current == null) {
         setTaskList((t) => [...t, taskToAdd]);
       } else {
         const tempTask = [...taskList];
-        tempTask[editTaskIndex] = taskToAdd;
+        tempTask[editTaskIndex.current] = taskToAdd;
         setTaskList(tempTask);
+        editTaskIndex.current = null;
         editTaskValue.current = [];
       }
 
@@ -81,6 +82,7 @@ function AddTask({ taskList, setAddStatus, tags, setTag, setTaskList, tagUpdate,
           onClick={() => {
             setTag([]);
             setAddStatus(false);
+            editTaskIndex.current = null;
             editTaskValue.current = [];
           }}
         >

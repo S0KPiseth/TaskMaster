@@ -1,10 +1,11 @@
 import "./TaskCard.css";
 import { useEffect, useRef, useState } from "react";
-function TaskCard({ taskList, editTask, index, completeTask, deleteTask, recent, isTabletScreen }) {
+function TaskCard({ taskList, taskItems, editTask, index, completeTask, deleteTask, recent, isTabletScreen }) {
   const myRef = useRef(null);
   const DateRef = useRef(null);
   const [isTouching, setIsTouching] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const animatedRef = useRef(null);
 
   const checkCollision = () => {
     if (!myRef.current || !DateRef.current) return;
@@ -31,9 +32,9 @@ function TaskCard({ taskList, editTask, index, completeTask, deleteTask, recent,
 
   useEffect(() => {
     checkCollision();
-  }, [windowWidth, taskList[2].length]);
+  }, [windowWidth, taskItems[2].length]);
 
-  const tags = taskList[2].map((e, index) => {
+  const tags = taskItems[2].map((e, index) => {
     return (
       <p key={index} style={{ backgroundColor: e.color, color: e.textColor }}>
         {e.tagname}
@@ -41,12 +42,12 @@ function TaskCard({ taskList, editTask, index, completeTask, deleteTask, recent,
     );
   });
   return (
-    <div className="tkCard">
+    <div className="tkCard slideInUP" ref={animatedRef}>
       <div className="taskContent">
-        <p style={{ fontWeight: "var(--font-semibold)", fontSize: "var(--text-xl)" }} className={taskList[5] == "Complete" ? "line-trough" : ""}>
-          {taskList[0]}
+        <p style={{ fontWeight: "var(--font-semibold)", fontSize: "var(--text-xl)" }} className={taskItems[5] == "Complete" ? "line-trough" : ""}>
+          {taskItems[0]}
         </p>
-        <p style={{ fontSize: "var(--text-lg)", color: "var(--color-gray-500)" }}>{taskList[1]}</p>
+        <p style={{ fontSize: "var(--text-lg)", color: "var(--color-gray-500)" }}>{taskItems[1]}</p>
         <div className="tags">{(isTabletScreen || isTouching) && tags}</div>
         <p style={{ color: "var(--color-gray-500)", display: "flex", columnGap: "10px", width: "fit-content" }} ref={DateRef}>
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -55,14 +56,14 @@ function TaskCard({ taskList, editTask, index, completeTask, deleteTask, recent,
             <rect width="18" height="18" x="3" y="4" rx="2"></rect>
             <path d="M3 10h18"></path>
           </svg>
-          {taskList[3]}
+          {taskItems[3]}
         </p>
       </div>
       <div id="TagsNControl">
-        <p className={taskList[5] == "In Progress" ? "in-progress" : taskList[5] == "Over due" ? "priority-high" : "complete"}>{taskList[5]}</p>
+        <p className={taskItems[5] == "In Progress" ? "in-progress" : taskItems[5] == "Over due" ? "priority-high" : "complete"}>{taskItems[5]}</p>
         <div id="innerTagNControl">
           <div className="tags" ref={myRef}>
-            <p className={taskList[4] == "Medium Priority" ? "priority-medium" : taskList[4] == "High Priority" ? "priority-high" : "priority-low"}>{taskList[4]}</p>
+            <p className={taskItems[4] == "Medium Priority" ? "priority-medium" : taskItems[4] == "High Priority" ? "priority-high" : "priority-low"}>{taskItems[4]}</p>
             {!isTabletScreen && !isTouching && tags}
           </div>
           {!recent && (
@@ -83,7 +84,15 @@ function TaskCard({ taskList, editTask, index, completeTask, deleteTask, recent,
                   <path d="m9 12 2 2 4-4" />
                 </svg>
               </button>
-              <button id="delete" onClick={() => deleteTask(index)}>
+              <button
+                id="delete"
+                onClick={() => {
+                  animatedRef && (animatedRef.current.className += " fadeOutLeft");
+                  setTimeout(() => {
+                    deleteTask(taskList.indexOf(taskItems));
+                  }, 300);
+                }}
+              >
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M3 6h18" />
                   <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />

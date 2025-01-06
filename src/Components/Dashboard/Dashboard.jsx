@@ -4,7 +4,7 @@ import TaskCard from "../TaskCard/TaskCard";
 
 function Dashboard({ taskList, setNavigationHelper, setAddStatus }) {
   const recent = taskList.map((e) => {
-    return <TaskCard taskList={e} recent={true} />;
+    return <TaskCard taskItems={e} recent={true} />;
   });
   [recent[0], recent[1]] = [recent[recent.length - 1], recent[recent.length - 2]];
   return (

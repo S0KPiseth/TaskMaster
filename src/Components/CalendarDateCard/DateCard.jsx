@@ -47,7 +47,7 @@ function DateCard({ taskList, day, date, tasksForDay, isToday, isPreviousDay, co
           <div className={hover || individualHover ? "dayNdate dayNdateHover" : "dayNdate"}>
             <p>{daysOfWeek[day]}</p>
             <p className={isToday ? "todayCard" : !isPreviousDay ? "previousDay" : ""}>{String(date).padStart(2, 0)}</p>
-            <p className={hover || individualHover ? "visible-none clearTask" : remainTask.length == 0 ? "clearTask" : "remainTask"}>{remainTask.length === 0 ? (overDueTasks.length === 0 ? "All Clear" : overDueTasks.length + " task over due") : remainTask.length + " tasks due this day"}</p>
+            <p className={hover || individualHover ? "visible-none clearTask" : remainTask.length == 0 ? (overDueTasks.length === 0 ? "clearTask" : "overDueTask") : "remainTask"}>{remainTask.length === 0 ? (overDueTasks.length === 0 ? "All Clear" : overDueTasks.length + " task over due") : remainTask.length + " tasks due this day"}</p>
           </div>
           <div className={hover || individualHover ? "calendarTasks visible-none visible-true " : "calendarTasks visible-none"}>{calendarTaskPreview}</div>
         </>

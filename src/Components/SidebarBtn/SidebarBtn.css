@@ -8,7 +8,7 @@
   background-color: transparent;
   border-radius: 0.5rem;
   font-family: var(--font-secondary);
-  color: var(--text-secondary);
+  color: var(--text-inactive);
   border: 0;
   padding: 10px;
   font-size: var(--text-xl);
@@ -19,7 +19,8 @@
   font-family: "Inter", serif;
 }
 .sideBarBtn:hover {
-  background-color: var(--color-gray-200);
+  background-color: var(--theme-color);
+  color: var(--text-primary);
 }
 .activeTab {
   /* background-color: var(--color-gray-200); */
