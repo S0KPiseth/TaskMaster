@@ -1,0 +1,83 @@
+.account {
+  padding-right: 40px;
+  column-gap: 10px;
+  display: flex;
+  align-items: center;
+}
+.account p {
+  font-weight: var(--font-semibold);
+  font-family: var(--font-secondary);
+}
+.profilePic {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background-color: var(--color-primary-100);
+  border-radius: 2rem;
+}
+.accountControl {
+  column-gap: 5px;
+  display: flex;
+  align-items: center;
+}
+#dropDownBtn {
+  padding: 0;
+  padding-top: 5px;
+  border: 0;
+  background-color: transparent;
+  color: var(--text-primary);
+}
+.uaBtn {
+  position: relative;
+  padding: 15px;
+  font-weight: var(--font-semibold);
+  font-size: var(--text-lg);
+  background-color: var(--theme-color);
+  border: 0;
+  border-radius: 0.5em;
+  color: var(--font-secondary);
+  transition: 0.5s;
+}
+.uaDiv {
+  background-color: transparent;
+}
+#login {
+  background-color: var(--background-secondary);
+}
+.uaBtn:hover {
+  scale: 1.2;
+}
+
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+/* #login::after,
+#login::before {
+  content: " ";
+  background-image: conic-gradient(from var(--angle), transparent, var(--theme-color));
+  width: 100%;
+  position: absolute;
+  height: 100%;
+  left: 50%;
+  top: 50%;
+  z-index: -1;
+  border-radius: 0.5em;
+  padding: 2px;
+  translate: -50% -50%;
+  animation: spin 1s infinite;
+}
+#login::before {
+  filter: blur(0.2rem);
+} */
+@keyframes spin {
+  0% {
+    --angle: 0deg;
+  }
+  100% {
+    --angle: 360deg;
+  }
+}

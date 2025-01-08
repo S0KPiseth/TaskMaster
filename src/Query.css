@@ -11,6 +11,12 @@
   }
 }
 @media (max-width: 480px) {
+  .uaBtn {
+    padding: 10px;
+  }
+  .uaDiv {
+    column-gap: 10px !important;
+  }
   .dateCard:hover {
     scale: unset !important;
   }

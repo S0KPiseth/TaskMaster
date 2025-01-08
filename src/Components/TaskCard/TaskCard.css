@@ -70,6 +70,9 @@
   border: 0;
   background-color: var(--background-secondary);
   padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .tags {
   display: flex;
@@ -128,9 +131,6 @@
   width: fit-content;
   border-radius: 50%;
   z-index: 3;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 #complete:hover {
   color: var(--low-priority-text);
@@ -143,7 +143,7 @@
   color: var(--high-priority-text);
 }
 #delete svg:hover {
-  fill: var(--color-error-500);
+  stroke: var(--color-error-500);
 }
 @keyframes pulse-custom {
   0% {

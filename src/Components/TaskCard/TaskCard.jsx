@@ -49,7 +49,7 @@ function TaskCard({ taskList, taskItems, editTask, index, completeTask, deleteTa
         </p>
         <p style={{ fontSize: "var(--text-lg)", color: "var(--color-gray-500)" }}>{taskItems[1]}</p>
         <div className="tags">{(isTabletScreen || isTouching) && tags}</div>
-        <p style={{ color: "var(--color-gray-500)", display: "flex", columnGap: "10px", width: "fit-content" }} ref={DateRef}>
+        <p style={{ color: "var(--color-gray-500)", display: "flex", columnGap: "10px", width: "fit-content", alignItems: "center" }} ref={DateRef}>
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M8 2v4"></path>
             <path d="M16 2v4"></path>

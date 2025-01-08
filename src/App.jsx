@@ -1,5 +1,7 @@
+import { Authenticated } from "./Components/AccountOptions/Authenticated";
+import Unauthorized from "./Components/AccountOptions/Unauthorized";
 import SidebarButton from "./Components/SidebarBtn/SidebarButton";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { tasks } from "./lib/Constant";
 import "./App.css";
 import "./Query.css";
@@ -8,6 +10,7 @@ import TaskTab from "./Components/TasksTab/TaskTab";
 import Calendar from "./Components/Calendar/Calendar";
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isTabletScreen, setIsTabletScreen] = useState(window.matchMedia("(max-width: 1024px)").matches);
   const [acControlStatus, setAcControlStatus] = useState(false);
   const [navigationHelper, setNavigationHelper] = useState("Tasks");
@@ -15,6 +18,8 @@ function App() {
   const [addStatus, setAddStatus] = useState(false);
   const [hover, setHover] = useState(false);
   const [taskList, setTaskList] = useState([...tasks]);
+  const tabRef = useRef(null);
+  const moveMentRef = useRef(null);
 
   // Handle screen size changes
   useEffect(() => {
@@ -80,6 +85,10 @@ function App() {
 
   const navigate = (e) => {
     setNavigationHelper(e);
+    if (tabRef) {
+      tabRef.current.classList += " animate__bounceInUp";
+      setTimeout(() => tabRef.current.classList.remove("animate__bounceInUp"), 500);
+    }
   };
 
   const sideBarCloseNOpen = () => {
@@ -103,11 +112,17 @@ function App() {
         return <Dashboard taskList={taskList} setNavigationHelper={setNavigationHelper} setAddStatus={setAddStatus} />;
     }
   };
-
+  const handleCapture = (e) => {
+    if (!moveMentRef.current) return;
+    const middleBox = tabRef.current.getBoundingClientRect();
+    moveMentRef.current.style.left = `${e.clientX - middleBox.left}px`;
+    moveMentRef.current.style.top = `${e.clientY}px`;
+  };
   return (
     <>
-      <div className="content">
+      <div className={!sideBarStatus ? "content horizontalShaking" : "content"} onMouseMove={handleCapture}>
         <div className="header">
+          {!isTabletScreen && <div id="mouseMovement" ref={moveMentRef}></div>}
           <div>
             <button id="menuButton" onClick={showSidebarMobile}>
               <svg width="25px" height="25px" viewBox="0 0 0.531 0.531" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
@@ -123,34 +138,9 @@ function App() {
             </label>
           </div>
 
-          <div className="AccountNNotification">
-            <button className="notification">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
-                <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
-              </svg>
-            </button>
-            <div className="account">
-              <div className="profilePic">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
-                  <circle cx="12" cy="7" r="4"></circle>
-                </svg>
-              </div>
-              <div className="accountControl">
-                <p>Name</p>
-                <button id="dropDownBtn" onClick={() => setAcControlStatus((prev) => !prev)}>
-                  <svg width="20" height="20" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-                    <title>{acControlStatus ? "arrowhead-up-solid" : "arrowhead-down-solid"}</title>
-                    <rect width="48" height="48" fill="none" />
-                    <path d={acControlStatus ? "M37.4,28.5l-12-11.9a1.9,1.9,0 0,0-2.8,0l-12,11.9A2,2,0,0,0,12,32H36a2,2,0,0,0,1.4-3.5Z" : "M10.6,19.5l12,11.9a1.9,1.9,0,0,0,2.8,0l12-11.9A2,2,0,0,0,36,16H12a2,2,0,0,0-1.4,3.5Z"} fill="currentColor" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </div>
+          {isAuthenticated ? <Authenticated setAcControlStatus={setAcControlStatus} acControlStatus={acControlStatus} /> : <Unauthorized />}
         </div>
-        <div className="middleContent">
+        <div className="middleContent" ref={tabRef}>
           {acControlStatus && (
             <div className="accountPanel">
               <a href="#Profile">View Profile</a>
