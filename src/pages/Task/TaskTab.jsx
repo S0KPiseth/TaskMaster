@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./TaskTab.css";
-import TaskCard from "../TaskCard/TaskCard";
-import AddTask from "./AddTask/AddTask";
+import TaskCard from "../../Components/TaskCard/TaskCard";
+import AddTask from "../../Components/AddTask/AddTask";
 
 function TaskTab({ taskList, setTaskList, addStatus, setAddStatus, completeTask, isTabletScreen }) {
   const tagUpdate = useRef([]);

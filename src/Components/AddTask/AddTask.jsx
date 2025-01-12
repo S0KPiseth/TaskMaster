@@ -1,4 +1,4 @@
-import "../TaskTab.css";
+import "../../pages/Task/TaskTab.css";
 import TagContent from "../TagContent/TagContent";
 
 function AddTask({ taskList, setAddStatus, tags, setTag, setTaskList, tagUpdate, editTaskValue, editTaskIndex }) {

@@ -132,6 +132,10 @@ body {
   font-weight: var(--font-normal);
   color: var(--text-primary);
 }
+.text-link {
+  color: inherit;
+  text-decoration: inherit;
+}
 .visible-none {
   position: absolute;
   scale: 0;

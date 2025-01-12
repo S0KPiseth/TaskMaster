@@ -1,8 +1,9 @@
 import "./Dashboard.css";
-import DashboardCard from "../DateCard/DashboardCard";
-import TaskCard from "../TaskCard/TaskCard";
+import DashboardCard from "../../Components/DateCard/DashboardCard";
+import TaskCard from "../../Components/TaskCard/TaskCard";
+import { Link } from "react-router-dom";
 
-function Dashboard({ taskList, setNavigationHelper, setAddStatus }) {
+function Dashboard({ taskList, setAddStatus }) {
   const recent = taskList.map((e) => {
     return <TaskCard taskItems={e} recent={true} />;
   });
@@ -19,16 +20,17 @@ function Dashboard({ taskList, setNavigationHelper, setAddStatus }) {
         </div>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "20px" }} className="header2">
           <h2>Recent Task</h2>
-          <button
-            className="addTaskBtn"
-            onClick={() => {
-              setNavigationHelper("Tasks");
-              window.scrollTo(0, 0);
-              setAddStatus(true);
-            }}
-          >
-            &#x2B; Add new
-          </button>
+          <Link to="/Tasks">
+            <button
+              className="addTaskBtn"
+              onClick={() => {
+                window.scrollTo(0, 0);
+                setAddStatus(true);
+              }}
+            >
+              &#x2B; Add new
+            </button>
+          </Link>
         </div>
 
         <div className="recentTask">{recent.slice(0, 2)}</div>

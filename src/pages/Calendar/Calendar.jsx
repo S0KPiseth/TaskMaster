@@ -1,5 +1,5 @@
 import "./Calendar.css";
-import DateCard from "../CalendarDateCard/DateCard";
+import DateCard from "../../Components/CalendarDateCard/DateCard";
 import { useState } from "react";
 
 function Calendar({ taskList, completeTask, hover, setHover }) {
