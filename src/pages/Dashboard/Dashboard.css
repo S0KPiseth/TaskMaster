@@ -1,6 +1,5 @@
 .dashBoard {
   padding: 20px;
-  background-color: var(--background-primary);
 }
 .dbcContainer {
   display: flex;

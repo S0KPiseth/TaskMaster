@@ -1,9 +1,13 @@
 import "./Dashboard.css";
 import DashboardCard from "../../Components/DateCard/DashboardCard";
 import TaskCard from "../../Components/TaskCard/TaskCard";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
+import { useEffect } from "react";
 
 function Dashboard({ taskList, setAddStatus }) {
+  if (!document.cookie) {
+    return <Navigate to="/login" replace />;
+  }
   const recent = taskList.map((e) => {
     return <TaskCard taskItems={e} recent={true} />;
   });
@@ -11,7 +15,6 @@ function Dashboard({ taskList, setAddStatus }) {
   return (
     <>
       <div className="dashBoard">
-        <h2 style={{ marginBottom: "20px" }}>Dashboard</h2>
         <div className="dbcContainer">
           <DashboardCard type={"task"} />
           <DashboardCard type={"progress"} />

@@ -1,14 +1,14 @@
-.dashBordCard {
+.dashBoardCard {
   width: 100%;
   justify-content: space-between;
   display: flex;
-  border-radius: 0.5rem;
+  border-radius: 1rem;
   padding: 20px;
   background-color: var(--background-secondary);
-  box-shadow: 0 0 1px var(--shadow-color);
+  box-shadow: 0 0 3px var(--shadow-color);
   font-size: var(--text-xl);
 }
-.dashBordCard > div > p {
+.dashBoardCard > div > p {
   margin-bottom: 10px;
   font-family: "Exo 2", serif;
 }
@@ -19,10 +19,10 @@
   font-size: 3.5rem;
   font-weight: var(--font-semibold);
 }
-.dashBordCard > div:nth-child(2) {
+.dashBoardCard > div:nth-child(2) {
   position: relative;
 }
-.dashBordCard > div:nth-child(2) > button {
+.dashBoardCard > div:nth-child(2) > button {
   right: 5px;
   position: absolute;
   width: 40px;
@@ -32,7 +32,7 @@
   border-radius: 0.5rem;
   color: var(--notHover);
 }
-.dashBordCard > div:nth-child(2) > button:hover {
+.dashBoardCard > div:nth-child(2) > button:hover {
   background-color: var(--color-primary-800);
   color: var(--hover);
   box-shadow: 0 0 2px var(--color-primary-600);

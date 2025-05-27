@@ -41,7 +41,7 @@ function DashboardCard({ type }) {
       console.error("incorrect type!");
   }
   return (
-    <div className="dashBordCard">
+    <div className="dashBoardCard">
       <div>
         <p id="text">Total Tasks</p>
         <p id="count">24</p>

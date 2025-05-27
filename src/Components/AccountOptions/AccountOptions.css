@@ -1,5 +1,9 @@
+.AccountNNotification {
+  display: flex;
+  align-items: center;
+  column-gap: 10px;
+}
 .account {
-  padding-right: 40px;
   column-gap: 10px;
   display: flex;
   align-items: center;
@@ -48,6 +52,14 @@
 }
 .uaBtn:hover {
   scale: 1.2;
+}
+.userIdentity {
+  font-size: small;
+  text-align: right;
+}
+.userIdentity > p:nth-child(2) {
+  font-size: x-small;
+  color: var(--text-inactive);
 }
 
 @property --angle {

@@ -64,7 +64,6 @@ function Calendar({ taskList, completeTask, hover, setHover }) {
 
   return (
     <div className="calendar">
-      <h2>Calender</h2>
       <div className="controlCalendar">
         <div>
           <p

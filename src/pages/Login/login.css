@@ -1,0 +1,19 @@
+.loginDiv {
+  width: 100%;
+}
+.loginDiv form {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  row-gap: 5px;
+}
+.fields {
+  width: 100%;
+  border-radius: 100px;
+  height: 35px;
+  padding-left: 10px;
+}
+
+form a {
+  text-align: right;
+}
