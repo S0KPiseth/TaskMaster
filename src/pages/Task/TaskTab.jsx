@@ -57,7 +57,7 @@ function TaskTab({ taskList, setTaskList, addStatus, setAddStatus, completeTask,
         <div>
           <div className="headerTask" style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
             <button
-              className="addTaskBtn"
+              className="addTaskBtn backgroundBtn"
               onClick={() => {
                 setAddStatus(true);
               }}

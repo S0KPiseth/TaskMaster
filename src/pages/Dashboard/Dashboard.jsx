@@ -25,7 +25,7 @@ function Dashboard({ taskList, setAddStatus }) {
           <h2>Recent Task</h2>
           <Link to="/Tasks">
             <button
-              className="addTaskBtn"
+              className="addTaskBtn backgroundBtn"
               onClick={() => {
                 window.scrollTo(0, 0);
                 setAddStatus(true);

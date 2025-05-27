@@ -5,7 +5,7 @@ function Sidebar({ sideBarStatus, sideBarCloseNOpen, navigate, isTabletScreen })
     <div className={`sideBarContainer ${sideBarStatus ? "width-250" : "width-60"}`}>
       <div className={`sideBar ${sideBarStatus ? "width-250" : "width-60"}`}>
         <div className="sideBarHeader">
-          <a id="logo" href="/" style={{ paddingLeft: sideBarStatus ? "10px" : undefined }}>
+          <a id="logo" href="/" style={{ paddingLeft: sideBarStatus ? "10px" : undefined, position: "static", color: "var(--text-primary)" }}>
             <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M27.947 9.523a3.333 3.333 0 0 1 5.107 4.287L18.055 31.683a3.333 3.333 0 1 1 -5.107 -4.283z" fill="currentColor" />
               <path d="M5 21.233a3.333 3.333 0 1 1 6.667 0 3.333 3.333 0 0 1 -6.667 0" fill="green" />

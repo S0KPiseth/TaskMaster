@@ -74,7 +74,7 @@ function AddTask({ taskList, setAddStatus, tags, setTag, setTaskList, tagUpdate,
         </select>
       </div>
       <div className="addBtnContainer">
-        <button className="addTaskBtn" onClick={addTask}>
+        <button className="addTaskBtn confirmAdd backgroundBtn" onClick={addTask}>
           Add Task
         </button>
         <button

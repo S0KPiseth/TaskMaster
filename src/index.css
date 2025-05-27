@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Anton&display=swap");
 @font-face {
   font-family: "malin-sans";
   src: url("/fonts/marlin-sans/marlin-sans-medium.otf") format("opentype");
@@ -163,6 +164,16 @@ body {
     scale: 0.5;
   }
 } */
+
+.backgroundBtn {
+  background-image: url("/image/bgGradient.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 400% auto;
+}
+.confirmAdd {
+  background-size: auto;
+}
 @media (max-width: 1024px) {
   :root {
     --text-xs: 0.5rem; /* 8px */
