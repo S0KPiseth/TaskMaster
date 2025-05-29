@@ -1,13 +1,13 @@
 import "./Dashboard.css";
 import DashboardCard from "../../Components/DateCard/DashboardCard";
 import TaskCard from "../../Components/TaskCard/TaskCard";
-import { Link, Navigate } from "react-router-dom";
+import { data, Link, Navigate } from "react-router-dom";
 import { useEffect } from "react";
 
 function Dashboard({ taskList, setAddStatus }) {
-  if (!document.cookie) {
-    return <Navigate to="/login" replace />;
-  }
+  // if (!document.cookie) {
+  //   return <Navigate to="/auth" replace />;
+  // }
   const recent = taskList.map((e) => {
     return <TaskCard taskItems={e} recent={true} />;
   });

@@ -1,17 +1,22 @@
 import Sidebar from "./Components/Sidebar/Sidebar";
 import Header from "./Components/Header/Header";
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { tasks } from "./lib/Constant";
 import "./App.css";
 import "./Query.css";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import TaskTab from "./pages/Task/TaskTab";
 import Calendar from "./pages/Calendar/Calendar";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
-import Login from "./pages/Login/Login";
+import { BrowserRouter as Router, Routes, Route, useLocation, useFetcher } from "react-router-dom";
+import UserAuthentication from "./pages/Login/Auth";
+import LoginForm from "./pages/Login/LoginForm";
+import RegisterForm from "./pages/Login/RegisterForm";
+import { store } from "./application-state/store";
+import { Provider } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { getAuthStatus } from "./application-state/authenticationSlice";
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isTabletScreen, setIsTabletScreen] = useState(window.matchMedia("(max-width: 1024px)").matches);
   const [acControlStatus, setAcControlStatus] = useState(false);
   const [sideBarStatus, setSideBarStatus] = useState(!isTabletScreen);
@@ -19,8 +24,14 @@ function App() {
   const [hover, setHover] = useState(false);
   const [taskList, setTaskList] = useState([...tasks]);
   const tabRef = useRef(null);
-
   const location = useLocation();
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getAuthStatus());
+  }, [dispatch]);
+  const isAuthenticated = useSelector((state) => state.isAuth.value);
+  console.log(isAuthenticated);
 
   const completeTask = (id) => {
     setTaskList((prevList) => prevList.map((task, index) => (index === id ? [...task.slice(0, 5), "Complete"] : task)));
@@ -43,7 +54,7 @@ function App() {
 
   return (
     <>
-      {location.pathname !== "/login" && (
+      {!["/auth", "/auth/register"].includes(location.pathname) && (
         <>
           <div className={!sideBarStatus ? "content horizontalShaking" : "content"}>
             <Header isAuthenticated={isAuthenticated} isTabletScreen={isTabletScreen} setAcControlStatus={setAcControlStatus} acControlStatus={acControlStatus} showSidebarMobile={showSidebarMobile} />
@@ -65,9 +76,12 @@ function App() {
         </>
       )}
 
-      {location.pathname === "/login" && (
+      {["/auth", "/auth/register"].includes(location.pathname) && (
         <Routes>
-          <Route path="/login" element={<Login />} />
+          <Route path="/auth" element={<UserAuthentication location={location} />}>
+            <Route index element={<LoginForm />} />
+            <Route path="/auth/register" element={<RegisterForm />} />
+          </Route>
         </Routes>
       )}
     </>
@@ -77,7 +91,9 @@ function App() {
 function RootApp() {
   return (
     <Router>
-      <App />
+      <Provider store={store}>
+        <App />
+      </Provider>
     </Router>
   );
 }
