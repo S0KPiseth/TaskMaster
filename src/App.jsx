@@ -7,14 +7,13 @@ import "./Query.css";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import TaskTab from "./pages/Task/TaskTab";
 import Calendar from "./pages/Calendar/Calendar";
-import { BrowserRouter as Router, Routes, Route, useLocation, useFetcher } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import UserAuthentication from "./pages/Login/Auth";
 import LoginForm from "./pages/Login/LoginForm";
 import RegisterForm from "./pages/Login/RegisterForm";
-import { store } from "./application-state/store";
-import { Provider } from "react-redux";
-import { useSelector, useDispatch } from "react-redux";
-import { getAuthStatus } from "./application-state/authenticationSlice";
+import { persistor } from "./application-state/Store";
+import { useDispatch } from "react-redux";
+import { setUser } from "./application-state/authenticationSlice";
 
 function App() {
   const [isTabletScreen, setIsTabletScreen] = useState(window.matchMedia("(max-width: 1024px)").matches);
@@ -25,14 +24,7 @@ function App() {
   const [taskList, setTaskList] = useState([...tasks]);
   const tabRef = useRef(null);
   const location = useLocation();
-
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getAuthStatus());
-  }, [dispatch]);
-  const isAuthenticated = useSelector((state) => state.isAuth.value);
-  console.log(isAuthenticated);
-
+  const dispatcher = useDispatch();
   const completeTask = (id) => {
     setTaskList((prevList) => prevList.map((task, index) => (index === id ? [...task.slice(0, 5), "Complete"] : task)));
   };
@@ -57,12 +49,23 @@ function App() {
       {!["/auth", "/auth/register"].includes(location.pathname) && (
         <>
           <div className={!sideBarStatus ? "content horizontalShaking" : "content"}>
-            <Header isAuthenticated={isAuthenticated} isTabletScreen={isTabletScreen} setAcControlStatus={setAcControlStatus} acControlStatus={acControlStatus} showSidebarMobile={showSidebarMobile} />
+            <Header isTabletScreen={isTabletScreen} setAcControlStatus={setAcControlStatus} acControlStatus={acControlStatus} showSidebarMobile={showSidebarMobile} />
             <div className="middleContent" ref={tabRef}>
               {acControlStatus && (
-                <div className="accountPanel">
-                  <a href="#Profile">View Profile</a>
-                  <a href="#switch account">Switch Account</a>
+                <div
+                  className="accountPanel"
+                  onClick={() => {
+                    setAcControlStatus(false);
+                    dispatcher(setUser([]));
+                    persistor.pause();
+                    persistor.flush().then(() => {
+                      return persistor.purge();
+                    });
+                  }}
+                >
+                  <button>View Profile</button>
+                  <button>Switch Account</button>
+                  <button>Log out</button>
                 </div>
               )}
               <Routes>
@@ -91,9 +94,7 @@ function App() {
 function RootApp() {
   return (
     <Router>
-      <Provider store={store}>
-        <App />
-      </Provider>
+      <App />
     </Router>
   );
 }

@@ -1,6 +1,8 @@
 import { Authenticated } from "../AccountOptions/Authenticated";
 import Unauthorized from "../AccountOptions/Unauthorized";
-function Header({ isAuthenticated, setAcControlStatus, acControlStatus, showSidebarMobile, isTabletScreen }) {
+import { useSelector } from "react-redux";
+function Header({ setAcControlStatus, acControlStatus, showSidebarMobile, isTabletScreen }) {
+  const user = useSelector((state) => state.isAuth.user);
   return (
     <div className="header">
       <div>
@@ -20,14 +22,16 @@ function Header({ isAuthenticated, setAcControlStatus, acControlStatus, showSide
               <path d="m0.525 0.525 -0.1 -0.1" stroke="currentColor" strokeWidth={0.05} strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </label>
-          <button className="notification">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M15 6.667A5 5 0 0 0 5 6.667c0 5.833 -2.5 7.5 -2.5 7.5h15s-2.5 -1.667 -2.5 -7.5" />
-              <path d="M11.442 17.5a1.667 1.667 0 0 1 -2.883 0" />
-            </svg>
-          </button>
+          {user._id && (
+            <button className="notification">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M15 6.667A5 5 0 0 0 5 6.667c0 5.833 -2.5 7.5 -2.5 7.5h15s-2.5 -1.667 -2.5 -7.5" />
+                <path d="M11.442 17.5a1.667 1.667 0 0 1 -2.883 0" />
+              </svg>
+            </button>
+          )}
         </div>
-        <Authenticated setAcControlStatus={setAcControlStatus} acControlStatus={acControlStatus} />
+        {user._id ? <Authenticated setAcControlStatus={setAcControlStatus} acControlStatus={acControlStatus} /> : <Unauthorized />}
       </div>
     </div>
   );

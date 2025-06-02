@@ -34,15 +34,22 @@
   color: var(--text-primary);
 }
 .uaBtn {
-  position: relative;
-  padding: 15px;
+  padding: 10px 15px 10px 15px;
   font-weight: var(--font-semibold);
   font-size: var(--text-lg);
   background-color: var(--theme-color);
   border: 0;
-  border-radius: 0.5em;
-  color: var(--font-secondary);
+  border-radius: 2em;
+  color: black;
   transition: 0.5s;
+}
+.uaBtn:nth-child(1) {
+  box-shadow: 0px 0px 3px var(--shadow-color);
+}
+.registerBtn {
+  color: white;
+  background-position: 10% 15%;
+  margin-left: 5px;
 }
 .uaDiv {
   background-color: transparent;
@@ -51,7 +58,7 @@
   background-color: var(--background-secondary);
 }
 .uaBtn:hover {
-  scale: 1.2;
+  scale: 1;
 }
 .userIdentity {
   font-size: small;

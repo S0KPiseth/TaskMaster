@@ -55,7 +55,7 @@ h3 {
 #priorityChoice {
   width: 15%;
 }
-.addTask input {
+.addTaskInput {
   color: var(--text-primary);
   background-color: var(--background-secondary);
   border: 0;
@@ -78,18 +78,24 @@ h3 {
   border: 0;
   height: 70%;
 }
-.addBtnContainer button {
-  font-size: var(--text-base);
-  margin-right: 10px;
+.addBtnContainer {
+  display: flex;
+  gap: 5px;
+  font-size: var(--text-sm);
 }
-.addBtnContainer button:nth-child(1) {
-  background-color: black;
+.addBtnContainer input {
+  color: white !important;
+  padding: 5px 10px 5px 10px;
+  border: none;
+  border-radius: 0.5rem;
 }
 .addBtnContainer button:nth-child(2) {
   color: black;
   background-color: white;
   box-shadow: 0 0 2px var(--shadow-color);
   border: 1px solid var(--border-color);
+  padding: 5px;
+  border-radius: 0.5rem;
 }
 #ttAddBtn:hover,
 #ttAddBtn:active {

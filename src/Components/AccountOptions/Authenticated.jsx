@@ -2,7 +2,12 @@ import React from "react";
 import "./AccountOptions.css";
 export function Authenticated({ setAcControlStatus, acControlStatus }) {
   return (
-    <div className="AccountNNotification">
+    <div
+      className="AccountNNotification"
+      onClick={() => {
+        setAcControlStatus((prev) => !prev);
+      }}
+    >
       <div className="account">
         <div className="userIdentity">
           <p>John Doe</p>

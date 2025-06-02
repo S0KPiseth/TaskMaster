@@ -2,6 +2,7 @@ function TagContent({ removeTag, tagElement, index, tagUpdate }) {
   function color(e) {
     let temTag = tagUpdate.current;
     temTag[index] = [index, e.target.value];
+
     tagUpdate.current = temTag;
   }
   return (

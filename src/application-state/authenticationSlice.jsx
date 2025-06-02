@@ -1,26 +1,18 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import { createSlice } from "@reduxjs/toolkit";
 
 // initial state
 const initialState = {
-  value: false,
+  user: [],
 };
-
-// create async thunk for auth status
-export const getAuthStatus = createAsyncThunk("isAuth/getAuthStatus", async () => {
-  const response = await axios.get("http://localhost:5050/api/auth/status");
-  return response.data.value;
-});
-
 // slice
 const isAuthenticated = createSlice({
   name: "isAuth",
   initialState,
-  reducers: {},
-  extraReducers: (builder) => {
-    builder.addCase(getAuthStatus.fulfilled, (state, action) => {
-      state.value = action.payload;
-    });
+  reducers: {
+    setUser: (state, action) => {
+      state.user = action.payload;
+    },
   },
 });
+export const { setUser } = isAuthenticated.actions;
 export default isAuthenticated.reducer;

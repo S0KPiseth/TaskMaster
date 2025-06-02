@@ -1,7 +1,44 @@
+import axios from "axios";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../application-state/authenticationSlice";
+import { useNavigate } from "react-router-dom";
+
 export default function LoginForm() {
+  const dispatcher = useDispatch();
+  const navigate = useNavigate();
+  function handleLogin(e) {
+    e.preventDefault();
+    const data = new FormData(e.target);
+    const username = data.get("username");
+    const password = data.get("password");
+    axios
+      .post(
+        "http://localhost:5050/api/auth",
+        {
+          username,
+          password,
+        },
+        { withCredentials: true }
+      )
+      .then((res) => {
+        if (200 <= res <= 299) {
+          dispatcher(setUser(res.data.user));
+
+          navigate(res.data.redirectUrl);
+          // window.location.href = res.data.redirectUrl;
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
   return (
-    <form action="http://localhost:5000" method="POST">
+    <form
+      onSubmit={(e) => {
+        handleLogin(e);
+      }}
+    >
       <div>
         <h1>Welcome back</h1>
         <p id="loginSlogan">Your tasks are right where you left them. Time to check a few off.</p>

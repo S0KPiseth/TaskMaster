@@ -1,17 +1,26 @@
 import "./Dashboard.css";
 import DashboardCard from "../../Components/DateCard/DashboardCard";
 import TaskCard from "../../Components/TaskCard/TaskCard";
-import { data, Link, Navigate } from "react-router-dom";
-import { useEffect } from "react";
+import { Link, Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function Dashboard({ taskList, setAddStatus }) {
-  // if (!document.cookie) {
-  //   return <Navigate to="/auth" replace />;
-  // }
-  const recent = taskList.map((e) => {
-    return <TaskCard taskItems={e} recent={true} />;
-  });
-  [recent[0], recent[1]] = [recent[recent.length - 1], recent[recent.length - 2]];
+  const ApiStatus = useSelector((state) => state.isAuth.user);
+  console.log(ApiStatus);
+  let recent;
+  if (ApiStatus._id) {
+    recent = ApiStatus.tasks.map((e, index) => {
+      return <TaskCard taskItems={e} recent={true} key={"sdfsadfsd" + index} />;
+    });
+  } else {
+    recent = ApiStatus.map((e, index) => {
+      return <TaskCard taskItems={e} recent={true} key={"sdfsadfsd" + index} />;
+    });
+  }
+  if (recent.length === 0) {
+    recent = <p className="noTasks">No tasks to show</p>;
+  }
+
   return (
     <>
       <div className="dashBoard">
@@ -35,8 +44,7 @@ function Dashboard({ taskList, setAddStatus }) {
             </button>
           </Link>
         </div>
-
-        <div className="recentTask">{recent.slice(0, 2)}</div>
+        <div className="recentTask">{recent}</div>
       </div>
     </>
   );

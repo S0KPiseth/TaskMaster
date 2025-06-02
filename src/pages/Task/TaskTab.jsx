@@ -2,18 +2,17 @@ import React, { useState, useRef, useEffect } from "react";
 import "./TaskTab.css";
 import TaskCard from "../../Components/TaskCard/TaskCard";
 import AddTask from "../../Components/AddTask/AddTask";
+import { useDispatch } from "react-redux";
+import { setTag } from "../../application-state/tagSlice";
 
 function TaskTab({ taskList, setTaskList, addStatus, setAddStatus, completeTask, isTabletScreen }) {
-  const tagUpdate = useRef([]);
-
+  const dispatcher = useDispatch();
   //filter option
   const [filterOption, setFilterOption] = useState(["All Status", "All Priority"]);
 
   // edit task
   const editTaskValue = useRef([]);
   const idxOfT2E = useRef(null);
-
-  const [tags, setTag] = useState([]);
   const [newList, setNewList] = useState(taskList);
 
   useEffect(() => filterTask(), [taskList]);
@@ -41,7 +40,7 @@ function TaskTab({ taskList, setTaskList, addStatus, setAddStatus, completeTask,
     idxOfT2E.current = id;
     const task2edit = newList[id];
     editTaskValue.current = task2edit;
-    setTag(editTaskValue.current[2]);
+    dispatcher(setTag(editTaskValue.current[2]));
     setAddStatus(true);
   }
   //delete task
@@ -87,7 +86,7 @@ function TaskTab({ taskList, setTaskList, addStatus, setAddStatus, completeTask,
         </div>
         {addStatus && (
           <>
-            <AddTask taskList={taskList} setAddStatus={setAddStatus} tags={tags} setTag={setTag} setTaskList={setTaskList} tagUpdate={tagUpdate} editTaskValue={editTaskValue} editTaskIndex={idxOfT2E} /> <br />
+            <AddTask taskList={taskList} setAddStatus={setAddStatus} setTaskList={setTaskList} editTaskValue={editTaskValue} editTaskIndex={idxOfT2E} /> <br />
           </>
         )}
 
