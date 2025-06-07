@@ -2,24 +2,23 @@ import React, { useState, useRef, useEffect } from "react";
 import "./TaskTab.css";
 import TaskCard from "../../Components/TaskCard/TaskCard";
 import AddTask from "../../Components/AddTask/AddTask";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setTag } from "../../application-state/tagSlice";
 
 function TaskTab({ taskList, setTaskList, addStatus, setAddStatus, completeTask, isTabletScreen }) {
   const dispatcher = useDispatch();
+  const tasks = useSelector((state) => state.tasks.list);
   //filter option
   const [filterOption, setFilterOption] = useState(["All Status", "All Priority"]);
 
   // edit task
   const editTaskValue = useRef([]);
   const idxOfT2E = useRef(null);
-  const [newList, setNewList] = useState(taskList);
 
   useEffect(() => filterTask(), [taskList]);
 
   //Filter task
   function filterTask() {
-    console.log(taskList);
     const filter1 = document.getElementById("status");
     const filter2 = document.getElementById("priority");
     const filter1_option = filter1.options[filter1.selectedIndex].text;
@@ -30,23 +29,6 @@ function TaskTab({ taskList, setTaskList, addStatus, setAddStatus, completeTask,
       const priorityMatch = filter2_option === "All Priority" || e[4] === filter2_option;
 
       return statusMatch && priorityMatch;
-    });
-    setNewList(tempList);
-    // console.log(taskList);
-    // console.log(newList);
-  }
-  // edit task
-  function editTask(id) {
-    idxOfT2E.current = id;
-    const task2edit = newList[id];
-    editTaskValue.current = task2edit;
-    dispatcher(setTag(editTaskValue.current[2]));
-    setAddStatus(true);
-  }
-  //delete task
-  function deleteTask(id) {
-    setTaskList((prevList) => {
-      return prevList.filter((_, idx) => idx !== id);
     });
   }
 
@@ -86,18 +68,22 @@ function TaskTab({ taskList, setTaskList, addStatus, setAddStatus, completeTask,
         </div>
         {addStatus && (
           <>
-            <AddTask taskList={taskList} setAddStatus={setAddStatus} setTaskList={setTaskList} editTaskValue={editTaskValue} editTaskIndex={idxOfT2E} /> <br />
+            <AddTask setAddStatus={setAddStatus} editTaskValue={editTaskValue} editTaskIndex={idxOfT2E} /> <br />
           </>
         )}
 
-        {newList.map((e, index) => {
-          return (
-            <React.Fragment key={`${e[0].slice(0, 3)}${index}`}>
-              <TaskCard taskList={taskList} taskItems={e} setAddStatus={setAddStatus} editTask={editTask} index={index} completeTask={completeTask} deleteTask={deleteTask} isTabletScreen={isTabletScreen} />
-              <br />
-            </React.Fragment>
-          );
-        })}
+        {tasks.length > 0 ? (
+          tasks.map((e, index) => {
+            return (
+              <React.Fragment key={`${e.title.slice(0, 3)}${index}`}>
+                <TaskCard task={e} setAddStatus={setAddStatus} index={index} completeTask={completeTask} isTabletScreen={isTabletScreen} />
+                <br />
+              </React.Fragment>
+            );
+          })
+        ) : (
+          <p className="noTasks">You haven't create any tasks click add new task to create task</p>
+        )}
       </div>
     </>
   );

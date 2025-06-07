@@ -2,18 +2,15 @@ import axios from "axios";
 import "../../pages/Task/TaskTab.css";
 import TagContent from "../TagContent/TagContent";
 import { useSelector, useDispatch } from "react-redux";
-import { addTag, changeColor, clearTags } from "../../application-state/tagSlice";
-import { useRef } from "react";
+import { addTag, clearTags } from "../../application-state/tagSlice";
+import { addNewTask, editExistTask, resetEditTask } from "../../application-state/taskListSlice";
 
 //taskList, setAddStatus, tags, setTag, setTaskList, tagUpdate, editTaskValue, editTaskIndex
-function AddTask({ taskList, setAddStatus, setTaskList, editTaskValue, editTaskIndex }) {
+function AddTask({ setAddStatus }) {
   const tags = useSelector((state) => state.tagList.list);
-  const tagUpdate = useRef([]);
+  const user = useSelector((state) => state.isAuth.user);
+  const taskForEdit = useSelector((state) => state.tasks.editTask);
   const dispatcher = useDispatch();
-  function removeTag(idx) {
-    // const updatedArray = tags.filter((_, index) => index !== idx);
-    // setTag(updatedArray);
-  }
   function addNewTag(e) {
     if (e.key == "Enter" && e.target.value != "") {
       dispatcher(addTag({ tagname: e.target.value, color: "black", textColor: "white" }));
@@ -25,51 +22,46 @@ function AddTask({ taskList, setAddStatus, setTaskList, editTaskValue, editTaskI
     }
   }
   function addTask(event) {
+    //waiting for backend add task fixed
     const createdDate = new Date();
     const formattedDate = createdDate.toISOString().slice(0, 10);
-    event.preventDefault();
-    const task = new FormData(event.target);
-    if (task.get("title") && task.get("date")) {
-      // let tagConfig = tags;
-      tagUpdate.current.forEach((element) => {
-        const [r, g, b] = element[1]
-          .replace(/^#/, "")
-          .match(/.{2}/g)
-          .map((hex) => parseInt(hex, 16));
-        const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-        let textColor = luminance > 0.5 ? "#000000" : "#FFFFFF";
-        dispatcher(changeColor({ idxToUpdate: element[0], updatedColor: element[1], improveTexColor: textColor }));
+    const title = document.getElementById("title").value;
+    const description = document.getElementById("description").value;
+    const date = document.getElementById("date").value;
+    const priorityChoice = document.getElementById("priorityChoice").value;
+    const rqBody = {
+      title: title,
+      description: description,
+      tags: tags,
+      dueDate: date,
+      priorityChoice: priorityChoice,
+      status: "in progress",
+      createdDate: formattedDate,
+      userId: user._id || null,
+      idx: taskForEdit._id,
+    };
 
-        // tagConfig[element[0]].color = element[1];
-        // tagConfig[element[0]].textColor = textColor;
-      });
-      tagUpdate.current = [];
-      console.log(tags);
-
-      const e = document.getElementById("priorityChoice");
-      const text = e.options[e.selectedIndex].text;
-      const taskToAdd = [document.getElementById("title").value, document.getElementById("description").value, tags, document.getElementById("date").value, text, "In Progress"];
-      if (editTaskIndex.current == null) {
+    if (title && date) {
+      if (taskForEdit._id) {
         axios
-          .put("http://localhost:5050/api/task", {
-            title: task.get("title"),
-            description: task.get("description"),
-            tags: tags,
-            dueDate: task.get("date"),
-            priorityChoice: task.get("priorityChoice"),
-            status: "in progress",
-            createdDate: formattedDate,
-          })
+          .put("http://localhost:5050/api/task", rqBody, { withCredentials: true })
           .then((res) => {
-            console.log(res.data);
+            dispatcher(editExistTask({ idx: taskForEdit._id, newTask: res.data.task }));
+          })
+          .catch((err) => {
+            alert(`error:${err.response.status}:${err.response.data.msg}`);
           });
-        setTaskList((t) => [...t, taskToAdd]);
       } else {
-        const tempTask = [...taskList];
-        tempTask[editTaskIndex.current] = taskToAdd;
-        setTaskList(tempTask);
-        editTaskIndex.current = null;
-        editTaskValue.current = [];
+        axios
+          .post("http://localhost:5050/api/task", rqBody, { withCredentials: true })
+          .then((res) => {
+            dispatcher(addNewTask(res.data.task));
+            //clear the data that assign to the add task input fields
+            dispatcher(resetEditTask());
+          })
+          .catch((err) => {
+            alert(`error:${err.response.status}:${err.response.data.msg}`);
+          });
       }
 
       setAddStatus(false);
@@ -80,40 +72,53 @@ function AddTask({ taskList, setAddStatus, setTaskList, editTaskValue, editTaskI
   }
 
   return (
-    <form className="addTask" onSubmit={addTask}>
+    <div
+      className="addTask"
+      id="taskForm"
+      onSubmit={(e) => {
+        e.preventDefault();
+      }}
+    >
       <h3 id="header">Add New Task</h3>
-      <input className="addTaskInput" type="text" name="title" id="title" placeholder="Task title" required defaultValue={editTaskValue.current[0]} />
-      <input className="addTaskInput" type="text" name="description" id="description" placeholder="Task description" defaultValue={editTaskValue.current[1]} />
+      <input className="addTaskInput" type="text" name="title" id="title" placeholder="Task title" defaultValue={taskForEdit.title} />
+      <input className="addTaskInput" type="text" name="description" id="description" placeholder="Task description" defaultValue={taskForEdit.description} />
       <label htmlFor="">
         {tags.map((e, idx) => {
-          return <TagContent key={idx} tagElement={e} tags={tags} index={idx} removeTag={removeTag} tagUpdate={tagUpdate} />;
+          return <TagContent key={idx} tagElement={e} tags={tags} index={idx} />;
         })}
 
-        <input className="addTaskInput" type="text" name="" placeholder="add tags" onKeyDown={(e) => addNewTag(e)} />
+        <input
+          className="addTaskInput"
+          type="text"
+          name=""
+          placeholder="add tags"
+          onKeyDown={(e) => {
+            addNewTag(e);
+          }}
+        />
       </label>
 
       <div className="lastInput">
-        <input className="addTaskInput" type="date" name="date" id="date" defaultValue={editTaskValue.current[3]} />
-        <select name="priorityChoice" id="priorityChoice" className="selectClass" defaultValue={editTaskValue.current[4]}>
+        <input className="addTaskInput" type="date" name="date" id="date" defaultValue={taskForEdit._id ? taskForEdit.dueDate.slice(0, 10) : null} />
+        <select name="priorityChoice" id="priorityChoice" className="selectClass" defaultValue={taskForEdit.priorityChoice}>
           <option value="High Priority">High Priority</option>
           <option value="Medium Priority">Medium Priority</option>
           <option value="Low Priority">Low Priority</option>
         </select>
       </div>
       <div className="addBtnContainer">
-        <input type="submit" value="Add Task" className="confirmAdd backgroundBtn" />
+        <input type="submit" value="Add Task" className="confirmAdd backgroundBtn" onClick={addTask} />
         <button
           onClick={() => {
-            setTag([]);
+            dispatcher(clearTags());
+            dispatcher(resetEditTask());
             setAddStatus(false);
-            editTaskIndex.current = null;
-            editTaskValue.current = [];
           }}
         >
           Cancel
         </button>
       </div>
-    </form>
+    </div>
   );
 }
 export default AddTask;

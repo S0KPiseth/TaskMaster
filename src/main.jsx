@@ -4,13 +4,14 @@ import "./general-sans.css";
 import "./index.css";
 import App from "./App.jsx";
 import { Provider } from "react-redux";
-import { store, persistor } from "./application-state/Store.jsx";
+import { getStore } from "./application-state/Store.jsx";
 import { PersistGate } from "redux-persist/integration/react";
+const { store, persistor } = getStore(false);
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <App />
+        <App persistor={persistor} />
       </PersistGate>
     </Provider>
   </StrictMode>

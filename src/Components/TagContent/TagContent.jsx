@@ -1,10 +1,13 @@
-function TagContent({ removeTag, tagElement, index, tagUpdate }) {
-  function color(e) {
-    let temTag = tagUpdate.current;
-    temTag[index] = [index, e.target.value];
+import { useDispatch } from "react-redux";
+import { changeColor, removeByIDX } from "../../application-state/tagSlice";
+import getTextColor from "../../helper/getTextColor";
+function TagContent({ tagElement, index }) {
+  const dispatcher = useDispatch();
+  const handleColorChange = (e) => {
+    const textColor = getTextColor(e.target.value);
+    dispatcher(changeColor({ idxToUpdate: index, updatedColor: e.target.value, improveTexColor: textColor }));
+  };
 
-    tagUpdate.current = temTag;
-  }
   return (
     <div
       style={{
@@ -20,7 +23,7 @@ function TagContent({ removeTag, tagElement, index, tagUpdate }) {
         backgroundColor: "var(--color-primary-100)",
       }}
     >
-      <input type="color" id="style2" onChange={color} defaultValue={tagElement.color} />
+      <input type="color" id="style2" onChange={handleColorChange} defaultValue={tagElement.color} />
       <p
         style={{
           fontSize: "var(--text-sm)",
@@ -43,7 +46,7 @@ function TagContent({ removeTag, tagElement, index, tagUpdate }) {
           height: "25px",
           width: "25px",
         }}
-        onClick={() => removeTag(index)}
+        onClick={() => dispatcher(removeByIDX({ index: index }))}
       >
         &#10006;
       </button>

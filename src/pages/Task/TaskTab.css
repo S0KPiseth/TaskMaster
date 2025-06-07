@@ -22,6 +22,9 @@ h3 {
   padding-bottom: 20px;
   /* box-shadow: 0 0 2px var(--shadow-color); */
 }
+.tasksTabContent .noTasks {
+  height: 100%;
+}
 .addTask {
   background-color: var(--background-tertiary);
   padding: 25px;

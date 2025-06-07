@@ -22,8 +22,12 @@ const tagSlice = createSlice({
     setTag: (state, action) => {
       state.list = action.payload;
     },
+    removeByIDX: (state, action) => {
+      const { index } = action.payload;
+      state.list.splice(index, 1);
+    },
   },
 });
 
-export const { addTag, changeColor, clearTags, setTag } = tagSlice.actions;
+export const { addTag, changeColor, clearTags, setTag, removeByIDX } = tagSlice.actions;
 export default tagSlice.reducer;

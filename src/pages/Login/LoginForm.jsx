@@ -3,8 +3,13 @@ import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../application-state/authenticationSlice";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { getStore } from "../../application-state/Store";
+import { setTaskLogin } from "../../application-state/taskListSlice";
+import { setAuth } from "../../application-state/authenticationSlice";
 
 export default function LoginForm() {
+  const [rememberMe, setRememberMe] = useState(false);
   const dispatcher = useDispatch();
   const navigate = useNavigate();
   function handleLogin(e) {
@@ -24,9 +29,16 @@ export default function LoginForm() {
       .then((res) => {
         if (200 <= res <= 299) {
           dispatcher(setUser(res.data.user));
-
+          dispatcher(setAuth(true));
           navigate(res.data.redirectUrl);
-          // window.location.href = res.data.redirectUrl;
+          const { store, persistor } = getStore(rememberMe);
+          localStorage.setItem("rememberMe", rememberMe);
+          rememberMe && window.location.reload();
+          //getTask
+          axios.get("http://localhost:5050/api/task", { withCredentials: true }).then((res) => {
+            console.log(res.data);
+            dispatcher(setTaskLogin(res.data));
+          });
         }
       })
       .catch((err) => {
@@ -52,7 +64,7 @@ export default function LoginForm() {
       </label>
       <div className="loginUtilsWrapper">
         <label htmlFor="remember">
-          <input type="checkbox" name="remember" id="" />
+          <input type="checkbox" name="remember" id="" checked={rememberMe} onChange={() => setRememberMe((pre) => !pre)} />
           Remember me
         </label>
         <a href="">Forgot password?</a>

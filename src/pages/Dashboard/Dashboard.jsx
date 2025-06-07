@@ -4,19 +4,12 @@ import TaskCard from "../../Components/TaskCard/TaskCard";
 import { Link, Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-function Dashboard({ taskList, setAddStatus }) {
-  const ApiStatus = useSelector((state) => state.isAuth.user);
-  console.log(ApiStatus);
-  let recent;
-  if (ApiStatus._id) {
-    recent = ApiStatus.tasks.map((e, index) => {
-      return <TaskCard taskItems={e} recent={true} key={"sdfsadfsd" + index} />;
-    });
-  } else {
-    recent = ApiStatus.map((e, index) => {
-      return <TaskCard taskItems={e} recent={true} key={"sdfsadfsd" + index} />;
-    });
-  }
+function Dashboard({ setAddStatus }) {
+  const tasks = useSelector((state) => state.tasks.list);
+  console.log(tasks);
+  let recent = tasks.map((e, index) => {
+    return <TaskCard task={e} recent={true} key={"sdfsadfsd" + index} />;
+  });
   if (recent.length === 0) {
     recent = <p className="noTasks">No tasks to show</p>;
   }

@@ -1,11 +1,19 @@
 import "./TaskCard.css";
 import { useEffect, useRef, useState } from "react";
-function TaskCard({ taskList, taskItems, editTask, index, completeTask, deleteTask, recent, isTabletScreen }) {
+import { initializeEdit } from "../../application-state/taskListSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { setTag } from "../../application-state/tagSlice";
+import { deleteTask, completeTk } from "../../application-state/taskListSlice";
+import axios from "axios";
+// taskList, taskItems, editTask, index, completeTask, deleteTask, recent, isTabletScreen
+function TaskCard({ taskList, task, index, recent, isTabletScreen, setAddStatus }) {
   const myRef = useRef(null);
   const DateRef = useRef(null);
   const [isTouching, setIsTouching] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const animatedRef = useRef(null);
+  const dispatcher = useDispatch();
+  const taskForEdit = useSelector((state) => state.tasks.editTask);
 
   const checkCollision = () => {
     if (!myRef.current || !DateRef.current) return;
@@ -32,9 +40,44 @@ function TaskCard({ taskList, taskItems, editTask, index, completeTask, deleteTa
 
   useEffect(() => {
     checkCollision();
-  }, [windowWidth, taskItems[2].length]);
+  }, [windowWidth, task.tags.length]);
+  const editTask = (task) => {
+    dispatcher(initializeEdit(task));
+    setAddStatus(true);
+    dispatcher(setTag(task.tags));
+  };
+  //delete task
+  const deleteUserTask = (task) => {
+    axios
+      .delete(`http://localhost:5050/api/task/${task._id}`, { withCredentials: true })
+      .then((res) => {
+        if (res.status >= 200 && res.status < 300) {
+          dispatcher(deleteTask(task._id));
+        }
+      })
+      .catch((err) => {
+        alert("Some thing went wrong " + err.response.status + ": " + err.response.data.msg);
+      });
+  };
+  //complete task
+  const completeTask = (currentTask) => {
+    if (!["Complete", "Over due"].includes(currentTask.status)) {
+      axios
+        .put(`http://localhost:5050/api/task/${currentTask._id}`, { withCredentials: true })
+        .then((res) => {
+          if (res.status >= 200 && res.status < 300) {
+            dispatcher(completeTk(currentTask._id));
+          }
+        })
+        .catch((err) => {
+          alert("Some thing went wrong " + err.response.status + ": " + err.response.data.msg);
+        });
+    } else {
+      alert("The task already complete or it over due");
+    }
+  };
 
-  const tags = taskItems[2].map((e, index) => {
+  const tags = task.tags.map((e, index) => {
     return (
       <p key={index} style={{ backgroundColor: e.color, color: e.textColor }}>
         {e.tagname}
@@ -44,10 +87,10 @@ function TaskCard({ taskList, taskItems, editTask, index, completeTask, deleteTa
   return (
     <div className="tkCard slideInUP" ref={animatedRef}>
       <div className="taskContent">
-        <p style={{ fontWeight: "var(--font-semibold)", fontSize: "var(--text-xl)" }} className={taskItems[5] == "Complete" ? "line-trough" : ""}>
-          {taskItems[0]}
+        <p style={{ fontWeight: "var(--font-semibold)", fontSize: "var(--text-xl)" }} className={task.status == "Complete" ? "line-trough" : ""}>
+          {task.title}
         </p>
-        <p style={{ fontSize: "var(--text-lg)", color: "var(--color-gray-500)" }}>{taskItems[1]}</p>
+        <p style={{ fontSize: "var(--text-lg)", color: "var(--color-gray-500)" }}>{task.description}</p>
         <div className="tags">{(isTabletScreen || isTouching) && tags}</div>
         <p style={{ color: "var(--color-gray-500)", display: "flex", columnGap: "10px", width: "fit-content", alignItems: "center" }} ref={DateRef}>
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -56,14 +99,14 @@ function TaskCard({ taskList, taskItems, editTask, index, completeTask, deleteTa
             <rect width="18" height="18" x="3" y="4" rx="2"></rect>
             <path d="M3 10h18"></path>
           </svg>
-          {taskItems[3]}
+          {task.dueDate.slice(0, 10)}
         </p>
       </div>
       <div id="TagsNControl">
-        <p className={taskItems[5] == "In Progress" ? "in-progress" : taskItems[5] == "Over due" ? "priority-high" : "complete"}>{taskItems[5]}</p>
+        <p className={task.status == "In Progress" ? "in-progress" : task.status == "Over due" ? "priority-high" : "complete"}>{task.status}</p>
         <div id="innerTagNControl">
           <div className="tags" ref={myRef}>
-            <p className={taskItems[4] == "Medium Priority" ? "priority-medium" : taskItems[4] == "High Priority" ? "priority-high" : "priority-low"}>{taskItems[4]}</p>
+            <p className={task.priorityChoice == "Medium Priority" ? "priority-medium" : task.priorityChoice == "High Priority" ? "priority-high" : "priority-low"}>{task.priorityChoice}</p>
             {!isTabletScreen && !isTouching && tags}
           </div>
           {!recent && (
@@ -71,14 +114,14 @@ function TaskCard({ taskList, taskItems, editTask, index, completeTask, deleteTa
               <button
                 id="edit"
                 onClick={() => {
-                  editTask(index);
+                  editTask(task);
                 }}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
                 </svg>
               </button>
-              <button id="complete" onClick={() => completeTask(index)}>
+              <button id="complete" onClick={() => completeTask(task)}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="12" cy="12" r="10" />
                   <path d="m9 12 2 2 4-4" />
@@ -89,7 +132,7 @@ function TaskCard({ taskList, taskItems, editTask, index, completeTask, deleteTa
                 onClick={() => {
                   animatedRef && (animatedRef.current.className += " fadeOutLeft");
                   setTimeout(() => {
-                    deleteTask(taskList.indexOf(taskItems));
+                    deleteUserTask(task);
                   }, 300);
                 }}
               >

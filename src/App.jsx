@@ -11,11 +11,10 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from "react-route
 import UserAuthentication from "./pages/Login/Auth";
 import LoginForm from "./pages/Login/LoginForm";
 import RegisterForm from "./pages/Login/RegisterForm";
-import { persistor } from "./application-state/Store";
 import { useDispatch } from "react-redux";
 import { setUser } from "./application-state/authenticationSlice";
 
-function App() {
+function App(props) {
   const [isTabletScreen, setIsTabletScreen] = useState(window.matchMedia("(max-width: 1024px)").matches);
   const [acControlStatus, setAcControlStatus] = useState(false);
   const [sideBarStatus, setSideBarStatus] = useState(!isTabletScreen);
@@ -57,9 +56,9 @@ function App() {
                   onClick={() => {
                     setAcControlStatus(false);
                     dispatcher(setUser([]));
-                    persistor.pause();
-                    persistor.flush().then(() => {
-                      return persistor.purge();
+                    props.persistor.pause();
+                    props.persistor.flush().then(() => {
+                      return props.persistor.purge();
                     });
                   }}
                 >
@@ -69,7 +68,7 @@ function App() {
                 </div>
               )}
               <Routes>
-                <Route path="/" element={<Dashboard taskList={taskList} setAddStatus={setAddStatus} />} />
+                <Route path="/" element={<Dashboard setAddStatus={setAddStatus} />} />
                 <Route path="/Tasks" element={<TaskTab taskList={taskList} setTaskList={setTaskList} addStatus={addStatus} setAddStatus={setAddStatus} completeTask={completeTask} isTabletScreen={isTabletScreen} />} />
                 <Route path="/Calendar" element={<Calendar taskList={taskList} completeTask={completeTask} hover={hover} setHover={setHover} />} />
               </Routes>
@@ -91,10 +90,10 @@ function App() {
   );
 }
 
-function RootApp() {
+function RootApp(props) {
   return (
     <Router>
-      <App />
+      <App persistor={props.persistor} />
     </Router>
   );
 }
