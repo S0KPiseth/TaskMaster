@@ -30,7 +30,7 @@ const tasks = createSlice({
     },
     setTaskLogin: (state, action) => {
       const tasks = action.payload;
-      state.list = [...tasks, ...state.list];
+      state.list = [...tasks];
     },
     initializeEdit: (state, action) => {
       state.editTask = action.payload;
@@ -43,7 +43,6 @@ const tasks = createSlice({
       state.list.splice(taskToDelete, 1);
     },
     completeTk: (state, action) => {
-      console.log(action.payload);
       state.list.forEach((e) => {
         if (e._id === action.payload) e.status = "Complete";
       });

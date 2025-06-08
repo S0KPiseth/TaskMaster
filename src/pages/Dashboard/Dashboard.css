@@ -23,6 +23,6 @@
 }
 .noTasks {
   color: var(--text-inactive);
-  font-size: large;
+  font-size: var(--text-2xl);
   text-align: center;
 }

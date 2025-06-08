@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../../application-state/authenticationSlice";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -10,6 +10,7 @@ import { setAuth } from "../../application-state/authenticationSlice";
 
 export default function LoginForm() {
   const [rememberMe, setRememberMe] = useState(false);
+  const guestTasks = useSelector((state) => state.tasks.list);
   const dispatcher = useDispatch();
   const navigate = useNavigate();
   function handleLogin(e) {
@@ -26,7 +27,7 @@ export default function LoginForm() {
         },
         { withCredentials: true }
       )
-      .then((res) => {
+      .then(async (res) => {
         if (200 <= res <= 299) {
           dispatcher(setUser(res.data.user));
           dispatcher(setAuth(true));
@@ -34,9 +35,18 @@ export default function LoginForm() {
           const { store, persistor } = getStore(rememberMe);
           localStorage.setItem("rememberMe", rememberMe);
           rememberMe && window.location.reload();
+          //add the that they the user create when they are a guest user to the database
+          if (guestTasks) {
+            for (const task of guestTasks) {
+              const { _id, ...reqBody } = task;
+              await axios.post("http://localhost:5050/api/task", { ...reqBody, userId: res.data.user._id }, { withCredentials: true }).catch((err) => {
+                alert(`error:${err.response.status}:${err.response.data.msg}`);
+              });
+            }
+          }
+
           //getTask
           axios.get("http://localhost:5050/api/task", { withCredentials: true }).then((res) => {
-            console.log(res.data);
             dispatcher(setTaskLogin(res.data));
           });
         }

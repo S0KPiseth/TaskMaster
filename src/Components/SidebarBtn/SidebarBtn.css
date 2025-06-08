@@ -18,14 +18,14 @@
   align-items: center;
 }
 .sideBarBtn:hover {
-  background-image: url("/image/bgGradient.jpg");
   background-repeat: no-repeat;
   background-position: top left;
-  color: white;
+  background-color: var(--color-primary-100);
+  color: var(--color-primary-700);
 }
 .activeTab {
-  /* background-color: var(--color-gray-200); */
-  color: var(--text-primary);
+  background-color: var(--color-primary-100);
+  color: var(--color-primary-700);
 }
 .Icon {
   scale: 1.2;

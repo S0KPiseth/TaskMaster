@@ -1,8 +1,15 @@
 import * as React from "react";
-const TaskIcon = (props) => (
-  <svg fill="#000000" width="20px" height="20px" viewBox="0 0 16 16" id="_31_Task" data-name="31 Task" xmlns="http://www.w3.org/2000/svg">
-    <path fill="currentColor" id="Path_40" data-name="Path 40" d="M10.179 3.988 7.159 7.227l-1.384 -1.483L4.5 7.111l2.712 2.886 4.286 -4.595Z" fillRule="evenodd" />
-    <path id="Path_41" data-name="Path 41" d="M15 0H1A0.999 0.999 0 0 0 0 1v14a0.999 0.999 0 0 0 1 1h14a0.999 0.999 0 0 0 1 -1V1a0.999 0.999 0 0 0 -1 -1m-1 11h-3v3H5v-3H2V2h12Z" fillRule="evenodd" fill="currentColor" />
+const SVGComponent = (props) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} fill="none" viewBox="0 0 24 24" {...props}>
+    <path fill="url(#paint0_linear_607_165)" d="M6 4.25C4.48122 4.25 3.25 5.48122 3.25 7V20C3.25 21.5188 4.48122 22.75 6 22.75H18C19.5188 22.75 20.75 21.5188 20.75 20V7C20.75 5.48122 19.5188 4.25 18 4.25H6Z" />
+    <path fill="#3D96D1" d="M6.25 10C6.25 9.58579 6.58579 9.25 7 9.25H17C17.4142 9.25 17.75 9.58579 17.75 10 17.75 10.4142 17.4142 10.75 17 10.75H7C6.58579 10.75 6.25 10.4142 6.25 10zM6.25 14C6.25 13.5858 6.58579 13.25 7 13.25H17C17.4142 13.25 17.75 13.5858 17.75 14 17.75 14.4142 17.4142 14.75 17 14.75H7C6.58579 14.75 6.25 14.4142 6.25 14zM7 17.25C6.58579 17.25 6.25 17.5858 6.25 18 6.25 18.4142 6.58579 18.75 7 18.75H13C13.4142 18.75 13.75 18.4142 13.75 18 13.75 17.5858 13.4142 17.25 13 17.25H7z" />
+    <path fill="#8FBFFA" d="M9.87803 4.25C10.1869 3.37611 11.0203 2.75 12 2.75C12.9797 2.75 13.8131 3.37611 14.122 4.25H15.675C15.3275 2.53832 13.8142 1.25 12 1.25C10.1858 1.25 8.67247 2.53832 8.32501 4.25H9.87803Z" />
+    <defs>
+      <linearGradient id="paint0_linear_607_165" x1={12} x2={12} y1={1.25} y2={22.75} gradientUnits="userSpaceOnUse">
+        <stop stopColor="#AEDFFF" />
+        <stop offset={1} stopColor="#85BBDE" />
+      </linearGradient>
+    </defs>
   </svg>
 );
-export default TaskIcon;
+export default SVGComponent;

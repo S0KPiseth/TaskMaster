@@ -11,9 +11,6 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from "react-route
 import UserAuthentication from "./pages/Login/Auth";
 import LoginForm from "./pages/Login/LoginForm";
 import RegisterForm from "./pages/Login/RegisterForm";
-import { useDispatch } from "react-redux";
-import { setUser } from "./application-state/authenticationSlice";
-
 function App(props) {
   const [isTabletScreen, setIsTabletScreen] = useState(window.matchMedia("(max-width: 1024px)").matches);
   const [acControlStatus, setAcControlStatus] = useState(false);
@@ -23,7 +20,6 @@ function App(props) {
   const [taskList, setTaskList] = useState([...tasks]);
   const tabRef = useRef(null);
   const location = useLocation();
-  const dispatcher = useDispatch();
   const completeTask = (id) => {
     setTaskList((prevList) => prevList.map((task, index) => (index === id ? [...task.slice(0, 5), "Complete"] : task)));
   };
@@ -42,6 +38,23 @@ function App(props) {
     document.querySelector(".sideBar").classList += " show";
     document.querySelector(".sideBarContainer").classList += " show";
   };
+  useEffect(() => {
+    const setTablet = () => {
+      setIsTabletScreen(window.matchMedia("(max-width: 1024px)").matches);
+    };
+    const toggleSideBarOff = () => {
+      setSideBarStatus(false);
+    };
+    window.addEventListener("resize", setTablet);
+    // document.body.addEventListener("mousedown", toggleSideBarOff);
+    return () => {
+      window.removeEventListener("resize", setTablet);
+      // document.body.removeEventListener("mousedown", toggleSideBarOff);
+    };
+  }, []);
+  useEffect(() => {
+    setSideBarStatus(!isTabletScreen);
+  }, [isTabletScreen]);
 
   return (
     <>
@@ -51,20 +64,21 @@ function App(props) {
             <Header isTabletScreen={isTabletScreen} setAcControlStatus={setAcControlStatus} acControlStatus={acControlStatus} showSidebarMobile={showSidebarMobile} />
             <div className="middleContent" ref={tabRef}>
               {acControlStatus && (
-                <div
-                  className="accountPanel"
-                  onClick={() => {
-                    setAcControlStatus(false);
-                    dispatcher(setUser([]));
-                    props.persistor.pause();
-                    props.persistor.flush().then(() => {
-                      return props.persistor.purge();
-                    });
-                  }}
-                >
+                <div className="accountPanel">
                   <button>View Profile</button>
                   <button>Switch Account</button>
-                  <button>Log out</button>
+                  <button
+                    onClick={() => {
+                      setAcControlStatus(false);
+                      props.persistor.pause();
+                      props.persistor.flush().then(() => {
+                        return props.persistor.purge();
+                      });
+                      window.location.reload();
+                    }}
+                  >
+                    Log out
+                  </button>
                 </div>
               )}
               <Routes>
@@ -74,7 +88,7 @@ function App(props) {
               </Routes>
             </div>
           </div>
-          <Sidebar sideBarCloseNOpen={sideBarCloseNOpen} sideBarStatus={sideBarStatus} navigate={navigate} isTabletScreen={isTabletScreen} />
+          <Sidebar sideBarCloseNOpen={sideBarCloseNOpen} sideBarStatus={sideBarStatus} navigate={navigate} isTabletScreen={isTabletScreen} setAcControlStatus={setAcControlStatus} />
         </>
       )}
 

@@ -1,31 +1,34 @@
 import "./Date.css";
 import "../TaskCard/TaskCard.css";
+import { useDispatch } from "react-redux";
+import { completeTk } from "../../application-state/taskListSlice";
 
 import { useState } from "react";
-function DateCard({ taskList, day, date, tasksForDay, isToday, isPreviousDay, completeTask, hover, setHover }) {
+function DateCard({ day, date, tasksForDay, isToday, isPreviousDay, completeTask, hover, setHover }) {
+  const dispatch = useDispatch();
   const [individualHover, setIndividualHover] = useState(false);
   const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
   const remainTask = tasksForDay.filter((task) => {
-    return task[5] === "In Progress";
+    return task.status === "In progress";
   });
   const overDueTasks = tasksForDay.filter((task) => {
-    return task[5] === "Over due";
+    return task.status === "Over due";
   });
   const calendarTaskPreview = tasksForDay.map((e, idx) => {
-    const prio = e[4].split(" ");
+    const prio = e.priorityChoice.split(" ");
     const priorityClass = `priority-${prio[0].toLowerCase()}`;
 
     return (
       <div className={priorityClass} key={idx} id="taskCardDive">
-        {!(e[5] === "Over due") ? (
-          <input type="checkbox" name="" id="" onChange={() => completeTask(taskList.indexOf(e))} checked={e[5] === "Complete"} disabled={e[5] === "Complete"} />
+        {!(e.status === "Over due") ? (
+          <input type="checkbox" name="" id="" onChange={() => dispatch(completeTk(e._id))} checked={e.status === "Complete"} disabled={e.status === "Complete"} />
         ) : (
           <div className="warning">
             <p className="sign">!</p>
           </div>
         )}
-        <p className={e[5] === "Complete" ? "line-trough" : e[5] === "Over due" ? "overDue" : ""}>{e[0]}</p>
+        <p className={e.status === "Complete" ? "line-trough" : e.status === "Over due" ? "overDue" : ""}>{e.title}</p>
       </div>
     );
   });

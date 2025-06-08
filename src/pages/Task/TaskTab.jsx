@@ -5,32 +5,23 @@ import AddTask from "../../Components/AddTask/AddTask";
 import { useDispatch, useSelector } from "react-redux";
 import { setTag } from "../../application-state/tagSlice";
 
-function TaskTab({ taskList, setTaskList, addStatus, setAddStatus, completeTask, isTabletScreen }) {
+function TaskTab({ taskList, addStatus, setAddStatus, completeTask, isTabletScreen }) {
   const dispatcher = useDispatch();
   const tasks = useSelector((state) => state.tasks.list);
   //filter option
   const [filterOption, setFilterOption] = useState(["All Status", "All Priority"]);
-
-  // edit task
-  const editTaskValue = useRef([]);
-  const idxOfT2E = useRef(null);
-
-  useEffect(() => filterTask(), [taskList]);
+  const [taskToRender, setTaskToRender] = useState([]);
 
   //Filter task
-  function filterTask() {
-    const filter1 = document.getElementById("status");
-    const filter2 = document.getElementById("priority");
-    const filter1_option = filter1.options[filter1.selectedIndex].text;
-    const filter2_option = filter2.options[filter2.selectedIndex].text;
-    setFilterOption([filter1_option, filter2_option]);
-    let tempList = taskList.filter((e) => {
-      const statusMatch = filter1_option === "All Status" || e[5] === filter1_option;
-      const priorityMatch = filter2_option === "All Priority" || e[4] === filter2_option;
+  useEffect(() => {
+    const tempList = tasks.filter((e) => {
+      const statusMatch = filterOption[0] === "All Status" || e.status === filterOption[0];
+      const priorityMatch = filterOption[1] === "All Priority" || e.priorityChoice === filterOption[1];
 
       return statusMatch && priorityMatch;
     });
-  }
+    setTaskToRender([...tempList]);
+  }, [filterOption, tasks]);
 
   return (
     <>
@@ -49,34 +40,46 @@ function TaskTab({ taskList, setTaskList, addStatus, setAddStatus, completeTask,
           </div>
         </div>
         <div className="taskFilter">
-          <select className="selectClass" id="status" onChange={filterTask}>
-            <option value="" defaultValue>
+          <select
+            className="selectClass"
+            id="status"
+            onChange={() => {
+              setFilterOption((pre) => [document.getElementById("status").value, pre[1]]);
+            }}
+          >
+            <option value="All Status" defaultValue>
               All Status
             </option>
-            <option value="">In Progress</option>
-            <option value="">Complete</option>
-            <option value="">Over due</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Complete">Complete</option>
+            <option value="Over due">Over due</option>
           </select>
-          <select className="selectClass" id="priority" onChange={filterTask}>
-            <option value="" defaultValue>
+          <select
+            className="selectClass"
+            id="priority"
+            onChange={() => {
+              setFilterOption((pre) => [pre[0], document.getElementById("priority").value]);
+            }}
+          >
+            <option value="All Priority" defaultValue>
               All Priority
             </option>
-            <option value="">High Priority</option>
-            <option value="">Medium Priority</option>
-            <option value="">Low Priority</option>
+            <option value="High Priority">High Priority</option>
+            <option value="Medium Priority">Medium Priority</option>
+            <option value="Low Priority<">Low Priority</option>
           </select>
         </div>
         {addStatus && (
           <>
-            <AddTask setAddStatus={setAddStatus} editTaskValue={editTaskValue} editTaskIndex={idxOfT2E} /> <br />
+            <AddTask setAddStatus={setAddStatus} /> <br />
           </>
         )}
 
-        {tasks.length > 0 ? (
-          tasks.map((e, index) => {
+        {taskToRender.length > 0 ? (
+          taskToRender.map((e, index) => {
             return (
-              <React.Fragment key={`${e.title.slice(0, 3)}${index}`}>
-                <TaskCard task={e} setAddStatus={setAddStatus} index={index} completeTask={completeTask} isTabletScreen={isTabletScreen} />
+              <React.Fragment key={`${index}4549`}>
+                <TaskCard task={e} setAddStatus={setAddStatus} isTabletScreen={isTabletScreen} />
                 <br />
               </React.Fragment>
             );

@@ -31,7 +31,7 @@ function Header({ setAcControlStatus, acControlStatus, showSidebarMobile, isTabl
             </button>
           )}
         </div>
-        {isAuthenticated ? <Authenticated setAcControlStatus={setAcControlStatus} acControlStatus={acControlStatus} /> : <Unauthorized />}
+        {isAuthenticated ? <Authenticated setAcControlStatus={setAcControlStatus} /> : <Unauthorized />}
       </div>
     </div>
   );

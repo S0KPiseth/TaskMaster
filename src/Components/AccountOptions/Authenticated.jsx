@@ -1,6 +1,7 @@
-import React from "react";
+import { useSelector } from "react-redux";
 import "./AccountOptions.css";
-export function Authenticated({ setAcControlStatus, acControlStatus }) {
+export function Authenticated({ setAcControlStatus }) {
+  const user = useSelector((state) => state.isAuth.user);
   return (
     <div
       className="AccountNNotification"
@@ -10,8 +11,8 @@ export function Authenticated({ setAcControlStatus, acControlStatus }) {
     >
       <div className="account">
         <div className="userIdentity">
-          <p>John Doe</p>
-          <p>@justjohn</p>
+          <p>{`${user.fname} ${user.lname}`}</p>
+          <p>{`@${user.username}`}</p>
         </div>
         <div className="profilePic">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

@@ -3,6 +3,8 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 export function handleFormSubmission(e, setState) {
   const formDt = new FormData(e.target);
+  const fname = formDt.get("fname");
+  const lname = formDt.get("lname");
   const username = formDt.get("username");
   const password = formDt.get("password");
   const email = formDt.get("email");
@@ -10,6 +12,8 @@ export function handleFormSubmission(e, setState) {
   e.preventDefault();
   axios
     .post("http://localhost:5050/api/auth/register", {
+      fname,
+      lname,
       username,
       password,
       email,
@@ -37,6 +41,15 @@ export default function RegisterForm() {
         <p id="loginSlogan">Let's make your day organize</p>
       </div>
       <br />
+      <div className="nameWrapper">
+        <label htmlFor="fname">
+          <input className="fields name" type="text" name="fname" placeholder="First name" />
+        </label>
+        <label htmlFor="lname">
+          <input className="fields name" type="text" name="lname" placeholder="Last name" />
+        </label>
+      </div>
+
       <label htmlFor="username">
         <input className="fields" type="text" name="username" placeholder="Enter your username" />
       </label>

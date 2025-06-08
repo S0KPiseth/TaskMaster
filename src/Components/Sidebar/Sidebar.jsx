@@ -1,6 +1,10 @@
 import SidebarButton from "../SidebarBtn/SidebarButton";
+import { Authenticated } from "../AccountOptions/Authenticated";
+import Unauthorized from "../AccountOptions/Unauthorized";
 import { Link } from "react-router";
-function Sidebar({ sideBarStatus, sideBarCloseNOpen, navigate, isTabletScreen }) {
+import { useSelector } from "react-redux";
+function Sidebar({ sideBarStatus, sideBarCloseNOpen, navigate, isTabletScreen, setAcControlStatus }) {
+  const isAuthenticated = useSelector((state) => state.isAuth.isAuthenticated);
   return (
     <div className={`sideBarContainer ${sideBarStatus ? "width-250" : "width-60"}`}>
       <div className={`sideBar ${sideBarStatus ? "width-250" : "width-60"}`}>
@@ -10,7 +14,8 @@ function Sidebar({ sideBarStatus, sideBarCloseNOpen, navigate, isTabletScreen })
               <path d="M27.947 9.523a3.333 3.333 0 0 1 5.107 4.287L18.055 31.683a3.333 3.333 0 1 1 -5.107 -4.283z" fill="currentColor" />
               <path d="M5 21.233a3.333 3.333 0 1 1 6.667 0 3.333 3.333 0 0 1 -6.667 0" fill="green" />
             </svg>
-            {sideBarStatus && "Task Master"}
+            {sideBarStatus && "Task-er"}
+            <p className="subText">Task-er</p>
           </a>
         </div>
         <hr />
@@ -32,29 +37,16 @@ function Sidebar({ sideBarStatus, sideBarCloseNOpen, navigate, isTabletScreen })
             <SidebarButton name="Settings" sideBarStatus={sideBarStatus} />
           </Link>
         </div>
-        <footer>{sideBarStatus && "© 2025 Piseth Sok. All rights reserved."}</footer>
-        <div
-          className="closeNopenSidebar"
-          onMouseEnter={() => {
-            if (!isTabletScreen) {
-              const sidebarBtn = document.querySelector("#sidebarCtrBtn");
-              const verticalLine = document.querySelector(".vertical-line");
-              if (sidebarBtn && verticalLine) {
-                sidebarBtn.classList.add("bouncingBtn");
-                verticalLine.style.visibility = "visible";
-              }
-            }
-          }}
-          onMouseLeave={() => {
-            const sidebarBtn = document.querySelector("#sidebarCtrBtn");
-            const verticalLine = document.querySelector(".vertical-line");
-            if (sidebarBtn && verticalLine) {
-              sidebarBtn.classList.remove("bouncingBtn");
-              verticalLine.style.visibility = "hidden";
-            }
-          }}
-        >
-          <div className="vertical-line"></div>
+        <div className="mobileAcc">
+          {" "}
+          {isAuthenticated ? <Authenticated setAcControlStatus={setAcControlStatus} /> : <Unauthorized />}
+          {isAuthenticated && (
+            <svg width="30px" height="30px" viewBox="0 0 0.563 0.563" fill="none" xmlns="http://www.w3.org/2000/svg" className="dot">
+              <path fillRule="evenodd" clipRule="evenodd" d="M0.136 0.281a0.042 0.042 0 1 1 -0.084 0 0.042 0.042 0 0 1 0.084 0m0.188 0a0.042 0.042 0 1 1 -0.084 0 0.042 0.042 0 0 1 0.084 0M0.469 0.323a0.042 0.042 0 1 0 0 -0.084 0.042 0.042 0 0 0 0 0.084" fill="#000000" />
+            </svg>
+          )}
+        </div>
+        <div className="closeNopenSidebar">
           <button id="sidebarCtrBtn" onClick={sideBarCloseNOpen}>
             <svg
               id="arrowhead"

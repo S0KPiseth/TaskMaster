@@ -112,6 +112,13 @@ form a {
   position: absolute;
   z-index: -1;
 }
+.name {
+  flex-grow: 1;
+}
+.nameWrapper {
+  display: flex;
+  gap: 5px;
+}
 
 /* .circle {
   position: absolute;

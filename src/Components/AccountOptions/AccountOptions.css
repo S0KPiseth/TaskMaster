@@ -50,6 +50,7 @@
   color: white;
   background-position: 10% 15%;
   margin-left: 5px;
+  min-width: 81px;
 }
 .uaDiv {
   background-color: transparent;

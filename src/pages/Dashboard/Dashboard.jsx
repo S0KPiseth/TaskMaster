@@ -6,7 +6,6 @@ import { useSelector } from "react-redux";
 
 function Dashboard({ setAddStatus }) {
   const tasks = useSelector((state) => state.tasks.list);
-  console.log(tasks);
   let recent = tasks.map((e, index) => {
     return <TaskCard task={e} recent={true} key={"sdfsadfsd" + index} />;
   });

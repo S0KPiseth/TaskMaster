@@ -38,8 +38,8 @@ function SidebarButton({ name, sideBarStatus }) {
       ref={activeBtn}
     >
       <div className={sideBarStatus ? "Icon" : "Icon full-width"}>{mainComponent}</div>
-
       {sideBarStatus ? name : null}
+      <p className="subText">{name}</p>
     </button>
   );
 }

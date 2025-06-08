@@ -11,6 +11,7 @@ function AddTask({ setAddStatus }) {
   const user = useSelector((state) => state.isAuth.user);
   const taskForEdit = useSelector((state) => state.tasks.editTask);
   const dispatcher = useDispatch();
+  const todayDate = new Date();
   function addNewTag(e) {
     if (e.key == "Enter" && e.target.value != "") {
       dispatcher(addTag({ tagname: e.target.value, color: "black", textColor: "white" }));
@@ -22,7 +23,6 @@ function AddTask({ setAddStatus }) {
     }
   }
   function addTask(event) {
-    //waiting for backend add task fixed
     const createdDate = new Date();
     const formattedDate = createdDate.toISOString().slice(0, 10);
     const title = document.getElementById("title").value;
@@ -37,20 +37,25 @@ function AddTask({ setAddStatus }) {
       priorityChoice: priorityChoice,
       status: "in progress",
       createdDate: formattedDate,
-      userId: user._id || null,
+      userId: user && user._id,
       idx: taskForEdit._id,
     };
 
     if (title && date) {
       if (taskForEdit._id) {
-        axios
-          .put("http://localhost:5050/api/task", rqBody, { withCredentials: true })
-          .then((res) => {
-            dispatcher(editExistTask({ idx: taskForEdit._id, newTask: res.data.task }));
-          })
-          .catch((err) => {
-            alert(`error:${err.response.status}:${err.response.data.msg}`);
-          });
+        if (user) {
+          axios
+            .put("http://localhost:5050/api/task", rqBody, { withCredentials: true })
+            .then((res) => {
+              dispatcher(editExistTask({ idx: taskForEdit._id, newTask: res.data.task }));
+            })
+            .catch((err) => {
+              alert(`error:${err.response.status}:${err.response.data.msg}`);
+            });
+        } else {
+          const { idx, ...propertyBefore } = rqBody;
+          dispatcher(editExistTask({ idx: taskForEdit._id, newTask: { _id: idx, ...propertyBefore } }));
+        }
       } else {
         axios
           .post("http://localhost:5050/api/task", rqBody, { withCredentials: true })
@@ -99,7 +104,7 @@ function AddTask({ setAddStatus }) {
       </label>
 
       <div className="lastInput">
-        <input className="addTaskInput" type="date" name="date" id="date" defaultValue={taskForEdit._id ? taskForEdit.dueDate.slice(0, 10) : null} />
+        <input className="addTaskInput" type="date" name="date" id="date" defaultValue={taskForEdit._id ? taskForEdit.dueDate.slice(0, 10) : null} min={todayDate.toISOString().slice(0, 10)} />
         <select name="priorityChoice" id="priorityChoice" className="selectClass" defaultValue={taskForEdit.priorityChoice}>
           <option value="High Priority">High Priority</option>
           <option value="Medium Priority">Medium Priority</option>

@@ -113,7 +113,7 @@ html,
 .notification {
   background-color: transparent;
   width: 40px;
-  height: 40px;
+  aspect-ratio: 1/1;
   border: 0;
   color: var(--color-primary-50);
   padding: 5px;
@@ -121,6 +121,7 @@ html,
   background-image: url("/image/bgGradient.jpg");
   background-repeat: no-repeat;
   background-position: center;
+  min-width: 39px;
 }
 
 .middleContent {
@@ -174,9 +175,9 @@ html,
   z-index: 1;
 }
 #sidebarCtrBtn {
-  top: 80px;
+  top: 50px;
   display: flex;
-  width: 30px;
+  width: 25px;
   aspect-ratio: 1/1;
   right: 2px;
   background-color: white;
@@ -184,22 +185,22 @@ html,
   border: 0;
   background-color: var(--background-secondary);
   padding: 0;
-  color: gray;
+  color: var(--color-primary-800);
   box-shadow: 0 0 12px var(--shadow-color);
   border-radius: 50%;
   z-index: 1;
   align-items: center;
   justify-content: center;
-  visibility: hidden;
+  animation: bounce 1.5s infinite alternate;
 }
 
 /* bouncing close sidebar */
-.bouncingBtn {
+/* .bouncingBtn {
   visibility: visible !important;
   animation: bounce 0.3s;
   animation-direction: alternate;
   animation-iteration-count: infinite;
-}
+} */
 
 .vertical-line {
   --color: rgb(32, 201, 151);
@@ -209,13 +210,59 @@ html,
   visibility: hidden;
   box-shadow: 0 0 2px rgba(var(---color), 0.5);
 }
-footer {
+.mobileAcc {
+  width: 90%;
+  border-radius: 5rem;
+  box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.333);
+  padding: 5px;
   position: absolute;
   font-size: var(--text-lg);
   text-align: center;
-  bottom: 0;
-  color: var(--color-gray-400);
+  bottom: 10px;
   font-weight: var(--font-normal);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  left: 50%;
+  transform: translate(-50%);
+}
+.mobileAcc {
+  display: none;
+}
+.mobileAcc .account {
+  flex-direction: row-reverse;
+}
+.mobileAcc .AccountNNotification {
+  max-width: 75%;
+  overflow: hidden;
+}
+.mobileAcc .userIdentity {
+  text-align: left;
+}
+.mobileAcc .userIdentity > p {
+  max-width: 70px;
+  word-break: keep-all;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.mobileAcc .uaDiv {
+  gap: 5px;
+  width: 100%;
+  justify-content: space-between;
+}
+.mobileAcc .uaDiv a {
+  flex-grow: 1;
+}
+
+.mobileAcc .uaBtn {
+  width: 100%;
+  margin: 0;
+}
+.mobileAcc #login {
+  background-color: rgb(233, 232, 232);
+}
+.dot {
+  margin-right: 10px;
 }
 #mouseMovement {
   position: absolute;

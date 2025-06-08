@@ -6,14 +6,14 @@ import { setTag } from "../../application-state/tagSlice";
 import { deleteTask, completeTk } from "../../application-state/taskListSlice";
 import axios from "axios";
 // taskList, taskItems, editTask, index, completeTask, deleteTask, recent, isTabletScreen
-function TaskCard({ taskList, task, index, recent, isTabletScreen, setAddStatus }) {
+function TaskCard({ task, recent, isTabletScreen, setAddStatus }) {
   const myRef = useRef(null);
   const DateRef = useRef(null);
   const [isTouching, setIsTouching] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const animatedRef = useRef(null);
   const dispatcher = useDispatch();
-  const taskForEdit = useSelector((state) => state.tasks.editTask);
+  const user = useSelector((state) => state.isAuth.user);
 
   const checkCollision = () => {
     if (!myRef.current || !DateRef.current) return;
@@ -48,30 +48,38 @@ function TaskCard({ taskList, task, index, recent, isTabletScreen, setAddStatus 
   };
   //delete task
   const deleteUserTask = (task) => {
-    axios
-      .delete(`http://localhost:5050/api/task/${task._id}`, { withCredentials: true })
-      .then((res) => {
-        if (res.status >= 200 && res.status < 300) {
-          dispatcher(deleteTask(task._id));
-        }
-      })
-      .catch((err) => {
-        alert("Some thing went wrong " + err.response.status + ": " + err.response.data.msg);
-      });
-  };
-  //complete task
-  const completeTask = (currentTask) => {
-    if (!["Complete", "Over due"].includes(currentTask.status)) {
+    if (user) {
       axios
-        .put(`http://localhost:5050/api/task/${currentTask._id}`, { withCredentials: true })
+        .delete(`http://localhost:5050/api/task/${task._id}`, { withCredentials: true })
         .then((res) => {
           if (res.status >= 200 && res.status < 300) {
-            dispatcher(completeTk(currentTask._id));
+            dispatcher(deleteTask(task._id));
           }
         })
         .catch((err) => {
           alert("Some thing went wrong " + err.response.status + ": " + err.response.data.msg);
         });
+    } else {
+      dispatcher(deleteTask(task._id));
+    }
+  };
+  //complete task
+  const completeTask = (currentTask) => {
+    if (!["Complete", "Over due"].includes(currentTask.status)) {
+      if (user) {
+        axios
+          .put(`http://localhost:5050/api/task/${currentTask._id}`, { withCredentials: true })
+          .then((res) => {
+            if (res.status >= 200 && res.status < 300) {
+              dispatcher(completeTk(currentTask._id));
+            }
+          })
+          .catch((err) => {
+            alert("Some thing went wrong " + err.response.status + ": " + err.response.data.msg);
+          });
+      } else {
+        dispatcher(completeTk(currentTask._id));
+      }
     } else {
       alert("The task already complete or it over due");
     }

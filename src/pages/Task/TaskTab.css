@@ -17,6 +17,10 @@ h3 {
   padding: 20px;
   padding-left: 0;
 }
+.taskFilter > select {
+  min-width: 100px;
+  height: 35px;
+}
 .tasksTabContent {
   padding: 20px;
   padding-bottom: 20px;
