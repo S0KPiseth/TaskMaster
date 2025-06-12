@@ -2,10 +2,26 @@ import "./Dashboard.css";
 import DashboardCard from "../../Components/DateCard/DashboardCard";
 import TaskCard from "../../Components/TaskCard/TaskCard";
 import { Link, Navigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import fetchUserData from "../../helper/loginData";
+import { useEffect, useState } from "react";
 
 function Dashboard({ setAddStatus }) {
   const tasks = useSelector((state) => state.tasks.list);
+  const isAuthenticated = useSelector((state) => state.isAuth.isAuthenticated);
+  const rememberMe = useSelector((state) => state.rememberMe.value);
+  const dispatcher = useDispatch();
+
+  //
+
+  useEffect(() => {
+    console.log("render In useEffect");
+    if (!isAuthenticated) {
+      console.log("hi");
+      fetchUserData(tasks, dispatcher, rememberMe);
+    }
+  }, []);
+
   let recent = tasks.map((e, index) => {
     return <TaskCard task={e} recent={true} key={"sdfsadfsd" + index} />;
   });

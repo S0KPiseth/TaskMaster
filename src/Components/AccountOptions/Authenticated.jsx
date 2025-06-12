@@ -11,7 +11,7 @@ export function Authenticated({ setAcControlStatus }) {
     >
       <div className="account">
         <div className="userIdentity">
-          <p>{`${user.fname} ${user.lname}`}</p>
+          <p>{user.lname ? `${user.fname} ${user.lname}` : `${user.fname}`}</p>
           <p>{`@${user.username}`}</p>
         </div>
         <div className="profilePic">

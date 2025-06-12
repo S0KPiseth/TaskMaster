@@ -2,7 +2,8 @@
   position: relative;
   margin: 5px;
   width: 13.5%;
-  aspect-ratio: 3 / 2;
+  height: fit-content;
+  /* aspect-ratio: 3 / 2; */
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.041);
   text-align: center;
   background-color: var(--background-primary);
@@ -13,13 +14,16 @@
 }
 .dateCard:hover {
   z-index: 1;
+  aspect-ratio: 3 / 2;
   scale: 2;
+}
+.disableDate div {
+  visibility: hidden;
 }
 .disableDate {
   position: relative;
   margin: 5px;
   width: 13.5%;
-  aspect-ratio: 3 / 2;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.041);
   background-color: var(--background-primary);
   border-radius: 0.5rem;

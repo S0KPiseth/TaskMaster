@@ -35,7 +35,7 @@ function AddTask({ setAddStatus }) {
       tags: tags,
       dueDate: date,
       priorityChoice: priorityChoice,
-      status: "in progress",
+      status: "In progress",
       createdDate: formattedDate,
       userId: user && user._id,
       idx: taskForEdit._id,

@@ -3,7 +3,7 @@ import { Authenticated } from "../AccountOptions/Authenticated";
 import Unauthorized from "../AccountOptions/Unauthorized";
 import { Link } from "react-router";
 import { useSelector } from "react-redux";
-function Sidebar({ sideBarStatus, sideBarCloseNOpen, navigate, isTabletScreen, setAcControlStatus }) {
+function Sidebar({ sideBarStatus, sideBarCloseNOpen, setAcControlStatus }) {
   const isAuthenticated = useSelector((state) => state.isAuth.isAuthenticated);
   return (
     <div className={`sideBarContainer ${sideBarStatus ? "width-250" : "width-60"}`}>

@@ -1,4 +1,5 @@
 import "./auth.css";
+
 import LoginImage from "../../Components/loginImage/LoginImage";
 import { useLocation, Outlet } from "react-router-dom";
 import gsap from "gsap";

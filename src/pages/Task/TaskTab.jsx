@@ -5,7 +5,7 @@ import AddTask from "../../Components/AddTask/AddTask";
 import { useDispatch, useSelector } from "react-redux";
 import { setTag } from "../../application-state/tagSlice";
 
-function TaskTab({ taskList, addStatus, setAddStatus, completeTask, isTabletScreen }) {
+function TaskTab({ addStatus, setAddStatus, isTabletScreen }) {
   const dispatcher = useDispatch();
   const tasks = useSelector((state) => state.tasks.list);
   //filter option
@@ -78,7 +78,7 @@ function TaskTab({ taskList, addStatus, setAddStatus, completeTask, isTabletScre
         {taskToRender.length > 0 ? (
           taskToRender.map((e, index) => {
             return (
-              <React.Fragment key={`${index}4549`}>
+              <React.Fragment key={e._id}>
                 <TaskCard task={e} setAddStatus={setAddStatus} isTabletScreen={isTabletScreen} />
                 <br />
               </React.Fragment>

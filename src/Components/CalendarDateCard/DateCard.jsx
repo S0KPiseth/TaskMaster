@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { completeTk } from "../../application-state/taskListSlice";
 
 import { useState } from "react";
-function DateCard({ day, date, tasksForDay, isToday, isPreviousDay, completeTask, hover, setHover }) {
+function DateCard({ day, date, tasksForDay, isToday, isPreviousDay }) {
   const dispatch = useDispatch();
   const [individualHover, setIndividualHover] = useState(false);
   const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -33,28 +33,33 @@ function DateCard({ day, date, tasksForDay, isToday, isPreviousDay, completeTask
     );
   });
   function showTasks() {
-    if (!hover) {
-      setIndividualHover(true);
-    }
+    setIndividualHover(true);
   }
   function hideTasks() {
-    if (!hover) {
-      setIndividualHover(false);
-    }
+    setIndividualHover(false);
   }
   //onMouseEnter={date ? showTasks : null} onMouseLeave={date ? hideTasks : null}
   return (
-    <div className={date ? (hover || individualHover ? "dateCard aspect-ratio3-2" : "dateCard") : "disableDate"} onMouseEnter={date ? showTasks : null} onMouseLeave={date ? hideTasks : null}>
+    <div className={date ? (individualHover ? "dateCard aspect-ratio3-2" : "dateCard") : "disableDate"} onMouseEnter={date ? showTasks : null} onMouseLeave={date ? hideTasks : null}>
       {date ? (
         <>
-          <div className={hover || individualHover ? "dayNdate dayNdateHover" : "dayNdate"}>
+          <div className={individualHover ? "dayNdate dayNdateHover" : "dayNdate"}>
             <p>{daysOfWeek[day]}</p>
             <p className={isToday ? "todayCard" : !isPreviousDay ? "previousDay" : ""}>{String(date).padStart(2, 0)}</p>
-            <p className={hover || individualHover ? "visible-none clearTask" : remainTask.length == 0 ? (overDueTasks.length === 0 ? "clearTask" : "overDueTask") : "remainTask"}>{remainTask.length === 0 ? (overDueTasks.length === 0 ? "All Clear" : overDueTasks.length + " task over due") : remainTask.length + " tasks due this day"}</p>
+            <p className={individualHover ? "visible-none clearTask" : remainTask.length == 0 ? (overDueTasks.length === 0 ? "clearTask" : "overDueTask") : "remainTask"}>{remainTask.length === 0 ? (overDueTasks.length === 0 ? "All Clear" : overDueTasks.length + " task over due") : remainTask.length + " tasks due this day"}</p>
           </div>
-          <div className={hover || individualHover ? "calendarTasks visible-none visible-true " : "calendarTasks visible-none"}>{calendarTaskPreview}</div>
+          <div className={individualHover ? "calendarTasks visible-none visible-true " : "calendarTasks visible-none"}>{calendarTaskPreview}</div>
         </>
-      ) : null}
+      ) : (
+        <>
+          <div className={individualHover ? "dayNdate dayNdateHover" : "dayNdate"}>
+            <p>null</p>
+            <p className={isToday ? "todayCard" : !isPreviousDay ? "previousDay" : ""}>00</p>
+            <p className={individualHover ? "visible-none clearTask" : remainTask.length == 0 ? (overDueTasks.length === 0 ? "clearTask" : "overDueTask") : "remainTask"}>All Clear</p>
+          </div>
+          <div className={individualHover ? "calendarTasks visible-none visible-true " : "calendarTasks visible-none"}>{calendarTaskPreview}</div>
+        </>
+      )}
     </div>
   );
 }

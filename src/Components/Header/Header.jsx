@@ -1,8 +1,10 @@
 import { Authenticated } from "../AccountOptions/Authenticated";
 import Unauthorized from "../AccountOptions/Unauthorized";
 import { useSelector } from "react-redux";
-function Header({ setAcControlStatus, acControlStatus, showSidebarMobile, isTabletScreen }) {
+import { useLocation } from "react-router-dom";
+function Header({ setAcControlStatus, showSidebarMobile }) {
   const isAuthenticated = useSelector((state) => state.isAuth.isAuthenticated);
+  const location = useLocation();
   return (
     <div className="header">
       <div>
@@ -11,7 +13,7 @@ function Header({ setAcControlStatus, acControlStatus, showSidebarMobile, isTabl
             <path d="M0.5 0.094v0.063H0.031V0.094zM0.031 0.313h0.469V0.25H0.031zm0 0.156h0.469v-0.063H0.031z" fill="currentColor" />
           </svg>
         </button>
-        <p id="pageIndicator">Dashboard</p>
+        <p id="pageIndicator">{location.pathname.slice(1) || "Dashboard"}</p>
       </div>
       <div className="headerContent">
         <div>

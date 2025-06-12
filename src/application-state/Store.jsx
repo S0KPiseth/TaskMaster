@@ -6,6 +6,7 @@ import localStorage from "redux-persist/lib/storage";
 import { combineReducers } from "redux";
 import tagReducer from "./tagSlice";
 import taskListReducer from "./taskListSlice";
+import rememberMeReducer from "./rememberMeSlice";
 
 export const getStore = (useLocal = false) => {
   const storage = useLocal ? localStorage : sessionStorage;
@@ -18,6 +19,7 @@ export const getStore = (useLocal = false) => {
     isAuth: isAuthReducer,
     tagList: tagReducer,
     tasks: taskListReducer,
+    rememberMe: rememberMeReducer,
   });
   const persistedReducer = persistReducer(persistConfig, rootReducer);
   const store = configureStore({

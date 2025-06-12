@@ -3,6 +3,10 @@
   display: none;
 }
 @media (max-width: 1024px) {
+  .formWrapper {
+    width: 1px;
+    min-width: none;
+  }
   .sideBarContainer,
   .sideBar {
     width: 60px !important;
@@ -20,6 +24,10 @@
   }
 }
 @media (max-width: 480px) {
+  .dateCard,
+  .disableDate {
+    aspect-ratio: 3/2;
+  }
   .mobileAcc {
     display: flex;
   }

@@ -17,10 +17,10 @@ html,
   position: fixed;
   padding-top: 12px;
   /* text-align: center; */
-  background-color: var(--background-secondary);
+  background-color: var(--color-primary-50);
   font-weight: var(--font-bold);
   font-size: var(--text-2xl);
-  box-shadow: 0 0 2px var(--shadow-color);
+  /* box-shadow: 0 0 2px var(--shadow-color); */
 }
 .sideBarContainer {
   position: relative;
@@ -62,12 +62,13 @@ html,
   flex-grow: 1;
 }
 .header {
-  position: relative;
+  top: 0;
+  z-index: 99;
   padding: 10px 15px 10px 15px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: var(--background-secondary);
+  background-color: var(--color-primary-50);
   /* border: 1px solid var(--border-color); */
 }
 #searchBar {
@@ -125,21 +126,37 @@ html,
 }
 
 .middleContent {
+  z-index: 50;
   position: relative;
-  height: 100%;
+  height: 90%;
+  border-radius: 1rem;
+  background-color: white;
+
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.138);
+  width: 99%;
+  margin: 0 auto 0 auto;
+  overflow: scroll;
+  animation: appear-blur 1s;
 }
 .accountPanel {
-  top: 0;
+  top: 70px;
   display: flex;
   flex-direction: column;
-  right: 20px;
+  right: 16px;
   position: absolute;
   width: 224px;
-  background-color: white;
-  border-radius: 0 0 1rem 1rem;
+  border-radius: 1rem;
   z-index: 99;
-  box-shadow: 0 0 2px var(--shadow-color);
-  padding: 10px 0 10px 0;
+
+  padding: 10px;
+  /* From https://css.glass */
+  background: rgba(255, 255, 255, 0.104);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(17.9px);
+  -webkit-backdrop-filter: blur(17.9px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  animation: appear 0.2s;
 }
 .accountPanel > button {
   padding: 10px;
@@ -188,10 +205,11 @@ html,
   color: var(--color-primary-800);
   box-shadow: 0 0 12px var(--shadow-color);
   border-radius: 50%;
-  z-index: 1;
+  z-index: 99;
   align-items: center;
   justify-content: center;
   animation: bounce 1.5s infinite alternate;
+  display: none;
 }
 
 /* bouncing close sidebar */

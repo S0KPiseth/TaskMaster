@@ -1,7 +1,6 @@
 import Sidebar from "./Components/Sidebar/Sidebar";
 import Header from "./Components/Header/Header";
-import { useState, useRef, useEffect } from "react";
-import { tasks } from "./lib/Constant";
+import { useState, useRef, useEffect, useLayoutEffect } from "react";
 import "./App.css";
 import "./Query.css";
 import Dashboard from "./pages/Dashboard/Dashboard";
@@ -11,25 +10,15 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from "react-route
 import UserAuthentication from "./pages/Login/Auth";
 import LoginForm from "./pages/Login/LoginForm";
 import RegisterForm from "./pages/Login/RegisterForm";
+import AccountControl from "./Components/AccountControl";
+import axios from "axios";
 function App(props) {
   const [isTabletScreen, setIsTabletScreen] = useState(window.matchMedia("(max-width: 1024px)").matches);
   const [acControlStatus, setAcControlStatus] = useState(false);
   const [sideBarStatus, setSideBarStatus] = useState(!isTabletScreen);
   const [addStatus, setAddStatus] = useState(false);
-  const [hover, setHover] = useState(false);
-  const [taskList, setTaskList] = useState([...tasks]);
   const tabRef = useRef(null);
   const location = useLocation();
-  const completeTask = (id) => {
-    setTaskList((prevList) => prevList.map((task, index) => (index === id ? [...task.slice(0, 5), "Complete"] : task)));
-  };
-
-  const navigate = (e) => {
-    if (tabRef) {
-      tabRef.current.classList += " animate__bounceInUp";
-      setTimeout(() => tabRef.current.classList.remove("animate__bounceInUp"), 500);
-    }
-  };
 
   const sideBarCloseNOpen = () => {
     setSideBarStatus((prev) => !prev);
@@ -55,40 +44,30 @@ function App(props) {
   useEffect(() => {
     setSideBarStatus(!isTabletScreen);
   }, [isTabletScreen]);
-
+  useEffect(() => {
+    if (tabRef.current) {
+      const el = tabRef.current;
+      el.style.animation = "none";
+      void el.offsetWidth;
+      el.style.animation = "";
+    }
+  }, [location]);
   return (
     <>
       {!["/auth", "/auth/register"].includes(location.pathname) && (
         <>
           <div className={!sideBarStatus ? "content horizontalShaking" : "content"}>
-            <Header isTabletScreen={isTabletScreen} setAcControlStatus={setAcControlStatus} acControlStatus={acControlStatus} showSidebarMobile={showSidebarMobile} />
+            <Header setAcControlStatus={setAcControlStatus} showSidebarMobile={showSidebarMobile} />
+            {acControlStatus && <AccountControl persistor={props.persistor} />}
             <div className="middleContent" ref={tabRef}>
-              {acControlStatus && (
-                <div className="accountPanel">
-                  <button>View Profile</button>
-                  <button>Switch Account</button>
-                  <button
-                    onClick={() => {
-                      setAcControlStatus(false);
-                      props.persistor.pause();
-                      props.persistor.flush().then(() => {
-                        return props.persistor.purge();
-                      });
-                      window.location.reload();
-                    }}
-                  >
-                    Log out
-                  </button>
-                </div>
-              )}
               <Routes>
                 <Route path="/" element={<Dashboard setAddStatus={setAddStatus} />} />
-                <Route path="/Tasks" element={<TaskTab taskList={taskList} setTaskList={setTaskList} addStatus={addStatus} setAddStatus={setAddStatus} completeTask={completeTask} isTabletScreen={isTabletScreen} />} />
-                <Route path="/Calendar" element={<Calendar taskList={taskList} completeTask={completeTask} hover={hover} setHover={setHover} />} />
+                <Route path="/Tasks" element={<TaskTab addStatus={addStatus} setAddStatus={setAddStatus} isTabletScreen={isTabletScreen} />} />
+                <Route path="/Calendar" element={<Calendar />} />
               </Routes>
             </div>
           </div>
-          <Sidebar sideBarCloseNOpen={sideBarCloseNOpen} sideBarStatus={sideBarStatus} navigate={navigate} isTabletScreen={isTabletScreen} setAcControlStatus={setAcControlStatus} />
+          <Sidebar sideBarCloseNOpen={sideBarCloseNOpen} sideBarStatus={sideBarStatus} setAcControlStatus={setAcControlStatus} />
         </>
       )}
 
