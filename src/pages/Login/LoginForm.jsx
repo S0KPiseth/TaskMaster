@@ -25,9 +25,9 @@ export default function LoginForm() {
         { withCredentials: true }
       )
       .then((res) => {
-        // if (200 <= res <= 299) {
-        //   navigate(res.data.redirectUrl);
-        // }
+        if (200 <= res <= 299) {
+          navigate(res.data.redirectUrl);
+        }
       })
       .catch((err) => {
         alert("Error " + err.status + ": " + err.response.data.msg);

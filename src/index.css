@@ -168,7 +168,18 @@ body::-webkit-scrollbar,
     scale: 0.5;
   }
 } */
-
+.headerVerticalAlign {
+  flex-direction: column-reverse;
+  justify-content: center;
+  align-items: center;
+  padding-left: 0px;
+}
+.headerHorizontalAlign {
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 10px;
+}
 .backgroundBtn {
   background-image: url("/image/bgGradient.jpg");
   background-repeat: no-repeat;

@@ -4,7 +4,8 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 
 function Calendar() {
-  const tasks = useSelector((state) => state.tasks.list);
+  const taskList = useSelector((state) => state.tasks.list);
+  const tasks = taskList.filter((task) => task.boardName === "Doing");
   let now = new Date();
   const [year, setYear] = useState(now.getFullYear());
   const [month, setMonth] = useState(now.getMonth());

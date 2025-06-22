@@ -1,17 +1,19 @@
 import Sidebar from "./Components/Sidebar/Sidebar";
 import Header from "./Components/Header/Header";
-import { useState, useRef, useEffect, useLayoutEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import "./App.css";
 import "./Query.css";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import TaskTab from "./pages/Task/TaskTab";
 import Calendar from "./pages/Calendar/Calendar";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import UserAuthentication from "./pages/Login/Auth";
 import LoginForm from "./pages/Login/LoginForm";
 import RegisterForm from "./pages/Login/RegisterForm";
 import AccountControl from "./Components/AccountControl";
-import axios from "axios";
+import { useSelector } from "react-redux";
+import AddBoard from "./Components/addNewBoard/AddBoard";
+
 function App(props) {
   const [isTabletScreen, setIsTabletScreen] = useState(window.matchMedia("(max-width: 1024px)").matches);
   const [acControlStatus, setAcControlStatus] = useState(false);
@@ -19,28 +21,46 @@ function App(props) {
   const [addStatus, setAddStatus] = useState(false);
   const tabRef = useRef(null);
   const location = useLocation();
+  const isAuthPath = ["/auth", "/auth/register"].includes(location.pathname);
+  const navigator = useNavigate();
+  const isAuthenticated = useSelector((state) => state.isAuth.isAuthenticated);
+  const isPopUp = useSelector((state) => state.popUp.isPopUp);
+  //mobile sidebar flag
+  const isMobileSidebarOpen = useRef(false);
 
   const sideBarCloseNOpen = () => {
     setSideBarStatus((prev) => !prev);
   };
   const showSidebarMobile = () => {
-    document.querySelector(".sideBar").classList += " show";
-    document.querySelector(".sideBarContainer").classList += " show";
+    document.querySelector(".sideBar").classList.add("show");
+    document.querySelector(".sideBarContainer").classList.add("show");
+    isMobileSidebarOpen.current = true;
+  };
+  const closeSidebarMobile = () => {
+    if (!isMobileSidebarOpen.current || !isTabletScreen) return;
+    document.querySelector(".sideBar").classList.remove("show");
+    document.querySelector(".sideBarContainer").classList.remove("show");
+    isMobileSidebarOpen.current = false;
   };
   useEffect(() => {
+    //prevent the authenticated user from login again
+    if (isAuthPath && isAuthenticated) {
+      navigator("/");
+    }
+    if (isAuthPath) return;
     const setTablet = () => {
       setIsTabletScreen(window.matchMedia("(max-width: 1024px)").matches);
     };
-    const toggleSideBarOff = () => {
-      setSideBarStatus(false);
-    };
+
     window.addEventListener("resize", setTablet);
-    // document.body.addEventListener("mousedown", toggleSideBarOff);
+
+    tabRef.current.addEventListener("click", closeSidebarMobile);
+
     return () => {
       window.removeEventListener("resize", setTablet);
-      // document.body.removeEventListener("mousedown", toggleSideBarOff);
     };
-  }, []);
+  }, [isAuthPath]);
+
   useEffect(() => {
     setSideBarStatus(!isTabletScreen);
   }, [isTabletScreen]);
@@ -58,8 +78,13 @@ function App(props) {
         <>
           <div className={!sideBarStatus ? "content horizontalShaking" : "content"}>
             <Header setAcControlStatus={setAcControlStatus} showSidebarMobile={showSidebarMobile} />
-            {acControlStatus && <AccountControl persistor={props.persistor} />}
+            {acControlStatus && <AccountControl persistor={props.persistor} setAcControlStatus={setAcControlStatus} />}
             <div className="middleContent" ref={tabRef}>
+              {isPopUp && (
+                <div className="popUpDiv">
+                  <AddBoard />
+                </div>
+              )}
               <Routes>
                 <Route path="/" element={<Dashboard setAddStatus={setAddStatus} />} />
                 <Route path="/Tasks" element={<TaskTab addStatus={addStatus} setAddStatus={setAddStatus} isTabletScreen={isTabletScreen} />} />
@@ -67,7 +92,7 @@ function App(props) {
               </Routes>
             </div>
           </div>
-          <Sidebar sideBarCloseNOpen={sideBarCloseNOpen} sideBarStatus={sideBarStatus} setAcControlStatus={setAcControlStatus} />
+          <Sidebar sideBarCloseNOpen={sideBarCloseNOpen} sideBarStatus={sideBarStatus} setAcControlStatus={setAcControlStatus} closeSidebarMobile={closeSidebarMobile} />
         </>
       )}
 

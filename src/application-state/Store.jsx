@@ -7,19 +7,23 @@ import { combineReducers } from "redux";
 import tagReducer from "./tagSlice";
 import taskListReducer from "./taskListSlice";
 import rememberMeReducer from "./rememberMeSlice";
+import popUpReducer from "./popUpSlice";
+import boardReducer from "./boardSlice";
 
 export const getStore = (useLocal = false) => {
   const storage = useLocal ? localStorage : sessionStorage;
   const persistConfig = {
     key: "root",
     storage,
-    whitelist: ["isAuth", "tasks"],
+    whitelist: ["isAuth", "tasks", "board"],
   };
   const rootReducer = combineReducers({
     isAuth: isAuthReducer,
     tagList: tagReducer,
     tasks: taskListReducer,
     rememberMe: rememberMeReducer,
+    popUp: popUpReducer,
+    board: boardReducer,
   });
   const persistedReducer = persistReducer(persistConfig, rootReducer);
   const store = configureStore({

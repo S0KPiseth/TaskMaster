@@ -4,13 +4,21 @@ import TagContent from "../TagContent/TagContent";
 import { useSelector, useDispatch } from "react-redux";
 import { addTag, clearTags } from "../../application-state/tagSlice";
 import { addNewTask, editExistTask, resetEditTask } from "../../application-state/taskListSlice";
+import { useEffect, useRef, useState } from "react";
 
 //taskList, setAddStatus, tags, setTag, setTaskList, tagUpdate, editTaskValue, editTaskIndex
 function AddTask({ setAddStatus }) {
   const tags = useSelector((state) => state.tagList.list);
   const user = useSelector((state) => state.isAuth.user);
   const taskForEdit = useSelector((state) => state.tasks.editTask);
+  const taskList = useSelector((state) => state.tasks.list);
+  const dateRef = useRef(null);
+  const searchRef = useRef(null);
+  const [boardChoice, setBoardChoice] = useState(null);
+  const [searchDoing, setSearchDoing] = useState(null);
   const dispatcher = useDispatch();
+  const boards = useSelector((state) => state.board.boardList);
+
   const todayDate = new Date();
   function addNewTag(e) {
     if (e.key == "Enter" && e.target.value != "") {
@@ -22,26 +30,40 @@ function AddTask({ setAddStatus }) {
       }, 200);
     }
   }
+  const handleChoseSearch = (task) => {
+    searchRef.current = task._id;
+    document.getElementById("sequenceTask").value = task.title;
+    setSearchDoing(null);
+  };
+
   function addTask(event) {
+    console.log("hi");
     const createdDate = new Date();
     const formattedDate = createdDate.toISOString().slice(0, 10);
     const title = document.getElementById("title").value;
     const description = document.getElementById("description").value;
-    const date = document.getElementById("date").value;
+    const date = document.getElementById("date");
+
     const priorityChoice = document.getElementById("priorityChoice").value;
+    const board = boards.find((e) => e.name === boardChoice);
+
     const rqBody = {
-      title: title,
-      description: description,
-      tags: tags,
-      dueDate: date,
-      priorityChoice: priorityChoice,
+      title,
+      description,
+      tags,
+      dueDate: boardChoice === "Doing" ? date.value : undefined,
+      completedDate: boardChoice === "Done" ? date.value : undefined,
+      taskToAddNext: searchRef.current ? searchRef.current : undefined,
+      priorityChoice,
       status: "In progress",
       createdDate: formattedDate,
-      userId: user && user._id,
-      idx: taskForEdit._id,
+      userId: user?._id,
+      idx: taskForEdit?._id,
+      boardId: board?._id,
+      boardName: user ? boardChoice : "To Do",
     };
 
-    if (title && date) {
+    if (title) {
       if (taskForEdit._id) {
         if (user) {
           axios
@@ -72,7 +94,7 @@ function AddTask({ setAddStatus }) {
       setAddStatus(false);
       dispatcher(clearTags());
     } else {
-      alert("Task title and Due date cannot be empty!");
+      alert("Task title cannot be empty!");
     }
   }
 
@@ -104,7 +126,41 @@ function AddTask({ setAddStatus }) {
       </label>
 
       <div className="lastInput">
-        <input className="addTaskInput" type="date" name="date" id="date" defaultValue={taskForEdit._id ? taskForEdit.dueDate.slice(0, 10) : null} min={todayDate.toISOString().slice(0, 10)} />
+        <select name="board" id="board" className="selectClass" onChange={(e) => setBoardChoice(e.target.value)}>
+          <option value="none" defaultValue disabled>
+            Select board
+          </option>
+          {boards.map((e) => {
+            return (
+              <option key={e._id} value={e.name} selected={boardChoice === e.name}>
+                {e.name}
+              </option>
+            );
+          })}
+        </select>
+        {boardChoice === "To Do" ? (
+          <div className="toDoTaskDiv">
+            <input type="text" name="sequenceTask" id="sequenceTask" placeholder="Automatically move to doing after task (optional)" className="addTaskInput" onChange={(e) => setSearchDoing(e.target.value)} />
+            {searchDoing && (
+              <div className="sequenceTaskSearch">
+                {taskList
+                  .filter((e) => e.boardName === "Doing" && e.title.slice(0, searchDoing.length) === searchDoing)
+                  .map((e) => (
+                    <p
+                      key={e._id}
+                      onClick={() => {
+                        handleChoseSearch(e);
+                      }}
+                    >
+                      {e.title}
+                    </p>
+                  ))}
+              </div>
+            )}
+          </div>
+        ) : (
+          <input className="addTaskInput" type="text" name="date" id="date" defaultValue={taskForEdit._id && taskForEdit.dueDate.slice(0, 10)} min={todayDate.toISOString().slice(0, 10)} placeholder={boardChoice === "Doing" ? "Chose due date" : "Chose completed date"} ref={dateRef} onFocus={() => (dateRef.current.type = "date")} onBlur={() => (dateRef.current.type = "text")} />
+        )}
         <select name="priorityChoice" id="priorityChoice" className="selectClass" defaultValue={taskForEdit.priorityChoice}>
           <option value="High Priority">High Priority</option>
           <option value="Medium Priority">Medium Priority</option>

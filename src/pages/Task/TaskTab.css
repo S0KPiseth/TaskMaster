@@ -22,6 +22,7 @@ h3 {
   height: 35px;
 }
 .tasksTabContent {
+  position: relative;
   padding: 20px;
   padding-bottom: 20px;
   /* box-shadow: 0 0 2px var(--shadow-color); */
@@ -104,6 +105,29 @@ h3 {
   padding: 5px;
   border-radius: 0.5rem;
 }
+
+.viewControl,
+.viewControl label {
+  display: flex;
+  gap: 5px;
+}
+.viewControl input {
+  display: none;
+}
+.newBoardDiv {
+  padding: 20px 0 20px 0;
+}
+.newBoardDiv button {
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+  border: none;
+  color: var(--text-inactive);
+}
+.activeRadio {
+  color: var(--color-primary-800);
+}
+
 #ttAddBtn:hover,
 #ttAddBtn:active {
   background-color: var(--color-primary-800);
@@ -136,6 +160,52 @@ h3 {
 }
 .shakingInput:focus {
   outline-color: red;
+}
+.renderTaskDiv {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  align-items: stretch;
+  gap: 5px;
+}
+.board {
+  border-radius: 0.5rem;
+  padding: 10px 15px 10px 15px;
+  background-color: var(--background-primary);
+  font-family: var(--font-secondary);
+  font-weight: var(--font-bold);
+}
+.boardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: var(--text-xl);
+}
+.boardHeader span {
+  padding-left: 5px;
+  color: var(--text-inactive);
+}
+.toDoTaskDiv {
+  position: relative;
+  flex-grow: 1;
+  place-content: center;
+}
+.toDoTaskDiv input {
+  width: 100%;
+}
+.sequenceTaskSearch {
+  position: absolute;
+  background-color: white;
+  width: 100%;
+  min-height: 100px;
+  border-radius: 0 0 0.5rem 0.5rem;
+}
+.sequenceTaskSearch p {
+  padding: 10px;
+}
+.sequenceTaskSearch p:hover {
+  background-color: var(--color-gray-200);
+  padding: 10px;
 }
 @keyframes shaking {
   10% {

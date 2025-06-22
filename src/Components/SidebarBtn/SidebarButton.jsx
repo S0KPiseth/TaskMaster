@@ -6,7 +6,7 @@ import TaskIcon from "../../assets/Icons/TaskIcon";
 import CalendarIcon from "../../assets/Icons/CalendarIcon";
 import SettingIcon from "../../assets/Icons/SettignIcon";
 
-function SidebarButton({ name, sideBarStatus }) {
+function SidebarButton({ name, sideBarStatus, closeSidebarMobile }) {
   const activeBtn = useRef(null);
   let mainComponent;
   switch (name) {
@@ -33,6 +33,7 @@ function SidebarButton({ name, sideBarStatus }) {
           e.classList.remove("activeTab");
         });
         activeBtn.current.className += " activeTab";
+        closeSidebarMobile();
       }}
       className={name === "Dashboard" ? "sideBarBtn activeTab" : "sideBarBtn"}
       ref={activeBtn}

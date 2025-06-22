@@ -15,9 +15,7 @@ function Dashboard({ setAddStatus }) {
   //
 
   useEffect(() => {
-    console.log("render In useEffect");
     if (!isAuthenticated) {
-      console.log("hi");
       fetchUserData(tasks, dispatcher, rememberMe);
     }
   }, []);

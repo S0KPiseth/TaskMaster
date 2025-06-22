@@ -2,35 +2,57 @@ import axios from "axios";
 import { setUser, setAuth } from "../application-state/authenticationSlice";
 import { getStore } from "../application-state/Store";
 import { setTaskLogin } from "../application-state/taskListSlice";
+import { setBoardList, pushBoard } from "../application-state/boardSlice";
 
 export default function fetchUserData(guestTasks, dispatcher, rememberMe) {
-  //get user object
-  axios.get("http://localhost:5050/api/auth/me", { withCredentials: true }).then(async (res) => {
-    if (res.data.isAuth) {
-      dispatcher(setUser(res.data.user));
-      dispatcher(setAuth(true));
-      const { store, persistor } = getStore(rememberMe);
-      localStorage.setItem("rememberMe", rememberMe);
-      rememberMe && window.location.reload();
-      //add the tasks that they the user create when they are a guest user to the database
-      console.log("outer count");
-      if (guestTasks) {
-        console.log("guest tasks");
-        console.log(guestTasks);
-        console.log("----------------------");
-        for (const task of guestTasks) {
-          console.log("outer count");
+  axios
+    .get("http://localhost:5050/api/auth/me", { withCredentials: true })
+    .then(async (res) => {
+      if (res.data.isAuth) {
+        dispatcher(setUser(res.data.user));
+        dispatcher(setAuth(true));
 
-          const { _id, ...reqBody } = task;
-          await axios.post("http://localhost:5050/api/task", { ...reqBody, userId: res.data.user._id }, { withCredentials: true }).catch((err) => {
-            alert(`error:${err.response.status}:${err.response.data.msg}`);
-          });
+        const { store, persistor } = getStore(rememberMe);
+        localStorage.setItem("rememberMe", rememberMe);
+        rememberMe && window.location.reload();
+
+        try {
+          const boardRes = await axios.get("http://localhost:5050/api/board", { withCredentials: true });
+
+          if (boardRes.data.boards.length === 0) {
+            const defaultBoardRes = await axios.post("http://localhost:5050/api/board/default", {}, { withCredentials: true });
+
+            dispatcher(setBoardList(defaultBoardRes.data.boardList));
+          } else {
+            dispatcher(setBoardList(boardRes.data.boards));
+          }
+        } catch (boardErr) {
+          console.error("Board fetching error:", boardErr);
+          alert(`Board error: ${boardErr?.response?.data?.msg || boardErr.message}`);
+        }
+
+        if (guestTasks) {
+          for (const task of guestTasks) {
+            const { _id, ...reqBody } = task;
+            try {
+              await axios.post("http://localhost:5050/api/task", { ...reqBody, userId: res.data.user._id }, { withCredentials: true });
+            } catch (err) {
+              alert(`Task error: ${err.response?.status || ""}: ${err.response?.data?.msg || err.message}`);
+            }
+          }
+        }
+
+        try {
+          const taskRes = await axios.get("http://localhost:5050/api/task", { withCredentials: true });
+          dispatcher(setTaskLogin(taskRes.data));
+        } catch (taskErr) {
+          console.error("Task loading error:", taskErr);
+          alert(`Task load error: ${taskErr?.response?.data?.msg || taskErr.message}`);
         }
       }
-      //getTask
-      axios.get("http://localhost:5050/api/task", { withCredentials: true }).then((res) => {
-        dispatcher(setTaskLogin(res.data));
-      });
-    }
-  });
+    })
+    .catch((err) => {
+      console.error("Auth fetch error:", err);
+      alert(`Auth error: ${err.response?.data?.msg || err.message}`);
+    });
 }

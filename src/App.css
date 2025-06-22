@@ -178,7 +178,12 @@ html,
 }
 .sideBarHeader {
   position: relative;
-  padding-left: 10px;
+  display: flex;
+}
+.sideBarHeader button {
+  background: var(--color-primary-50);
+  border: 0;
+  color: var(--color-inactive);
 }
 .closeNopenSidebar {
   position: absolute;
@@ -281,6 +286,19 @@ html,
 }
 .dot {
   margin-right: 10px;
+}
+.popUpDiv {
+  position: absolute;
+  width: 95%;
+  height: 90%;
+  left: 50%;
+  top: 50%;
+  z-index: 50;
+  border-radius: 0.5rem;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 10px;
+  box-shadow: 0px 0px 5px var(--shadow-color);
 }
 #mouseMovement {
   position: absolute;

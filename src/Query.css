@@ -22,8 +22,14 @@
   #sidebarCtrBtn {
     display: none;
   }
+  .taskContent {
+    padding: 10px !important;
+  }
 }
 @media (max-width: 480px) {
+  .sideBarHeader button {
+    display: none;
+  }
   .dateCard,
   .disableDate {
     aspect-ratio: 3/2;
@@ -123,5 +129,5 @@
 }
 .show {
   transform: translateX(0%);
-  z-index: 1 !important;
+  z-index: 99 !important;
 }
