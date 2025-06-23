@@ -172,6 +172,10 @@ h3 {
   align-items: stretch;
   gap: 5px;
 }
+.listRender {
+  display: flex;
+  flex-direction: column;
+}
 .board {
   border-radius: 0.5rem;
   padding: 10px 15px 10px 15px;

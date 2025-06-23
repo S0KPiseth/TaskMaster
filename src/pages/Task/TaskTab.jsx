@@ -1,18 +1,18 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "./TaskTab.css";
 import "../../Query.css";
-import TaskCard from "../../Components/TaskCard/TaskCard";
 import AddTask from "../../Components/AddTask/AddTask";
 import { useDispatch, useSelector } from "react-redux";
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
-import { moveTask, setBoard, setLayout } from "../../application-state/taskListSlice";
+
+import { setLayout } from "../../application-state/taskListSlice";
 import { setPopUpLocation } from "../../application-state/popUpSlice";
-import axios from "axios";
+
 import AddBoard from "./AddBoard";
 import { useParams } from "react-router-dom";
+import Board from "../../Components/Board/Board";
+import List from "../../Components/List/List";
 
-function TaskTab({ isTabletScreen }) {
+function TaskTab() {
   let { "*": catchall } = useParams();
   //pop location
   const popUpLocation = useSelector((state) => state.popUp.where);
@@ -21,10 +21,6 @@ function TaskTab({ isTabletScreen }) {
   const boardList = useSelector((state) => state.board.boardList);
   const taskLayout = useSelector((state) => state.tasks.layout);
   const isAuthenticated = useSelector((state) => state.isAuth.isAuthenticated);
-
-  //drag and drop state
-  const startDrag = useRef(null);
-  const endDrag = useRef(null);
 
   //filter option
   const [filterOption, setFilterOption] = useState(["All Status", "All Priority"]);
@@ -40,94 +36,6 @@ function TaskTab({ isTabletScreen }) {
     });
     setTaskToRender([...tempList]);
   }, [filterOption, tasks]);
-  useGSAP(() => {
-    if (taskLayout === "list") return;
-    const dropAreas = gsap.utils.toArray(".dropArea");
-
-    const handleDragEnter = (e) => {
-      e.preventDefault();
-
-      const el = e.currentTarget;
-      const board = el.dataset.board;
-      const index = Number(el.dataset.index);
-      if (!board) return;
-
-      endDrag.current = { board, index };
-
-      const cardEl = document.querySelector(".tkCard");
-      const height = cardEl?.offsetHeight || 80;
-
-      gsap.to(el, { height, borderTop: "1px solid var(--color-primary-800)" });
-    };
-
-    const handleDragLeave = (e) => {
-      const el = e.currentTarget;
-      gsap.to(el, { height: "10px", border: 0 });
-      endDrag.current = null;
-    };
-
-    const handleDrop = () => {
-      if (!startDrag.current || !endDrag.current) return;
-
-      const { id } = startDrag.current;
-      const { board, index } = endDrag.current;
-      const boardObject = boardList.find((b) => b.name === endDrag.current.board);
-
-      if (!id || board === null || index === null) return;
-
-      const draggedTask = tasks.find((task) => task._id === id);
-      if (!draggedTask) return;
-
-      const filteredTasks = tasks.filter((task) => task._id !== id);
-
-      const targetBoard = filteredTasks.filter((task) => task.boardName === board);
-      targetBoard.splice(index, 0, draggedTask);
-      const otherTasks = filteredTasks.filter((task) => task.boardName !== board);
-      const finalTasksArray = [...otherTasks, ...targetBoard];
-      const indexOfChanging = finalTasksArray.findIndex((task) => task._id === draggedTask._id);
-      //update backend
-
-      let updatedTask;
-      const today = new Date();
-      if (endDrag.current.board === "Doing") {
-        const dueDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 3);
-        //default deadline 3 days
-        updatedTask = { ...draggedTask, dueDate: dueDate, boardName: endDrag.current.board, boardId: boardObject._id };
-      } else if (endDrag.current.board === "Done") {
-        updatedTask = { ...draggedTask, completedDate: today, boardName: endDrag.current.board, dueDate: null, boardId: boardObject._id };
-      } else {
-        updatedTask = { ...draggedTask, completedDate: null, boardName: endDrag.current.board, dueDate: null, boardId: boardObject._id };
-      }
-
-      axios
-        .put("http://localhost:5050/api/task", { ...updatedTask, idx: draggedTask._id }, { withCredentials: true })
-        .then((res) => {
-          dispatcher(moveTask({ task: res.data.task, newIndex: indexOfChanging }));
-          gsap.to(".dropArea", { height: "10px", border: 0 });
-
-          // CLEANUP
-          startDrag.current = null;
-          endDrag.current = null;
-        })
-        .catch((err) => {
-          alert(`error:${err}`);
-        });
-    };
-
-    dropAreas.forEach((el) => {
-      el.addEventListener("dragenter", handleDragEnter);
-      el.addEventListener("dragleave", handleDragLeave);
-      el.addEventListener("drop", handleDrop);
-    });
-
-    return () => {
-      dropAreas.forEach((el) => {
-        el.removeEventListener("dragenter", handleDragEnter);
-        el.removeEventListener("dragleave", handleDragLeave);
-        el.removeEventListener("drop", handleDrop);
-      });
-    };
-  }, [tasks, taskLayout, boardList]);
   return (
     <div className="tasksTabContent">
       <div>
@@ -209,72 +117,11 @@ function TaskTab({ isTabletScreen }) {
             </>
           )
         )}
-        {taskLayout === "list" && (
-          <div className="renderTaskDiv" style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
-            {taskToRender.length > 0 ? (
-              taskToRender.map((e, index) => (
-                <div key={e._id}>
-                  {index === 0 && <br />}
-                  <TaskCard chooseTask={catchall} task={e} isTabletScreen={isTabletScreen} radioValue={taskLayout} />
-                  <br />
-                </div>
-              ))
-            ) : (
-              <p className="noTasks">You haven't created any tasks. Click "Add New Task" to create one.</p>
-            )}
-          </div>
-        )}
-        {taskLayout === "board" && (
-          <div className="renderTaskDiv">
-            {/* dynamic task rendering */}
-            {boardList.map((board) => (
-              <div className="board" key={board.name}>
-                <div className="boardHeader">
-                  <p>
-                    {board.name}
-                    <span>{tasks.filter((e) => e.boardName === board.name).length}</span>
-                  </p>
-                  <svg
-                    width="20px"
-                    height="20px"
-                    viewBox="0 0 0.72 0.72"
-                    xmlns="http://www.w3.org/2000/svg"
-                    id="plus"
-                    onClick={() => {
-                      dispatcher(setPopUpLocation("addTask"));
-                      dispatcher(setBoard(board.name));
-                    }}
-                  >
-                    <path d="M0.57 0.33h-0.18V0.15a0.03 0.03 0 0 0 -0.06 0v0.18H0.15a0.03 0.03 0 0 0 0 0.06h0.18v0.18a0.03 0.03 0 0 0 0.06 0v-0.18h0.18a0.03 0.03 0 0 0 0 -0.06" fill="currentColor" />
-                  </svg>
-                </div>
 
-                {tasks.filter((e) => e.boardName === board.name).length > 0 ? (
-                  tasks
-                    .filter((e) => e.boardName === board.name)
-                    .map((e, index) => (
-                      <div key={e._id}>
-                        {index === 0 && (
-                          <div className="dropArea" onDragOver={(e) => e.preventDefault()} data-board={e.boardName} data-index={index}>
-                            &nbsp;
-                          </div>
-                        )}
-
-                        <TaskCard chooseTask={catchall} task={e} id={e._id} boardName={e.boardName} startDrag={startDrag} endDrag={endDrag} radioValue={taskLayout} />
-                        <div className="dropArea" onDragOver={(e) => e.preventDefault()} data-board={e.boardName} data-index={index + 1}>
-                          &nbsp;
-                        </div>
-                      </div>
-                    ))
-                ) : (
-                  <div className="dropArea" onDragOver={(e) => e.preventDefault()} data-board={board.name} data-index={0}>
-                    &nbsp;
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
+        <div className={`renderTaskDiv ${taskLayout === "list" && "listRender"}`}>
+          {/* dynamic task rendering */}
+          {taskLayout === "board" ? boardList.map((board) => <Board board={board} catchall={catchall} key={board.name} />) : <List taskToRender={taskToRender} />}
+        </div>
       </div>
     </div>
   );
