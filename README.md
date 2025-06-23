@@ -66,7 +66,7 @@ You can install the [MongoDB Community Server](https://www.mongodb.com/try/downl
    ```bash
    npm install
    ```
-3. In the **backend folder**, create a `.env` file using the example provided.  
+3. In the **backend folder**, create a `.env` file using the [example](https://github.com/S0KPiseth/Task-er_Backend/blob/main/.env.example) provided.  
    You’ll need 3 client IDs and secrets for the following providers:
 
    - [Google OAuth Credentials](https://console.cloud.google.com/apis/credentials)
