@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
 import { toggleRememberMe } from "../../application-state/rememberMeSlice";
+const BASE_URL = import.meta.env.VITE_BACKEND_URI;
 
 export default function LoginForm() {
   const rememberMe = useSelector((state) => state.rememberMe.value);
@@ -17,7 +18,7 @@ export default function LoginForm() {
     const password = data.get("password");
     axios
       .post(
-        "http://localhost:5050/api/auth",
+        `${BASE_URL}/api/auth`,
         {
           username,
           password,
@@ -77,7 +78,7 @@ export default function LoginForm() {
         <button
           className="thirdParty"
           onClick={() => {
-            window.location.href = "http://localhost:5050/api/auth/google";
+            window.location.href = `${BASE_URL}/api/auth/google`;
           }}
         >
           <svg width="25px" height="25px" viewBox="0 0 1 1" data-name="Layer 1" id="Layer_1" xmlns="http://www.w3.org/2000/svg">
@@ -93,7 +94,7 @@ export default function LoginForm() {
         <button
           className="thirdParty"
           onClick={() => {
-            window.location.href = "http://localhost:5050/api/auth/discord";
+            window.location.href = `${BASE_URL}/api/auth/discord`;
           }}
         >
           <svg width="25px" height="25px" viewBox="0 -2.783 25 25" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" preserveAspectRatio="xMidYMid">
@@ -105,7 +106,7 @@ export default function LoginForm() {
         <button
           className="thirdParty"
           onClick={() => {
-            window.location.href = "http://localhost:5050/api/auth/github";
+            window.location.href = `${BASE_URL}/api/auth/github`;
           }}
         >
           <svg role="img" viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg" width={25} height={25}>

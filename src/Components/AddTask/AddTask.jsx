@@ -6,7 +6,7 @@ import { addTag, clearTags } from "../../application-state/tagSlice";
 import { addNewTask, editExistTask, resetEditTask } from "../../application-state/taskListSlice";
 import { useEffect, useRef, useState } from "react";
 import { setPopUpLocation } from "../../application-state/popUpSlice";
-
+const BASE_URL = import.meta.env.VITE_BACKEND_URI;
 function AddTask() {
   const isAuthenticated = useSelector((state) => state.isAuth.isAuthenticated);
   const [boardChoice, setBoardChoice] = useState("default");
@@ -34,6 +34,8 @@ function AddTask() {
   }
 
   function addTask() {
+    if (isAuthenticated && (!boardChoice || boardChoice === "default")) return alert("You haven't choose any board");
+
     const createdDate = new Date();
     const formattedDate = createdDate.toISOString().slice(0, 10);
     const title = document.getElementById("title").value;
@@ -62,7 +64,7 @@ function AddTask() {
       if (taskForEdit._id) {
         if (user) {
           axios
-            .put("http://localhost:5050/api/task", rqBody, { withCredentials: true })
+            .put(`${BASE_URL}/api/task`, rqBody, { withCredentials: true })
             .then((res) => {
               dispatcher(editExistTask({ idx: taskForEdit._id, newTask: res.data.task }));
             })
@@ -75,7 +77,7 @@ function AddTask() {
         }
       } else {
         axios
-          .post("http://localhost:5050/api/task", rqBody, { withCredentials: true })
+          .post(`${BASE_URL}/api/task`, rqBody, { withCredentials: true })
           .then((res) => {
             dispatcher(addNewTask(res.data.task));
             //clear the data that assign to the add task input fields
@@ -88,9 +90,9 @@ function AddTask() {
 
       dispatcher(setPopUpLocation(null));
       dispatcher(clearTags());
-    } else {
-      alert("Task title cannot be empty!");
+      return;
     }
+    alert("Task title cannot be empty!");
   }
 
   return (
@@ -115,7 +117,7 @@ function AddTask() {
       </label>
 
       <div className="lastInput">
-        <select name="board" id="board" className="selectClass" onChange={(e) => setBoardChoice(e.target.value)} disabled={taskForEdit.boardName || (!isAuthenticated && true)} value={boardChoice}>
+        <select name="board" id="board" className="selectClass" onChange={(e) => setBoardChoice(e.target.value)} disabled={taskForEdit.boardName || (!isAuthenticated && true)} value={boardChoice || "default"}>
           <option value="default" disabled>
             Select board
           </option>

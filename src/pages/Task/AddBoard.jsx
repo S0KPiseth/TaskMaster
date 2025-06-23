@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setPopUpLocation } from "../../application-state/popUpSlice";
 import axios from "axios";
 import { pushBoard } from "../../application-state/boardSlice";
+const BASE_URL = import.meta.env.VITE_BACKEND_URI;
 export default function AddBoard() {
   const dispatcher = useDispatch();
   const boardList = useSelector((state) => state.board.boardList);
@@ -11,7 +12,7 @@ export default function AddBoard() {
     const findBoard = boardList.find((board) => board.name === name);
     if (findBoard) return alert("Cannot create a duplicate board consider changing name");
     axios
-      .post("http://localhost:5050/api/board", { name: name }, { withCredentials: true })
+      .post(`${BASE_URL}/api/board`, { name }, { withCredentials: true })
       .then((res) => {
         dispatcher(pushBoard(res.data.board));
         dispatcher(setPopUpLocation(null));

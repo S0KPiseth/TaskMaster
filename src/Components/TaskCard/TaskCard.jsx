@@ -9,6 +9,7 @@ import axios from "axios";
 import { setPopUpLocation } from "../../application-state/popUpSlice";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+const BASE_URL = import.meta.env.VITE_BACKEND_URI;
 
 function TaskCard({ chooseTask, task, recent, id, boardName, startDrag, endDrag, radioValue }) {
   useGSAP(() => {
@@ -70,14 +71,14 @@ function TaskCard({ chooseTask, task, recent, id, boardName, startDrag, endDrag,
   const deleteUserTask = (task) => {
     if (user) {
       axios
-        .delete(`http://localhost:5050/api/task/${task._id}`, { withCredentials: true })
+        .delete(`${BASE_URL}/api/task/${task._id}`, { withCredentials: true })
         .then((res) => {
           if (res.status >= 200 && res.status < 300) {
             dispatcher(deleteTask(task._id));
           }
         })
         .catch((err) => {
-          alert("Some thing went wrong " + err.response.status + ": " + err.response.data.msg);
+          alert(`Some thing went wrong ${err.response.status}: ${err.response.data.msg}`);
         });
     } else {
       dispatcher(deleteTask(task._id));
@@ -88,7 +89,7 @@ function TaskCard({ chooseTask, task, recent, id, boardName, startDrag, endDrag,
     if (!["Complete", "Over due"].includes(currentTask.status)) {
       if (user) {
         axios
-          .put(`http://localhost:5050/api/task/${currentTask._id}`, {}, { withCredentials: true })
+          .put(`${BASE_URL}/api/task/${currentTask._id}`, {}, { withCredentials: true })
           .then((res) => {
             if (res.status >= 200 && res.status < 300) {
               dispatcher(completeTk(currentTask._id));
@@ -104,6 +105,19 @@ function TaskCard({ chooseTask, task, recent, id, boardName, startDrag, endDrag,
       alert("The task already complete or it over due");
     }
   };
+  const updateTaskStatus = (status) => {
+    if (isAuthenticated) {
+      const { _id, ...rest } = task;
+      const reqBody = { ...rest, status, idx: _id };
+      axios
+        .put(`${BASE_URL}/api/task`, reqBody, { withCredentials: true })
+        .then((res) => dispatcher(editExistTask({ idx: res.data.task._id, newTask: res.data.task })))
+        .catch((err) => alert(err));
+    } else {
+      const updatedTask = { ...task, status };
+      dispatcher(editExistTask({ idx: updatedTask._id, newTask: updatedTask }));
+    }
+  };
 
   const tags = task.tags.map((e, index) => {
     return (
@@ -117,34 +131,14 @@ function TaskCard({ chooseTask, task, recent, id, boardName, startDrag, endDrag,
     const currentDate = new Date().toISOString();
 
     if (task.boardName === "Doing" && currentDate > task.dueDate) {
-      if (isAuthenticated) {
-        const { _id, ...rest } = task;
-        const reqBody = { ...rest, status: "Over Due", idx: _id };
-        axios
-          .put("http://localhost:5050/api/task", reqBody, { withCredentials: true })
-          .then((res) => dispatcher(editExistTask({ idx: res.data.task._id, newTask: res.data.task })))
-          .catch((err) => alert(err));
-      } else {
-        const updatedTask = { ...task, status: "Over Due" };
-        dispatcher(editExistTask({ idx: updatedTask._id, newTask: updatedTask }));
-      }
+      updateTaskStatus("Over Due");
     } else if (task.boardName === "Doing" && currentDate < task.dueDate) {
-      if (isAuthenticated) {
-        const { _id, ...rest } = task;
-        const reqBody = { ...rest, status: "In progress", idx: _id };
-        axios
-          .put("http://localhost:5050/api/task", reqBody, { withCredentials: true })
-          .then((res) => dispatcher(editExistTask({ idx: res.data.task._id, newTask: res.data.task })))
-          .catch((err) => alert(err));
-      } else {
-        const updatedTask = { ...task, status: "In progress" };
-        dispatcher(editExistTask({ idx: updatedTask._id, newTask: updatedTask }));
-      }
+      updateTaskStatus("In progress");
     }
   }, []);
 
   return (
-    <div className="tkCard taskContent" ref={animatedRef} draggable={radioValue === "board"} id={"task" + id}>
+    <div className="tkCard taskContent" ref={animatedRef} draggable={radioValue === "board"} id={`task${id}`}>
       <p className={`${task.priorityChoice == "Medium Priority" ? "priority-medium" : task.priorityChoice == "High Priority" ? "priority-high" : "priority-low"}`} id="taskPriority">
         {task.priorityChoice}
         <span>
@@ -162,15 +156,15 @@ function TaskCard({ chooseTask, task, recent, id, boardName, startDrag, endDrag,
       </div>
 
       <p className="taskDes">{task.description}</p>
-      <br />
+
       <div className="tags">{tags}</div>
       <div className="TagNControl">
         <p className="dateOfTask" ref={DateRef}>
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M8 2v4"></path>
-            <path d="M16 2v4"></path>
-            <rect width="18" height="18" x="3" y="4" rx="2"></rect>
-            <path d="M3 10h18"></path>
+            <path d="M8 2v4" />
+            <path d="M16 2v4" />
+            <rect width="18" height="18" x="3" y="4" rx="2" />
+            <path d="M3 10h18" />
           </svg>
 
           {task.dueDate ? `${new Date(task.dueDate).toDateString().slice(3, 10)} (Due)` : task.completedDate ? `${new Date(task.completedDate).toDateString().slice(3, 10)} (complete)` : "Not started"}
@@ -198,7 +192,7 @@ function TaskCard({ chooseTask, task, recent, id, boardName, startDrag, endDrag,
             <button
               id="delete"
               onClick={() => {
-                animatedRef && (animatedRef.current.className += " fadeOutLeft");
+                if (animatedRef) animatedRef.current.className += " fadeOutLeft";
                 setTimeout(() => {
                   deleteUserTask(task);
                 }, 300);

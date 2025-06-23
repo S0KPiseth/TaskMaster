@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
+const BASE_URL = import.meta.env.VITE_BACKEND_URI;
 
 export default function RegisterForm() {
   const [correctPw, setCorrectPw] = useState(false);
@@ -16,7 +17,7 @@ export default function RegisterForm() {
 
     e.preventDefault();
     axios
-      .post("http://localhost:5050/api/auth/register", {
+      .post(`${BASE_URL}/api/auth/register`, {
         fname,
         lname,
         username,

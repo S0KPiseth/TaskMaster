@@ -4,10 +4,11 @@ import { getStore } from "../application-state/Store";
 import { setTaskLogin } from "../application-state/taskListSlice";
 import { setBoardList } from "../application-state/boardSlice";
 import { setLayout } from "../application-state/taskListSlice";
+const BASE_URL = import.meta.env.VITE_BACKEND_URI;
 
 export default function fetchUserData(guestTasks, dispatcher, rememberMe) {
   axios
-    .get("http://localhost:5050/api/auth/me", { withCredentials: true })
+    .get(`${BASE_URL}/api/auth/me`, { withCredentials: true })
     .then(async (res) => {
       if (res.data.isAuth) {
         dispatcher(setUser(res.data.user));
@@ -19,11 +20,11 @@ export default function fetchUserData(guestTasks, dispatcher, rememberMe) {
         rememberMe && window.location.reload();
 
         try {
-          const boardRes = await axios.get("http://localhost:5050/api/board", { withCredentials: true });
+          const boardRes = await axios.get(`${BASE_URL}/api/board`, { withCredentials: true });
           let boardData;
 
           if (boardRes.data.boards.length === 0) {
-            const defaultBoardRes = await axios.post("http://localhost:5050/api/board/default", {}, { withCredentials: true });
+            const defaultBoardRes = await axios.post(`${BASE_URL}/api/board/default`, {}, { withCredentials: true });
 
             dispatcher(setBoardList(defaultBoardRes.data.boardList));
             boardData = [...defaultBoardRes.data.boardList];
@@ -38,7 +39,7 @@ export default function fetchUserData(guestTasks, dispatcher, rememberMe) {
               const board = boardData.find((e) => e.name === reqBody.boardName);
 
               try {
-                await axios.post("http://localhost:5050/api/task", { ...reqBody, userId: res.data.user._id, boardId: board._id }, { withCredentials: true });
+                await axios.post(`${BASE_URL}/api/task`, { ...reqBody, userId: res.data.user._id, boardId: board._id }, { withCredentials: true });
               } catch (err) {
                 alert(`Task error: ${err.response?.status || ""}: ${err.response?.data?.msg || err.message}`);
               }
@@ -50,7 +51,7 @@ export default function fetchUserData(guestTasks, dispatcher, rememberMe) {
         }
 
         try {
-          const taskRes = await axios.get("http://localhost:5050/api/task", { withCredentials: true });
+          const taskRes = await axios.get(`${BASE_URL}/api/task`, { withCredentials: true });
           dispatcher(setTaskLogin(taskRes.data));
         } catch (taskErr) {
           console.error("Task loading error:", taskErr);

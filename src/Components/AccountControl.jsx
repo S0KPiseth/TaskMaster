@@ -1,5 +1,6 @@
 import { useLayoutEffect } from "react";
 import axios from "axios";
+const BASE_URL = import.meta.env.VITE_BACKEND_URI;
 export default function AccountControl(props) {
   useLayoutEffect(() => {
     return () => {
@@ -15,7 +16,7 @@ export default function AccountControl(props) {
       <button
         onClick={() => {
           props.setAcControlStatus(false);
-          axios.get("http://localhost:5050/api/auth/logout", { withCredentials: true }).then((res) => {
+          axios.get(`${BASE_URL}/api/auth/logout`, { withCredentials: true }).then((res) => {
             props.persistor.pause();
             props.persistor.flush().then(() => {
               return props.persistor.purge();
