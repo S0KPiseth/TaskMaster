@@ -1,5 +1,13 @@
 /* Mobile Screens */
+.subText {
+  display: none;
+}
+
 @media (max-width: 1024px) {
+  .formWrapper {
+    width: 1px;
+    min-width: none;
+  }
   .sideBarContainer,
   .sideBar {
     width: 60px !important;
@@ -9,13 +17,107 @@
     height: 100% !important;
     width: fit-content !important;
   }
+  .headerContent {
+    column-gap: 10px !important;
+  }
+  #sidebarCtrBtn {
+    display: none;
+  }
+  .taskContent {
+    padding: 10px !important;
+    gap: 10px !important;
+  }
+  .dateOfTask {
+    column-gap: 5px !important;
+  }
 }
+@media (max-width: 768px) {
+  .renderTaskDiv {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
 @media (max-width: 480px) {
+  .taskProgress {
+    padding: 2.5px 5px 2.5px 5px !important;
+  }
+  .renderTaskDiv {
+    padding: 0px;
+  }
+  .tasksTabContent {
+    padding: 10px !important;
+  }
+  .board,
+  #taskForm {
+    padding: 5px !important;
+  }
+  .lastInput {
+    gap: 5px !important;
+  }
+
+  .buttonTask svg,
+  .dateOfTask svg {
+    height: 15px;
+  }
+  .sideBarHeader button {
+    display: none;
+  }
+  .dateCard,
+  .disableDate {
+    aspect-ratio: 3/2;
+  }
+  .mobileAcc {
+    display: flex;
+  }
+
+  .subText {
+    display: block;
+  }
+  .header .AccountNNotification,
+  .header .notification {
+    display: none;
+  }
+  .sideBarBtn .full-width {
+    width: fit-content;
+  }
+  .sideBar footer {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+  .sideBarBtn {
+    justify-content: left;
+    gap: 10px;
+  }
+  .sideBarBtn p {
+    font-size: var(--text-2xl);
+  }
+  .sideBarBtn svg,
+  #logo svg {
+    width: fit-content;
+  }
+  #searchBar {
+    width: 80%;
+  }
+  #searchBar > input {
+    padding: 15px 35px 15px 15px;
+  }
+  #priorityChoice {
+    height: 35px;
+  }
+  .headerContent > div:nth-child(1) {
+    justify-content: right;
+  }
+  .header {
+    padding: 10px 5px 10px 5px;
+  }
+
   .uaBtn {
     padding: 10px;
   }
-  .uaDiv {
+  .header .uaDiv {
     column-gap: 10px !important;
+    display: none;
   }
   .dateCard:hover {
     scale: unset !important;
@@ -59,5 +161,5 @@
 }
 .show {
   transform: translateX(0%);
-  z-index: 1 !important;
+  z-index: 99 !important;
 }

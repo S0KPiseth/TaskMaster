@@ -2,16 +2,33 @@ import "./Dashboard.css";
 import DashboardCard from "../../Components/DateCard/DashboardCard";
 import TaskCard from "../../Components/TaskCard/TaskCard";
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import fetchUserData from "../../helper/loginData";
+import { useEffect } from "react";
+import { setPopUpLocation } from "../../application-state/popUpSlice";
 
-function Dashboard({ taskList, setAddStatus }) {
-  const recent = taskList.map((e) => {
-    return <TaskCard taskItems={e} recent={true} />;
+function Dashboard() {
+  const tasks = useSelector((state) => state.tasks.list);
+  const isAuthenticated = useSelector((state) => state.isAuth.isAuthenticated);
+  const rememberMe = useSelector((state) => state.rememberMe.value);
+  const dispatcher = useDispatch();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      fetchUserData(tasks, dispatcher, rememberMe);
+    }
+  }, []);
+
+  let recent = tasks.map((e, index) => {
+    return <TaskCard task={e} recent={true} key={"sdfsadfsd" + index} />;
   });
-  [recent[0], recent[1]] = [recent[recent.length - 1], recent[recent.length - 2]];
+  if (recent.length === 0) {
+    recent = <p className="noTasks">No tasks to show</p>;
+  }
+
   return (
     <>
       <div className="dashBoard">
-        <h2 style={{ marginBottom: "20px" }}>Dashboard</h2>
         <div className="dbcContainer">
           <DashboardCard type={"task"} />
           <DashboardCard type={"progress"} />
@@ -22,18 +39,17 @@ function Dashboard({ taskList, setAddStatus }) {
           <h2>Recent Task</h2>
           <Link to="/Tasks">
             <button
-              className="addTaskBtn"
+              className="addTaskBtn backgroundBtn"
               onClick={() => {
                 window.scrollTo(0, 0);
-                setAddStatus(true);
+                dispatcher(setPopUpLocation("addTask"));
               }}
             >
               &#x2B; Add new
             </button>
           </Link>
         </div>
-
-        <div className="recentTask">{recent.slice(0, 2)}</div>
+        <div className="recentTask">{recent}</div>
       </div>
     </>
   );

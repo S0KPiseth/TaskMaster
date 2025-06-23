@@ -1,8 +1,11 @@
 import "./Calendar.css";
 import DateCard from "../../Components/CalendarDateCard/DateCard";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
-function Calendar({ taskList, completeTask, hover, setHover }) {
+function Calendar() {
+  const taskList = useSelector((state) => state.tasks.list);
+  const tasks = taskList.filter((task) => task.boardName === "Doing");
   let now = new Date();
   const [year, setYear] = useState(now.getFullYear());
   const [month, setMonth] = useState(now.getMonth());
@@ -48,10 +51,11 @@ function Calendar({ taskList, completeTask, hover, setHover }) {
   numberOFNull.length >= 7 ? (testDayOFmonthList = testDayOFmonthList.slice(0, 35)) : null;
   const cards = testDayOFmonthList.map((e, idx) => {
     const isPreviousDay = now > new Date(year, month, e);
-    const tasksForDay = taskList.filter((task) => {
-      return task[3] === `${year}-${String(month + 1).padStart(2, 0)}-${String(e).padStart(2, 0)}`;
+    const tasksForDay = tasks.filter((task) => {
+      const localDate = new Date(task.dueDate);
+      return localDate.getFullYear() === year && localDate.getMonth() === month && localDate.getDate() === e;
     });
-    return <DateCard hover={hover} setHover={setHover} key={idx} completeTask={completeTask} taskList={taskList} day={idx % 7} date={e} tasksForDay={tasksForDay} isToday={e == now.getDate() && year == now.getFullYear() && month == now.getMonth() ? true : false} isPreviousDay={isPreviousDay} />;
+    return <DateCard key={idx} day={idx % 7} date={e} tasksForDay={tasksForDay} isToday={e == now.getDate() && year == now.getFullYear() && month == now.getMonth() ? true : false} isPreviousDay={isPreviousDay} />;
   });
   const groupedCards = [];
   for (let i = 0; i < cards.length; i += 7) {
@@ -64,7 +68,6 @@ function Calendar({ taskList, completeTask, hover, setHover }) {
 
   return (
     <div className="calendar">
-      <h2>Calender</h2>
       <div className="controlCalendar">
         <div>
           <p

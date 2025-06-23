@@ -1,7 +1,12 @@
+@import url("https://fonts.googleapis.com/css2?family=Anton&display=swap");
+@font-face {
+  font-family: "malin-sans";
+  src: url("/fonts/marlin-sans/marlin-sans-medium.otf") format("opentype");
+}
 :root {
   /* Typography */
-  --font-primary: "Lexend Deca", serif;
-  --font-secondary: "Exo 2", serif;
+  --font-primary: "malin-sans", sans-serif;
+  --font-secondary: "GeneralSans-Regular", serif;
 
   /* Font Sizes */
 
@@ -93,7 +98,7 @@
 }
 
 /* Dark Theme Colors */
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root {
     --background-primary: #1e1e1e;
     --background-secondary: #2a2a2a;
@@ -115,22 +120,25 @@
     --notHover: white;
     --hover: var(--color-primary-600);
 
-    --high-priority-bg: rgba(128, 0, 0, 0.6); /* Dark red, semi-transparent */
-    --medium-priority-bg: rgba(128, 104, 0, 0.6); /* Dark yellow, semi-transparent */
-    --low-priority-bg: rgba(0, 128, 0, 0.6); /* Dark green, semi-transparent */
+    --high-priority-bg: rgba(128, 0, 0, 0.6); 
+    --medium-priority-bg: rgba(128, 104, 0, 0.6);
+    --low-priority-bg: rgba(0, 128, 0, 0.6);
 
-    /* Priority Text Colors */
-    --high-priority-text: rgba(255, 100, 100, 0.9); /* Bright red for contrast */
-    --medium-priority-text: rgba(255, 215, 100, 0.9); /* Bright yellow for contrast */
-    --low-priority-text: rgba(100, 255, 100, 0.9); /* Bright green for contrast */
+    --high-priority-text: rgba(255, 100, 100, 0.9);
+    --medium-priority-text: rgba(255, 215, 100, 0.9); 
+    --low-priority-text: rgba(100, 255, 100, 0.9);
   }
-}
+} */
 body {
-  background-color: var(--background-primary);
+  background-color: var(--color-primary-50);
   font-family: var(--font-primary);
   font-size: var(--text-base);
   font-weight: var(--font-normal);
   color: var(--text-primary);
+}
+body::-webkit-scrollbar,
+.middleContent::-webkit-scrollbar {
+  display: none;
 }
 .text-link {
   color: inherit;
@@ -160,6 +168,28 @@ body {
     scale: 0.5;
   }
 } */
+.headerVerticalAlign {
+  flex-direction: column-reverse;
+  justify-content: center;
+  align-items: center;
+  padding-left: 0px;
+}
+.headerHorizontalAlign {
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 10px;
+}
+.backgroundBtn {
+  background-image: url("/image/bgGradient.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 400% auto;
+}
+.confirmAdd {
+  background-size: auto;
+}
+
 @media (max-width: 1024px) {
   :root {
     --text-xs: 0.5rem; /* 8px */
@@ -172,6 +202,9 @@ body {
     --text-task: clamp(0.09rem, 1vh, 0.3rem);
     --text-day: clamp(0.1rem, 0.9vh, 0.5rem);
     --text-date: clamp(0.8rem, 5vh, 1.8rem);
+  }
+  .sideBarOpenBtn {
+    display: none;
   }
 }
 
@@ -389,5 +422,26 @@ body {
   to {
     -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0);
+  }
+}
+@keyframes appear {
+  from {
+    opacity: 0;
+    scale: 0;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+@keyframes appear-blur {
+  from {
+    opacity: 0.5;
+    filter: blur(100%);
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0%);
   }
 }

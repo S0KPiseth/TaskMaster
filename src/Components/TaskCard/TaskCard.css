@@ -1,82 +1,94 @@
-.tkCard {
-  position: relative;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: var(--background-secondary);
-  border-radius: 0.5rem;
-  border: 1px solid var(--border-color);
-}
-.tkCardFocus::after {
-  position: absolute;
-  content: "";
+.taskContent {
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 162, 255, 0.089);
-  border: 1px solid rgba(0, 162, 255, 0.312);
-  border-radius: inherit;
+  background-color: var(--background-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 15px 10px 15px;
+  gap: 15px;
+  font-family: var(--font-secondary);
 }
-.taskContent {
+.taskTitleNPriority {
+  display: flex;
+  justify-content: space-between;
+}
+.taskProgress {
+  padding: 5px 10px 5px 10px;
+  border-radius: 1999px;
+  font-size: var(--text-sm);
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
+  height: fit-content;
+}
+#taskPriority {
+  background-color: transparent !important;
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
+  justify-content: start;
+  column-gap: 5px;
+}
+
+.taskDes {
   flex-grow: 1;
+  font-family: var(--font-secondary);
+  font-size: var(--text-lg);
+  color: var(--color-gray-500);
 }
+
 .taskContent > .tags {
-  margin-left: 20px;
-  margin-right: 20px;
   flex-wrap: wrap;
   flex-direction: row;
   row-gap: 5px;
 }
-#TagsNControl {
-  right: 0;
-  position: absolute;
-  padding: 20px;
-  width: fit-content;
+.TagNControl {
+  width: 100%;
   display: flex;
-  justify-content: end;
-  align-items: end;
-  height: 100%;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  row-gap: 5px;
 }
-#TagsNControl > p {
-  font-weight: var(--font-medium);
-  border-radius: 2rem;
-  padding: 5px 10px 5px 10px;
-  position: absolute;
-  top: 0;
-  right: 0;
-}
-
 .in-progress {
   color: var(--color-primary-700);
   background-color: var(--color-primary-100);
 }
 
-.tkCard > div > p {
-  font-family: var(--font-secondary);
-  margin: 20px;
-}
-#innerTagNControl {
-  align-items: center;
-  column-gap: 20px;
-  display: flex;
-}
-#buttonTask {
+.controlDiv {
+  flex-grow: 1;
   display: flex;
   align-items: center;
   column-gap: 10px;
+  justify-content: space-between;
 }
-#buttonTask > button {
+.dateOfTask {
+  color: var(--color-gray-500);
+  display: flex;
+  column-gap: 10px;
+  width: fit-content;
+  align-items: center;
+}
+.buttonTask {
+  display: flex;
+  flex-grow: 1;
+  justify-content: end;
+}
+.buttonTask > button {
   color: var(--color-gray-500);
   border: 0;
-  background-color: var(--background-secondary);
+  background-color: transparent;
   padding: 0;
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
 .tags {
   display: flex;
   column-gap: 5px;
+  font-size: var(--text-sm);
 }
 .tags > p {
   font-weight: var(--font-medium);
