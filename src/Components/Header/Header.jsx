@@ -6,13 +6,14 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-function Header({ setAcControlStatus, showSidebarMobile }) {
+function Header({ showSidebarMobile }) {
   const searchBarRef = useRef(null);
   const searchResultsRef = useRef(null);
   const searchInput = useRef(null);
   const taskList = useSelector((state) => state.tasks.list);
   const [searchValue, setSearchValue] = useState("");
   const [choice, setChoice] = useState(null);
+
   const navigate = useNavigate();
   const location = useLocation();
   useGSAP(() => {
@@ -117,7 +118,7 @@ function Header({ setAcControlStatus, showSidebarMobile }) {
             </button>
           )}
         </div>
-        {isAuthenticated ? <Authenticated setAcControlStatus={setAcControlStatus} /> : <Unauthorized />}
+        {isAuthenticated ? <Authenticated /> : <Unauthorized />}
       </div>
     </div>
   );

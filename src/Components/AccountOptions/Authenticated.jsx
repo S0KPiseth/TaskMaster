@@ -1,12 +1,20 @@
 import { useSelector } from "react-redux";
 import "./AccountOptions.css";
-export function Authenticated({ setAcControlStatus }) {
+import { useDispatch } from "react-redux";
+import { setPopUpLocation } from "../../application-state/popUpSlice";
+export function Authenticated() {
+  const dispacher = useDispatch();
   const user = useSelector((state) => state.isAuth.user);
+  const popUpLocation = useSelector((state) => state.popUp.where);
   return (
     <div
       className="AccountNNotification"
       onClick={() => {
-        setAcControlStatus((prev) => !prev);
+        if (popUpLocation === "accountPc") {
+          dispacher(setPopUpLocation(null));
+        } else {
+          dispacher(setPopUpLocation("accountPc"));
+        }
       }}
     >
       <div className="account">
