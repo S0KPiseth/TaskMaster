@@ -10,12 +10,12 @@
 
 <table>
   <tr>
-    <td><img src="https://via.placeholder.com/300" alt="Screenshot 1" /></td>
-    <td><img src="https://via.placeholder.com/300" alt="Screenshot 2" /></td>
+    <td><img src="https://github.com/user-attachments/assets/2d1ac4fe-517d-4fec-872c-f43f927ee3b7" /></td>
+    <td><img src="https://github.com/user-attachments/assets/2f4dc3c6-1d68-44f9-9357-3c9c0bdcf660" /></td>
   </tr>
   <tr>
-    <td><img src="https://via.placeholder.com/300" alt="Screenshot 3" /></td>
-    <td><img src="https://via.placeholder.com/300" alt="Screenshot 4" /></td>
+    <td><img src="https://github.com/user-attachments/assets/79910f59-88de-4d89-87b2-31cde8b4b642" /></td>
+    <td><img src="https://github.com/user-attachments/assets/7864fea0-30e8-4830-b96f-abe782c421df" alt="Screenshot 4" /></td>
   </tr>
 </table>
 
@@ -79,7 +79,7 @@ You can install the [MongoDB Community Server](https://www.mongodb.com/try/downl
    ```
 5. Start the **frontend app**:
    ```bash
-   npm start
+   npm run start
    ```
 6. Navigate to `http://localhost:8888` You can now use Task-er locally.
 
