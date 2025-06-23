@@ -3,10 +3,10 @@ import { Authenticated } from "../AccountOptions/Authenticated";
 import Unauthorized from "../AccountOptions/Unauthorized";
 import { Link } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
-import { setPopUpLocation } from "../../application-state/popUpSlice";
+import { setLogOut } from "../../application-state/popUpSlice";
 function Sidebar({ sideBarStatus, sideBarCloseNOpen, closeSidebarMobile }) {
   const isAuthenticated = useSelector((state) => state.isAuth.isAuthenticated);
-  const dispacher = useDispatch();
+  const dispatcher = useDispatch();
   return (
     <div className={`sideBarContainer ${sideBarStatus ? "width-250" : "width-60"}`}>
       <div className={`sideBar ${sideBarStatus ? "width-250" : "width-60"}`}>
@@ -119,7 +119,7 @@ function Sidebar({ sideBarStatus, sideBarCloseNOpen, closeSidebarMobile }) {
               className="dot"
               onClick={() => {
                 closeSidebarMobile();
-                dispacher(setPopUpLocation("accountMobile"));
+                dispatcher(setLogOut("accountMobile"));
               }}
             >
               <path fillRule="evenodd" clipRule="evenodd" d="M0.136 0.281a0.042 0.042 0 1 1 -0.084 0 0.042 0.042 0 0 1 0.084 0m0.188 0a0.042 0.042 0 1 1 -0.084 0 0.042 0.042 0 0 1 0.084 0M0.469 0.323a0.042 0.042 0 1 0 0 -0.084 0.042 0.042 0 0 0 0 0.084" fill="#000000" />

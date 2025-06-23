@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import reducer from "./taskListSlice";
 
 const initialState = {
   isPopUp: false,
   where: null,
+  logOut: null,
 };
 
 const popUpSlice = createSlice({
@@ -16,7 +16,10 @@ const popUpSlice = createSlice({
     setPopUpLocation: (state, actions) => {
       state.where = actions.payload;
     },
+    setLogOut: (state, actions) => {
+      state.logOut = actions.payload;
+    },
   },
 });
-export const { setPopUp, setPopUpLocation } = popUpSlice.actions;
+export const { setPopUp, setPopUpLocation, setLogOut } = popUpSlice.actions;
 export default popUpSlice.reducer;

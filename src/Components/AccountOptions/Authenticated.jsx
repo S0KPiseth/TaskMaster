@@ -1,19 +1,19 @@
 import { useSelector } from "react-redux";
 import "./AccountOptions.css";
 import { useDispatch } from "react-redux";
-import { setPopUpLocation } from "../../application-state/popUpSlice";
+import { setLogOut } from "../../application-state/popUpSlice";
 export function Authenticated() {
   const dispacher = useDispatch();
   const user = useSelector((state) => state.isAuth.user);
-  const popUpLocation = useSelector((state) => state.popUp.where);
+  const logOutLocation = useSelector((state) => state.popUp.logOut);
   return (
     <div
       className="AccountNNotification"
       onClick={() => {
-        if (popUpLocation === "accountPc") {
-          dispacher(setPopUpLocation(null));
+        if (logOutLocation === "accountPc") {
+          dispacher(setLogOut(null));
         } else {
-          dispacher(setPopUpLocation("accountPc"));
+          dispacher(setLogOut("accountPc"));
         }
       }}
     >

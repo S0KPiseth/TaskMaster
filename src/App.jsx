@@ -16,7 +16,7 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import Logout from "./Components/AccountControl/Logout";
-import { setPopUpLocation } from "./application-state/popUpSlice";
+import { setLogOut } from "./application-state/popUpSlice";
 
 function App(props) {
   //register gsap plugins
@@ -31,7 +31,8 @@ function App(props) {
   const isAuthPath = ["/auth", "/auth/register"].includes(location.pathname);
   const navigator = useNavigate();
   const isAuthenticated = useSelector((state) => state.isAuth.isAuthenticated);
-  const popUpLocation = useSelector((state) => state.popUp.where);
+
+  const logOutLocation = useSelector((state) => state.popUp.logOut);
   const dispatcher = useDispatch();
 
   //mobile sidebar flag
@@ -65,9 +66,8 @@ function App(props) {
 
     tabRef.current.addEventListener("click", () => {
       closeSidebarMobile();
-      if (popUpLocation === "accountMobile" || !popUpLocation) {
-        dispatcher(setPopUpLocation(null));
-      }
+
+      dispatcher(setLogOut(null));
     });
 
     return () => {
@@ -92,10 +92,10 @@ function App(props) {
         <>
           <div className={!sideBarStatus ? "content horizontalShaking" : "content"}>
             <Header showSidebarMobile={showSidebarMobile} />
-            {popUpLocation === "accountPc" ? (
+            {logOutLocation === "accountPc" ? (
               <AccountControl persistor={props.persistor} />
             ) : (
-              popUpLocation === "accountMobile" && (
+              logOutLocation === "accountMobile" && (
                 <div className="mobileAcControl">
                   <svg
                     id="Capa_1"
