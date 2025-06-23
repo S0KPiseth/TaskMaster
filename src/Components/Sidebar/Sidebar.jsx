@@ -2,9 +2,11 @@ import SidebarButton from "../SidebarBtn/SidebarButton";
 import { Authenticated } from "../AccountOptions/Authenticated";
 import Unauthorized from "../AccountOptions/Unauthorized";
 import { Link } from "react-router";
-import { useSelector } from "react-redux";
-function Sidebar({ sideBarStatus, sideBarCloseNOpen, setAcControlStatus, closeSidebarMobile }) {
+import { useSelector, useDispatch } from "react-redux";
+import { setPopUpLocation } from "../../application-state/popUpSlice";
+function Sidebar({ sideBarStatus, sideBarCloseNOpen, closeSidebarMobile }) {
   const isAuthenticated = useSelector((state) => state.isAuth.isAuthenticated);
+  const dispacher = useDispatch();
   return (
     <div className={`sideBarContainer ${sideBarStatus ? "width-250" : "width-60"}`}>
       <div className={`sideBar ${sideBarStatus ? "width-250" : "width-60"}`}>
@@ -106,9 +108,20 @@ function Sidebar({ sideBarStatus, sideBarCloseNOpen, setAcControlStatus, closeSi
         </div>
         <div className="mobileAcc">
           {" "}
-          {isAuthenticated ? <Authenticated setAcControlStatus={setAcControlStatus} /> : <Unauthorized />}
+          {isAuthenticated ? <Authenticated /> : <Unauthorized />}
           {isAuthenticated && (
-            <svg width="30px" height="30px" viewBox="0 0 0.563 0.563" fill="none" xmlns="http://www.w3.org/2000/svg" className="dot">
+            <svg
+              width="30px"
+              height="30px"
+              viewBox="0 0 0.563 0.563"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className="dot"
+              onClick={() => {
+                closeSidebarMobile();
+                dispacher(setPopUpLocation("accountMobile"));
+              }}
+            >
               <path fillRule="evenodd" clipRule="evenodd" d="M0.136 0.281a0.042 0.042 0 1 1 -0.084 0 0.042 0.042 0 0 1 0.084 0m0.188 0a0.042 0.042 0 1 1 -0.084 0 0.042 0.042 0 0 1 0.084 0M0.469 0.323a0.042 0.042 0 1 0 0 -0.084 0.042 0.042 0 0 0 0 0.084" fill="#000000" />
             </svg>
           )}

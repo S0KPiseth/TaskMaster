@@ -71,6 +71,30 @@ html,
   background-color: var(--color-primary-50);
   /* border: 1px solid var(--border-color); */
 }
+.mobileAcControl {
+  position: absolute;
+  z-index: 99;
+  background-color: white;
+  width: 95%;
+  margin-left: auto;
+  margin-right: auto;
+  height: fit-content;
+  padding: 10px;
+  left: 50%;
+  bottom: 15px;
+  color: red;
+  border-radius: 0.5rem;
+  transform: translate(-50%);
+  display: flex;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.129);
+}
+.mobileAcControl button {
+  color: red;
+  border: 0;
+  background-color: transparent;
+  width: 100%;
+  text-align: left;
+}
 #searchBar {
   color: var(--text-inactive);
   /* margin-left: 5px; */
