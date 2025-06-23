@@ -5,19 +5,21 @@ import { useSelector, useDispatch } from "react-redux";
 import { addTag, clearTags } from "../../application-state/tagSlice";
 import { addNewTask, editExistTask, resetEditTask } from "../../application-state/taskListSlice";
 import { useEffect, useRef, useState } from "react";
+import { setPopUpLocation } from "../../application-state/popUpSlice";
 
-//taskList, setAddStatus, tags, setTag, setTaskList, tagUpdate, editTaskValue, editTaskIndex
-function AddTask({ setAddStatus }) {
+function AddTask() {
+  const isAuthenticated = useSelector((state) => state.isAuth.isAuthenticated);
+  const [boardChoice, setBoardChoice] = useState("default");
   const tags = useSelector((state) => state.tagList.list);
   const user = useSelector((state) => state.isAuth.user);
   const taskForEdit = useSelector((state) => state.tasks.editTask);
-  const taskList = useSelector((state) => state.tasks.list);
   const dateRef = useRef(null);
   const searchRef = useRef(null);
-  const [boardChoice, setBoardChoice] = useState(null);
-  const [searchDoing, setSearchDoing] = useState(null);
   const dispatcher = useDispatch();
   const boards = useSelector((state) => state.board.boardList);
+  useEffect(() => {
+    setBoardChoice(taskForEdit.boardName);
+  }, [taskForEdit]);
 
   const todayDate = new Date();
   function addNewTag(e) {
@@ -30,20 +32,13 @@ function AddTask({ setAddStatus }) {
       }, 200);
     }
   }
-  const handleChoseSearch = (task) => {
-    searchRef.current = task._id;
-    document.getElementById("sequenceTask").value = task.title;
-    setSearchDoing(null);
-  };
 
-  function addTask(event) {
-    console.log("hi");
+  function addTask() {
     const createdDate = new Date();
     const formattedDate = createdDate.toISOString().slice(0, 10);
     const title = document.getElementById("title").value;
     const description = document.getElementById("description").value;
     const date = document.getElementById("date");
-
     const priorityChoice = document.getElementById("priorityChoice").value;
     const board = boards.find((e) => e.name === boardChoice);
 
@@ -51,16 +46,16 @@ function AddTask({ setAddStatus }) {
       title,
       description,
       tags,
-      dueDate: boardChoice === "Doing" ? date.value : undefined,
+      dueDate: boardChoice === "Doing" || !isAuthenticated ? date.value : undefined,
       completedDate: boardChoice === "Done" ? date.value : undefined,
       taskToAddNext: searchRef.current ? searchRef.current : undefined,
       priorityChoice,
-      status: "In progress",
+      status: boardChoice === "Done" ? "Complete" : "In progress",
       createdDate: formattedDate,
       userId: user?._id,
       idx: taskForEdit?._id,
       boardId: board?._id,
-      boardName: user ? boardChoice : "To Do",
+      boardName: user ? boardChoice : "Doing",
     };
 
     if (title) {
@@ -91,7 +86,7 @@ function AddTask({ setAddStatus }) {
           });
       }
 
-      setAddStatus(false);
+      dispatcher(setPopUpLocation(null));
       dispatcher(clearTags());
     } else {
       alert("Task title cannot be empty!");
@@ -99,13 +94,7 @@ function AddTask({ setAddStatus }) {
   }
 
   return (
-    <div
-      className="addTask"
-      id="taskForm"
-      onSubmit={(e) => {
-        e.preventDefault();
-      }}
-    >
+    <div className="addTask" id="taskForm">
       <h3 id="header">Add New Task</h3>
       <input className="addTaskInput" type="text" name="title" id="title" placeholder="Task title" defaultValue={taskForEdit.title} />
       <input className="addTaskInput" type="text" name="description" id="description" placeholder="Task description" defaultValue={taskForEdit.description} />
@@ -126,41 +115,19 @@ function AddTask({ setAddStatus }) {
       </label>
 
       <div className="lastInput">
-        <select name="board" id="board" className="selectClass" onChange={(e) => setBoardChoice(e.target.value)}>
-          <option value="none" defaultValue disabled>
+        <select name="board" id="board" className="selectClass" onChange={(e) => setBoardChoice(e.target.value)} disabled={taskForEdit.boardName || (!isAuthenticated && true)} value={boardChoice}>
+          <option value="default" disabled>
             Select board
           </option>
           {boards.map((e) => {
             return (
-              <option key={e._id} value={e.name} selected={boardChoice === e.name}>
+              <option key={e._id} value={e.name}>
                 {e.name}
               </option>
             );
           })}
         </select>
-        {boardChoice === "To Do" ? (
-          <div className="toDoTaskDiv">
-            <input type="text" name="sequenceTask" id="sequenceTask" placeholder="Automatically move to doing after task (optional)" className="addTaskInput" onChange={(e) => setSearchDoing(e.target.value)} />
-            {searchDoing && (
-              <div className="sequenceTaskSearch">
-                {taskList
-                  .filter((e) => e.boardName === "Doing" && e.title.slice(0, searchDoing.length) === searchDoing)
-                  .map((e) => (
-                    <p
-                      key={e._id}
-                      onClick={() => {
-                        handleChoseSearch(e);
-                      }}
-                    >
-                      {e.title}
-                    </p>
-                  ))}
-              </div>
-            )}
-          </div>
-        ) : (
-          <input className="addTaskInput" type="text" name="date" id="date" defaultValue={taskForEdit._id && taskForEdit.dueDate.slice(0, 10)} min={todayDate.toISOString().slice(0, 10)} placeholder={boardChoice === "Doing" ? "Chose due date" : "Chose completed date"} ref={dateRef} onFocus={() => (dateRef.current.type = "date")} onBlur={() => (dateRef.current.type = "text")} />
-        )}
+        {(["Doing", "Done"].includes(boardChoice) || !isAuthenticated) && <input className="addTaskInput" type="text" name="date" id="date" defaultValue={(taskForEdit.dueDate && taskForEdit.dueDate.slice(0, 10)) || (taskForEdit.completedDate && taskForEdit.completedDate.slice(0, 10))} min={boardChoice === "Doing" || !isAuthenticated ? todayDate.toISOString().slice(0, 10) : undefined} max={boardChoice === "Done" ? todayDate.toISOString().slice(0, 10) : undefined} placeholder={boardChoice === "Doing" || !isAuthenticated ? "Chose due date" : "Chose completed date"} ref={dateRef} onFocus={() => (dateRef.current.type = "date")} onBlur={() => (dateRef.current.type = "text")} />}
         <select name="priorityChoice" id="priorityChoice" className="selectClass" defaultValue={taskForEdit.priorityChoice}>
           <option value="High Priority">High Priority</option>
           <option value="Medium Priority">Medium Priority</option>
@@ -173,7 +140,7 @@ function AddTask({ setAddStatus }) {
           onClick={() => {
             dispatcher(clearTags());
             dispatcher(resetEditTask());
-            setAddStatus(false);
+            dispatcher(setPopUpLocation(null));
           }}
         >
           Cancel

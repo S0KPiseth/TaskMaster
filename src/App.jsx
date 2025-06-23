@@ -12,19 +12,24 @@ import LoginForm from "./pages/Login/LoginForm";
 import RegisterForm from "./pages/Login/RegisterForm";
 import AccountControl from "./Components/AccountControl";
 import { useSelector } from "react-redux";
-import AddBoard from "./Components/addNewBoard/AddBoard";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 
 function App(props) {
+  //register gsap plugins
+  gsap.registerPlugin(useGSAP, ScrollToPlugin);
+
   const [isTabletScreen, setIsTabletScreen] = useState(window.matchMedia("(max-width: 1024px)").matches);
   const [acControlStatus, setAcControlStatus] = useState(false);
   const [sideBarStatus, setSideBarStatus] = useState(!isTabletScreen);
-  const [addStatus, setAddStatus] = useState(false);
+
   const tabRef = useRef(null);
   const location = useLocation();
   const isAuthPath = ["/auth", "/auth/register"].includes(location.pathname);
   const navigator = useNavigate();
   const isAuthenticated = useSelector((state) => state.isAuth.isAuthenticated);
-  const isPopUp = useSelector((state) => state.popUp.isPopUp);
+
   //mobile sidebar flag
   const isMobileSidebarOpen = useRef(false);
 
@@ -80,14 +85,9 @@ function App(props) {
             <Header setAcControlStatus={setAcControlStatus} showSidebarMobile={showSidebarMobile} />
             {acControlStatus && <AccountControl persistor={props.persistor} setAcControlStatus={setAcControlStatus} />}
             <div className="middleContent" ref={tabRef}>
-              {isPopUp && (
-                <div className="popUpDiv">
-                  <AddBoard />
-                </div>
-              )}
               <Routes>
-                <Route path="/" element={<Dashboard setAddStatus={setAddStatus} />} />
-                <Route path="/Tasks" element={<TaskTab addStatus={addStatus} setAddStatus={setAddStatus} isTabletScreen={isTabletScreen} />} />
+                <Route path="/" element={<Dashboard />} />
+                <Route path="/Tasks/*" element={<TaskTab isTabletScreen={isTabletScreen} />} />
                 <Route path="/Calendar" element={<Calendar />} />
               </Routes>
             </div>

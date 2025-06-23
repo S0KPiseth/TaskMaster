@@ -56,6 +56,7 @@ h3 {
 .lastInput {
   display: flex;
   column-gap: 15px;
+  align-items: center;
 }
 .lastInput > input {
   width: 85%;
@@ -161,6 +162,9 @@ h3 {
 .shakingInput:focus {
   outline-color: red;
 }
+.dropArea {
+  height: 10px;
+}
 .renderTaskDiv {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -174,6 +178,28 @@ h3 {
   background-color: var(--background-primary);
   font-family: var(--font-secondary);
   font-weight: var(--font-bold);
+}
+#boardLabel,
+#listLabel {
+  position: relative;
+}
+
+#boardToolTip,
+#listToolTip {
+  position: absolute;
+
+  font-size: xx-small;
+  text-wrap: nowrap;
+  left: 50%;
+  transform: translate(-50%);
+  top: -10px;
+  color: var(--text-inactive);
+  z-index: 99;
+  display: none;
+}
+#boardLabel:hover #boardToolTip,
+#listLabel:hover #listToolTip {
+  display: block;
 }
 .boardHeader {
   display: flex;

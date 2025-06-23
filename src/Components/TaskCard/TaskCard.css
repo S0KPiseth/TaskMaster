@@ -6,8 +6,9 @@
   border-radius: 0.5rem;
   display: flex;
   flex-direction: column;
-  padding: 5%;
+  padding: 10px 15px 10px 15px;
   gap: 15px;
+  font-family: var(--font-secondary);
 }
 .taskTitleNPriority {
   display: flex;
@@ -17,6 +18,9 @@
   padding: 5px 10px 5px 10px;
   border-radius: 1999px;
   font-size: var(--text-sm);
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
+  height: fit-content;
 }
 #taskPriority {
   background-color: transparent !important;
@@ -59,6 +63,13 @@
   column-gap: 10px;
   justify-content: space-between;
 }
+.dateOfTask {
+  color: var(--color-gray-500);
+  display: flex;
+  column-gap: 10px;
+  width: fit-content;
+  align-items: center;
+}
 .buttonTask {
   display: flex;
   flex-grow: 1;
@@ -67,7 +78,7 @@
 .buttonTask > button {
   color: var(--color-gray-500);
   border: 0;
-  background-color: var(--background-secondary);
+  background-color: transparent;
   padding: 0;
   display: flex;
   justify-content: center;

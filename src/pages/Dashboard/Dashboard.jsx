@@ -1,18 +1,17 @@
 import "./Dashboard.css";
 import DashboardCard from "../../Components/DateCard/DashboardCard";
 import TaskCard from "../../Components/TaskCard/TaskCard";
-import { Link, Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import fetchUserData from "../../helper/loginData";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { setPopUpLocation } from "../../application-state/popUpSlice";
 
-function Dashboard({ setAddStatus }) {
+function Dashboard() {
   const tasks = useSelector((state) => state.tasks.list);
   const isAuthenticated = useSelector((state) => state.isAuth.isAuthenticated);
   const rememberMe = useSelector((state) => state.rememberMe.value);
   const dispatcher = useDispatch();
-
-  //
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -43,7 +42,7 @@ function Dashboard({ setAddStatus }) {
               className="addTaskBtn backgroundBtn"
               onClick={() => {
                 window.scrollTo(0, 0);
-                setAddStatus(true);
+                dispatcher(setPopUpLocation("addTask"));
               }}
             >
               &#x2B; Add new

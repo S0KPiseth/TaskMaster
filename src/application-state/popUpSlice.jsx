@@ -14,7 +14,7 @@ const popUpSlice = createSlice({
       state.isPopUp = actions.payload;
     },
     setPopUpLocation: (state, actions) => {
-      state.where = action.payload;
+      state.where = actions.payload;
     },
   },
 });

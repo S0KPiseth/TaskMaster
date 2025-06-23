@@ -30,6 +30,7 @@ export default function LoginForm() {
         }
       })
       .catch((err) => {
+        console.log(err);
         alert("Error " + err.status + ": " + err.response.data.msg);
       });
   }
@@ -57,7 +58,7 @@ export default function LoginForm() {
             <input type="checkbox" name="remember" id="" checked={rememberMe} onChange={() => dispatcher(toggleRememberMe())} />
             Remember me
           </label>
-          <a href="">Forgot password?</a>
+          {/* <a href="">Forgot password?</a> */}
         </div>
 
         <br />

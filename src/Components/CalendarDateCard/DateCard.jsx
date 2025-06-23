@@ -9,26 +9,28 @@ function DateCard({ day, date, tasksForDay, isToday, isPreviousDay }) {
   const [individualHover, setIndividualHover] = useState(false);
   const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
+  //get tasks
   const remainTask = tasksForDay.filter((task) => {
     return task.status === "In progress";
   });
   const overDueTasks = tasksForDay.filter((task) => {
-    return task.status === "Over due";
+    return task.status === "Over Due";
   });
+
   const calendarTaskPreview = tasksForDay.map((e, idx) => {
     const prio = e.priorityChoice.split(" ");
     const priorityClass = `priority-${prio[0].toLowerCase()}`;
 
     return (
       <div className={priorityClass} key={idx} id="taskCardDive">
-        {!(e.status === "Over due") ? (
+        {!(e.status === "Over Due") ? (
           <input type="checkbox" name="" id="" onChange={() => dispatch(completeTk(e._id))} checked={e.status === "Complete"} disabled={e.status === "Complete"} />
         ) : (
           <div className="warning">
             <p className="sign">!</p>
           </div>
         )}
-        <p className={e.status === "Complete" ? "line-trough" : e.status === "Over due" ? "overDue" : ""}>{e.title}</p>
+        <p className={e.status === "Complete" ? "line-trough" : e.status === "Over Due" ? "overDue" : ""}>{e.title}</p>
       </div>
     );
   });
@@ -38,7 +40,7 @@ function DateCard({ day, date, tasksForDay, isToday, isPreviousDay }) {
   function hideTasks() {
     setIndividualHover(false);
   }
-  //onMouseEnter={date ? showTasks : null} onMouseLeave={date ? hideTasks : null}
+
   return (
     <div className={date ? (individualHover ? "dateCard aspect-ratio3-2" : "dateCard") : "disableDate"} onMouseEnter={date ? showTasks : null} onMouseLeave={date ? hideTasks : null}>
       {date ? (

@@ -1,21 +1,69 @@
-import "../../Query.css";
 import "./TaskCard.css";
-import { useRef } from "react";
-import { initializeEdit } from "../../application-state/taskListSlice";
+import "../../Query.css";
+import { useEffect, useRef } from "react";
+import { editExistTask, initializeEdit, resetEditTask } from "../../application-state/taskListSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { setTag } from "../../application-state/tagSlice";
 import { deleteTask, completeTk } from "../../application-state/taskListSlice";
 import axios from "axios";
-// taskList, taskItems, editTask, index, completeTask, deleteTask, recent, isTabletScreen
-function TaskCard({ task, recent, isTabletScreen, setAddStatus }) {
+import { setPopUpLocation } from "../../application-state/popUpSlice";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+
+function TaskCard({ chooseTask, task, recent, id, boardName, startDrag, endDrag, radioValue }) {
+  useGSAP(() => {
+    if (radioValue === "list") {
+      gsap.fromTo(animatedRef.current, { y: 100 }, { y: 0 });
+    } else if (radioValue === "board") {
+      gsap.fromTo(
+        animatedRef.current,
+        { scale: 0 },
+        {
+          scale: 1,
+          onComplete: () => {
+            if (id === chooseTask) {
+              gsap.to(document.querySelector(".middleContent"), {
+                duration: 0.5,
+                scrollTo: animatedRef.current,
+                onComplete: () => {
+                  gsap.fromTo(animatedRef.current, { backgroundColor: "var(--color-primary-50)" }, { backgroundColor: "white" });
+                },
+              });
+            }
+          },
+        }
+      );
+    }
+    const handleDragStart = () => {
+      if (radioValue === "list") return;
+      startDrag.current = { board: boardName, id: id };
+    };
+    const handleEnd = () => {
+      if (radioValue === "list") return;
+      startDrag.current = null;
+      endDrag.current = null;
+    };
+
+    animatedRef.current.addEventListener("dragstart", handleDragStart);
+    animatedRef.current.addEventListener("dragend", handleEnd);
+    return () => {
+      animatedRef.current.removeEventListener("dragstart", handleDragStart);
+      animatedRef.current.removeEventListener("dragend", handleEnd);
+    };
+  }, [chooseTask]);
+
   const DateRef = useRef(null);
   const animatedRef = useRef(null);
   const dispatcher = useDispatch();
   const user = useSelector((state) => state.isAuth.user);
+  const popUpLocation = useSelector((state) => state.popUp.where);
+  const isAuthenticated = useSelector((state) => state.isAuth.isAuthenticated);
 
   const editTask = (task) => {
+    dispatcher(setPopUpLocation(null));
+    dispatcher(resetEditTask());
     dispatcher(initializeEdit(task));
-    setAddStatus(true);
+    dispatcher(setPopUpLocation("addTask"));
     dispatcher(setTag(task.tags));
   };
   //delete task
@@ -40,7 +88,7 @@ function TaskCard({ task, recent, isTabletScreen, setAddStatus }) {
     if (!["Complete", "Over due"].includes(currentTask.status)) {
       if (user) {
         axios
-          .put(`http://localhost:5050/api/task/${currentTask._id}`, { withCredentials: true })
+          .put(`http://localhost:5050/api/task/${currentTask._id}`, {}, { withCredentials: true })
           .then((res) => {
             if (res.status >= 200 && res.status < 300) {
               dispatcher(completeTk(currentTask._id));
@@ -64,8 +112,39 @@ function TaskCard({ task, recent, isTabletScreen, setAddStatus }) {
       </p>
     );
   });
+  //check due date
+  useEffect(() => {
+    const currentDate = new Date().toISOString();
+
+    if (task.boardName === "Doing" && currentDate > task.dueDate) {
+      if (isAuthenticated) {
+        const { _id, ...rest } = task;
+        const reqBody = { ...rest, status: "Over Due", idx: _id };
+        axios
+          .put("http://localhost:5050/api/task", reqBody, { withCredentials: true })
+          .then((res) => dispatcher(editExistTask({ idx: res.data.task._id, newTask: res.data.task })))
+          .catch((err) => alert(err));
+      } else {
+        const updatedTask = { ...task, status: "Over Due" };
+        dispatcher(editExistTask({ idx: updatedTask._id, newTask: updatedTask }));
+      }
+    } else if (task.boardName === "Doing" && currentDate < task.dueDate) {
+      if (isAuthenticated) {
+        const { _id, ...rest } = task;
+        const reqBody = { ...rest, status: "In progress", idx: _id };
+        axios
+          .put("http://localhost:5050/api/task", reqBody, { withCredentials: true })
+          .then((res) => dispatcher(editExistTask({ idx: res.data.task._id, newTask: res.data.task })))
+          .catch((err) => alert(err));
+      } else {
+        const updatedTask = { ...task, status: "In progress" };
+        dispatcher(editExistTask({ idx: updatedTask._id, newTask: updatedTask }));
+      }
+    }
+  }, []);
+
   return (
-    <div className="tkCard taskContent slideInUP" ref={animatedRef} draggable>
+    <div className="tkCard taskContent" ref={animatedRef} draggable={radioValue === "board"} id={"task" + id}>
       <p className={`${task.priorityChoice == "Medium Priority" ? "priority-medium" : task.priorityChoice == "High Priority" ? "priority-high" : "priority-low"}`} id="taskPriority">
         {task.priorityChoice}
         <span>
@@ -79,23 +158,14 @@ function TaskCard({ task, recent, isTabletScreen, setAddStatus }) {
         <p style={{ fontWeight: "var(--font-semibold)", fontSize: "var(--text-xl)" }} className={task.status == "Complete" ? "line-trough" : ""}>
           {task.title}
         </p>
-        <p className={`taskProgress ${task.status == "In Progress" ? "in-progress" : task.status == "Over due" ? "priority-high" : "complete"}`}>{task.status}</p>
+        <p className={`taskProgress ${task.status == "In Progress" ? "in-progress" : task.status == "Over Due" ? "priority-high" : "complete"}`}>{task.status}</p>
       </div>
 
       <p className="taskDes">{task.description}</p>
       <br />
       <div className="tags">{tags}</div>
       <div className="TagNControl">
-        <p
-          style={{
-            color: "var(--color-gray-500)",
-            display: "flex",
-            columnGap: "10px",
-            width: "fit-content",
-            alignItems: "center",
-          }}
-          ref={DateRef}
-        >
+        <p className="dateOfTask" ref={DateRef}>
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M8 2v4"></path>
             <path d="M16 2v4"></path>
@@ -103,12 +173,7 @@ function TaskCard({ task, recent, isTabletScreen, setAddStatus }) {
             <path d="M3 10h18"></path>
           </svg>
 
-          {task.dueDate
-            ? new Date(task.dueDate).toLocaleDateString("en-US", {
-                month: "long",
-                day: "numeric",
-              })
-            : "Not started"}
+          {task.dueDate ? `${new Date(task.dueDate).toDateString().slice(3, 10)} (Due)` : task.completedDate ? `${new Date(task.completedDate).toDateString().slice(3, 10)} (complete)` : "Not started"}
         </p>
 
         {!recent && (
@@ -118,6 +183,7 @@ function TaskCard({ task, recent, isTabletScreen, setAddStatus }) {
               onClick={() => {
                 editTask(task);
               }}
+              disabled={popUpLocation === "addTask" && true}
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="75%" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />

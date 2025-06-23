@@ -203,6 +203,9 @@ body::-webkit-scrollbar,
     --text-day: clamp(0.1rem, 0.9vh, 0.5rem);
     --text-date: clamp(0.8rem, 5vh, 1.8rem);
   }
+  .sideBarOpenBtn {
+    display: none;
+  }
 }
 
 @media (max-width: 768px) {

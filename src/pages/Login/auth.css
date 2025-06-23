@@ -83,6 +83,10 @@ form a {
   background-size: 150% auto;
   color: white;
 }
+.login-btn:disabled {
+  background-color: rgba(0, 0, 0, 0.304);
+  background-blend-mode: darken;
+}
 .thirdPartyDiv {
   display: flex;
   justify-content: space-evenly;

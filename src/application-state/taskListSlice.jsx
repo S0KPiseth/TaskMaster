@@ -13,7 +13,9 @@ const initialState = {
     createdDate: null,
     userId: null,
     status: "not started",
+    boardName: "",
   },
+  layout: "list",
 };
 // slice
 const tasks = createSlice({
@@ -35,6 +37,9 @@ const tasks = createSlice({
     initializeEdit: (state, action) => {
       state.editTask = action.payload;
     },
+    setBoard: (state, action) => {
+      state.editTask.boardName = action.payload;
+    },
     resetEditTask: (state) => {
       state.editTask = initialState.editTask;
     },
@@ -44,10 +49,23 @@ const tasks = createSlice({
     },
     completeTk: (state, action) => {
       state.list.forEach((e) => {
-        if (e._id === action.payload) e.status = "Complete";
+        if (e._id === action.payload) {
+          e.status = "Complete";
+          e.boardName = "Done";
+          e.dueDate = null;
+          e.completedDate = new Date();
+        }
       });
+    },
+    moveTask: (state, action) => {
+      const { task, newIndex } = action.payload;
+      state.list = state.list.filter((e) => e._id !== task._id);
+      state.list.splice(newIndex, 0, task);
+    },
+    setLayout: (state, action) => {
+      state.layout = action.payload;
     },
   },
 });
-export const { addNewTask, editExistTask, setTaskLogin, initializeEdit, resetEditTask, deleteTask, completeTk } = tasks.actions;
+export const { addNewTask, editExistTask, setTaskLogin, initializeEdit, resetEditTask, deleteTask, completeTk, moveTask, setBoard, setLayout } = tasks.actions;
 export default tasks.reducer;

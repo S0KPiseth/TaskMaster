@@ -17,7 +17,7 @@ function Sidebar({ sideBarStatus, sideBarCloseNOpen, setAcControlStatus, closeSi
             {sideBarStatus && "Task-er"}
             <p className="subText">Task-er</p>
           </a>
-          <button onClick={sideBarCloseNOpen}>
+          <button onClick={sideBarCloseNOpen} className="sideBarOpenBtn">
             {sideBarStatus ? (
               <svg fill="currentColor" version="1.1" id="Layer_1" xmlnsx="http://ns.adobe.com/Extensibility/1.0/" xmlnsi="http://ns.adobe.com/AdobeIllustrator/10.0/" xmlnsgraph="http://ns.adobe.com/Graphs/1.0/" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" width="20px" height="20px" viewBox="0 0 0.6 0.6" xmlSpace="preserve">
                 <metadata>
